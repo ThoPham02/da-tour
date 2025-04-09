@@ -1,0 +1,18 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/fe/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/fe/coverage
+
+# production
+/fe/build
+
+# misc
+/fe/.DS_Store
+/fe/.env.local
+
+/fe/deleted

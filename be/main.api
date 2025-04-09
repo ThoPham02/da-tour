@@ -1,0 +1,58 @@
+info (
+	title:   "main api"
+	author:  "thopb"
+	email:   "thoahlgbg2002@gamil.com"
+	version: "1.0"
+)
+
+// Model
+type (
+	Result {
+		Code    int    `json:"code"`    //    Result code: 0 is success. Otherwise, getting an error
+		Message string `json:"message"` // Result message: detail response code
+	}
+)
+
+type (
+	User {
+		UserID      int64  `json:"userID"`
+		Phone       string `json:"phone"`
+		Role        int64  `json:"role"`
+		Status      int64  `json:"status"`
+		Address     string `json:"address"`
+		FullName    string `json:"fullName"`
+		AvatarUrl   string `json:"avatarUrl"`
+		Birthday    int64  `json:"birthday"`
+		Gender      int64  `json:"gender"`
+		CccdNumber  string `json:"cccdNumber"`
+		CccdDate    int64  `json:"cccdDate"`
+		CccdAddress string `json:"cccdAddress"`
+		CreatedAt   int64  `json:"createdAt"`
+		UpdatedAt   int64  `json:"updatedAt"`
+	}
+)
+
+// API
+
+type (
+	LoginReq {
+		Phone    string `form:"phone"`    // user_name
+		Password string `form:"password"` //  password
+	}
+	LoginRes {
+		Result Result `json:"result"`
+		Token  string `json:"token"` // jwt token for api
+		User   User   `json:"user"`  // Account info
+	}
+)
+
+@server (
+	prefix: /users
+)
+service main-api {
+	@doc (
+		summary: "User Login"
+	)
+	@handler Login
+	post /login (LoginReq) returns (LoginRes)
+}
