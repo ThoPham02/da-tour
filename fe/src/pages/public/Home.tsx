@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plane, MapPin, Star, Users, Phone, Mail, Calendar, LogIn, Send } from 'lucide-react';
+import { MapPin, Star, Users, Phone, Mail, Calendar, LogIn, Send } from 'lucide-react';
 
 function Home() {
   const navigate = useNavigate();
