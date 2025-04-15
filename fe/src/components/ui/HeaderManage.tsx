@@ -34,17 +34,18 @@ const HeaderManage: React.FC<HeaderManageProps> = ({
   return (
     <div>
       <header
-        className={`fixed flex items-center justify-between h-70 px-4 bg-primary z-20 transition-width duration-300 ${
+        className={`fixed flex items-center justify-between h-70 px-4 bg-gray-300 z-20 transition-width duration-300 w-full ${
           isExpanded ? "width260px" : "width80px"
         }`}
       >
-        <div className="flex items-center">
+        <div className="flex items-center w-full">
           <HeaderButton
             icon={<TfiViewList className="text-xl" />}
             onClick={() => setIsExpanded(!isExpanded)}
           />
         </div>
         {/* <User /> */}
+        <div></div>
       </header>
       <div className="h-70"></div>
     </div>

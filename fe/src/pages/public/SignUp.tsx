@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, ArrowLeft, Phone } from 'lucide-react';
+import { User, Lock, ArrowLeft, Mail } from 'lucide-react';
+
+import BgImg1 from '../../assets/images/bg-1.png';
+import { ROUTE_PATHS } from '../../common/path';
 
 function SignUp() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullname: '',
-    phone: '',
+    email: '',
     password: '',
     confirmPassword: ''
   });
@@ -31,7 +34,7 @@ function SignUp() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center relative py-12 px-4 sm:px-6 lg:px-8"
          style={{
-           backgroundImage: 'url("https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&q=80")',
+           backgroundImage: `url(${BgImg1})`,
          }}>
       <div className="absolute inset-0 bg-black opacity-50"></div>
       
@@ -75,20 +78,20 @@ function SignUp() {
             </div>
 
             <div>
-              <label htmlFor="phone" className="sr-only">Phone Number</label>
+              <label htmlFor="email" className="sr-only">Email</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-gray-200" />
+                  <Mail className="h-5 w-5 text-gray-200" />
                 </div>
                 <input
-                  id="phone"
-                  name="phone"
+                  id="email"
+                  name="email"
                   type="tel"
                   required
-                  value={formData.phone}
+                  value={formData.email}
                   onChange={handleChange}
                   className="appearance-none rounded-lg relative block w-full pl-10 pr-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
-                  placeholder="Phone Number"
+                  placeholder="Your Email"
                 />
               </div>
             </div>
@@ -145,7 +148,7 @@ function SignUp() {
             <span className="text-gray-200">Already have an account? </span>
             <button 
               type="button" 
-              onClick={() => navigate('/login')} 
+              onClick={() => navigate(`${ROUTE_PATHS.LOGIN}`)} 
               className="font-medium text-red-200 hover:text-red-100"
             >
               Sign in

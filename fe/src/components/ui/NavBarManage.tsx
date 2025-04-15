@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { MdPayment } from "react-icons/md";
-import { LiaFileContractSolid } from "react-icons/lia";
-import { IoSettingsOutline } from "react-icons/io5";
-import { FiCalendar } from "react-icons/fi";
+import { MdOutlineDashboardCustomize, MdPerson, MdShoppingCart, MdPayment, MdTravelExplore  } from "react-icons/md";
 
 import logo from "../../assets/images/logo.png";
 import { ROUTE_PATHS } from "../../common/path";
@@ -30,24 +27,29 @@ const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
     user?.role !== USER_ROLES.ADMIN
       ? [
           {
-            icon: <LiaFileContractSolid className="text-3xl" />,
-            label: "Hợp đồng",
-            path: ROUTE_PATHS.HOME,
+            icon: <MdOutlineDashboardCustomize className="text-3xl" />,
+            label: "Dashboard",
+            path: ROUTE_PATHS.MANAGE_DASHBOARD,
+          },
+          {
+            icon: <MdTravelExplore className="text-3xl" />,
+            label: "Sản phẩm",
+            path: ROUTE_PATHS.MANAGE_TOUR,
+          },
+          {
+            icon: <MdShoppingCart className="text-3xl" />,
+            label: "Đơn hàng",
+            path: ROUTE_PATHS.MANAGE_ORDER,
+          },
+          {
+            icon: <MdPerson className="text-3xl" />,
+            label: "Khách hàng",
+            path: ROUTE_PATHS.MANAGE_USER,
           },
           {
             icon: <MdPayment className="text-3xl" />,
             label: "Thanh toán",
-            path: ROUTE_PATHS.HOME,
-          },
-          {
-            icon: <FiCalendar className="text-3xl" />,
-            label: "Lịch hẹn",
-            path: ROUTE_PATHS.HOME,
-          },
-          {
-            icon: <IoSettingsOutline className="text-3xl" />,
-            label: "Cài đặt",
-            path: ROUTE_PATHS.HOME,
+            path: ROUTE_PATHS.MANAGE_PAYMENT,
           },
         ]
       : [];
@@ -78,8 +80,8 @@ const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
                 }`}
               />
               {shouldExpand && (
-                <h1 className="text-xl font-bold ml-4 uppercase whitespace-nowrap">
-                  Nhà Trọ <br /> HUMG
+                <h1 className="text-xl font-bold ml-4 uppercase whitespace-nowrap text-red-600">
+                  China Tour <br/> Admin
                 </h1>
               )}
             </div>
@@ -90,8 +92,8 @@ const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
               {menuItems.map((item, index) => (
                 <li
                   key={index}
-                  className={`p-4 hover:text-blue-700 cursor-pointer ${
-                    currentPage === item.path ? "text-blue-700" : ""
+                  className={`p-4 hover:text-red-600 cursor-pointer font-semibold ${
+                    currentPage === item.path ? "text-red-600" : ""
                   } ${shouldExpand ? "justify-start" : "justify-center"}`}
                 >
                   <Link to={item.path} className="flex items-center">

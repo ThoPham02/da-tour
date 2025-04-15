@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Star, Users, Phone, Mail, Calendar, LogIn, Send } from 'lucide-react';
 
+import BgImg1 from '../../assets/images/bg-1.png';
+import { ROUTE_PATHS } from '../../common/path';
+
 function Home() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -28,7 +31,7 @@ function Home() {
       {/* Navigation */}
       <div className="fixed top-0 right-0 p-6 z-50">
         <button 
-          onClick={() => navigate('/login')}
+          onClick={() => navigate(`${ROUTE_PATHS.LOGIN}`)}
           className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-300 flex items-center"
         >
           <LogIn className="w-4 h-4 mr-2" />
@@ -40,7 +43,7 @@ function Home() {
       <div 
         className="h-screen bg-cover bg-center relative" 
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&q=80")',
+          backgroundImage: `url(${BgImg1})`,
         }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50">

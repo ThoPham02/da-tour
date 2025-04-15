@@ -11,6 +11,14 @@ export const API_URL = {
     REGISTER: "/register",
     HOME: "/home",
     ERROR: "/error",
+    DETAIL_TOUR: "/tour/:id",
+
+    // admin routes
+    MANAGE_DASHBOARD: "/admin/dashboard",
+    MANAGE_TOUR: "/admin/manage-tour",
+    MANAGE_ORDER: "/admin/manage-order",
+    MANAGE_USER: "/admin/manage-user",
+    MANAGE_PAYMENT: "/admin/manage-payment",
   } as const;
   
   export const BREADCRUMB_DETAIL: Record<string, string> = {

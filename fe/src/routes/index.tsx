@@ -5,7 +5,8 @@ import { RootState } from "../store/redux"; // Đảm bảo file `store/index.ts
 
 import { publicRoute } from "../pages/public/route";
 import { ROUTE_PATHS } from "../common/path";
-import { ErrorLayout, DefaultLayout } from "../components/layout";
+import { ErrorLayout, DefaultLayout, ManageLayout } from "../components/layout";
+import { adminRoute } from "../pages/admin/route";
 
 // Kiểu cho Props của ProtectedRoute
 interface ProtectedRouteProps {
@@ -36,6 +37,12 @@ const router = createBrowserRouter([
     element: <DefaultLayout />,
     errorElement: <ErrorLayout />,
     children: publicRoute,
+  },
+  {
+    path: ROUTE_PATHS.ROOT,
+    element: <ManageLayout />,
+    errorElement: <ErrorLayout />,
+    children: adminRoute,
   },
 ]);
 

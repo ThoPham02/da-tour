@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Lock, ArrowLeft } from 'lucide-react';
 
+import { ROUTE_PATHS } from '../../common/path';
+import BgImg2 from '../../assets/images/bg-2.png';
+
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -12,7 +15,7 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Login submitted:', formData);
-    // Add your login logic here
+
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +28,7 @@ function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center relative py-12 px-4 sm:px-6 lg:px-8"
          style={{
-           backgroundImage: 'url("https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&q=80")',
+           backgroundImage: `url(${BgImg2})`,
          }}>
       <div className="absolute inset-0 bg-black opacity-50"></div>
       
@@ -120,7 +123,7 @@ function Login() {
             <span className="text-gray-200">Don't have an account? </span>
             <button 
               type="button" 
-              onClick={() => navigate('/signup')} 
+              onClick={() => navigate(`${ROUTE_PATHS.REGISTER}`)} 
               className="font-medium text-red-200 hover:text-red-100"
             >
               Sign up
