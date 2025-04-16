@@ -7,28 +7,65 @@ type Result struct {
 }
 
 type User struct {
-	UserID      int64  `json:"userID"`
-	Phone       string `json:"phone"`
-	Role        int64  `json:"role"`
-	Status      int64  `json:"status"`
-	Address     string `json:"address"`
-	FullName    string `json:"fullName"`
-	AvatarUrl   string `json:"avatarUrl"`
-	Birthday    int64  `json:"birthday"`
-	Gender      int64  `json:"gender"`
-	CccdNumber  string `json:"cccdNumber"`
-	CccdDate    int64  `json:"cccdDate"`
-	CccdAddress string `json:"cccdAddress"`
-	CreatedAt   int64  `json:"createdAt"`
-	UpdatedAt   int64  `json:"updatedAt"`
+	UserID   int64  `json:"userID"`
+	FullName string `json:"fullName"`
+	Email    string `json:"email"`
+	Role     int64  `json:"role"`
+	Status   int64  `json:"status"`
+}
+
+type Tour struct {
+	ID          int64     `json:"id"`
+	Name        string    `json:"name"`
+	BgUrl       string    `json:"bgUrl"`
+	Description string    `json:"description"`
+	Destination int64     `json:"destination"`
+	NumberDay   int64     `json:"numberDay"`
+	Overview    string    `json:"overview"`
+	Utils       []Util    `json:"utils"`
+	Includes    []Include `json:"includes"`
+	Journeys    []Journey `json:"journey"`
+	Price       int64     `json:"price"`
+	TimeStart   int64     `json:"timeStart"`
+	Quantity    int64     `json:"quantity"`
+	Remain      int64     `json:"remain"`
+}
+
+type Util struct {
+	ID     int64  `json:"id"`
+	Title  string `json:"title"`
+	Detail string `json:"detail"`
+}
+
+type Include struct {
+	ID     int64  `json:"id"`
+	Title  string `json:"title"`
+	Detail string `json:"detail"`
+}
+
+type Journey struct {
+	ID     int64  `json:"id"`
+	Detail string `json:"detail"`
 }
 
 type LoginReq struct {
-	Phone    string `form:"phone"`    // user_name
+	Email    string `form:"email"`    // user_name
 	Password string `form:"password"` //  password
 }
 
 type LoginRes struct {
+	Result Result `json:"result"`
+	Token  string `json:"token"` // jwt token for api
+	User   User   `json:"user"`  // Account info
+}
+
+type RegisterReq struct {
+	Fullname string `form:"fullname"`
+	Email    string `form:"email"`
+	Password string `form:"password"`
+}
+
+type RegisterRes struct {
 	Result Result `json:"result"`
 	Token  string `json:"token"` // jwt token for api
 	User   User   `json:"user"`  // Account info

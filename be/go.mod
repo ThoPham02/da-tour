@@ -2,7 +2,11 @@ module da-tour
 
 go 1.23.5
 
-require github.com/zeromicro/go-zero v1.8.2
+require (
+	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/zeromicro/go-zero v1.8.2
+	golang.org/x/crypto v0.33.0
+)
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect

@@ -36,18 +36,11 @@ type (
 
 	UserTbl struct {
 		Id           int64          `db:"id"`
-		Phone        string         `db:"phone"`
-		PasswordHash string         `db:"password_hash"`
-		Role         sql.NullInt64  `db:"role"`
-		Status       int64          `db:"status"`
-		Address      sql.NullString `db:"address"`
+		Email        string         `db:"email"`
 		FullName     sql.NullString `db:"full_name"`
-		AvatarUrl    sql.NullString `db:"avatar_url"`
-		Birthday     sql.NullInt64  `db:"birthday"`
-		Gender       sql.NullInt64  `db:"gender"`
-		CCCDNumber   sql.NullString `db:"CCCD_number"`
-		CCCDDate     sql.NullInt64  `db:"CCCD_date"`
-		CCCDAddress  sql.NullString `db:"CCCD_address"`
+		PasswordHash string         `db:"password_hash"`
+		Role         int64          `db:"role"`
+		Status       int64          `db:"status"`
 		CreatedAt    sql.NullInt64  `db:"created_at"`
 		UpdatedAt    sql.NullInt64  `db:"updated_at"`
 	}
@@ -88,14 +81,14 @@ func (m *defaultUserTblModel) FindOne(ctx context.Context, id int64) (*UserTbl, 
 }
 
 func (m *defaultUserTblModel) Insert(ctx context.Context, data *UserTbl) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userTblRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.Phone, data.PasswordHash, data.Role, data.Status, data.Address, data.FullName, data.AvatarUrl, data.Birthday, data.Gender, data.CCCDNumber, data.CCCDDate, data.CCCDAddress, data.CreatedAt, data.UpdatedAt)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userTblRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.Email, data.FullName, data.PasswordHash, data.Role, data.Status, data.CreatedAt, data.UpdatedAt)
 	return ret, err
 }
 
 func (m *defaultUserTblModel) Update(ctx context.Context, data *UserTbl) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userTblRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.Phone, data.PasswordHash, data.Role, data.Status, data.Address, data.FullName, data.AvatarUrl, data.Birthday, data.Gender, data.CCCDNumber, data.CCCDDate, data.CCCDAddress, data.CreatedAt, data.UpdatedAt, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.Email, data.FullName, data.PasswordHash, data.Role, data.Status, data.CreatedAt, data.UpdatedAt, data.Id)
 	return err
 }
 

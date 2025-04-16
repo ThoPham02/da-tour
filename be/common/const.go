@@ -1,0 +1,39 @@
+package common
+
+// RESPONSE_CODE_AND_MESSAGE
+
+const (
+	SUCCESS_CODE = 0
+	SUCCESS_MESS = "Success"
+
+	DB_ERR_CODE = 1
+	DB_ERR_MESS = "Database error"
+
+	UNKNOWN_ERR_CODE = 2
+	UNKNOWN_ERR_MESS = "Unknown error"
+)
+
+const (
+	USER_NOT_FOUND_CODE = 2000
+	USER_NOT_FOUND_MESS = "User not found"
+
+	INVALID_PASSWORD_CODE = 2001
+	INVALID_PASSWORD_MESS = "Invalid password"
+
+	USER_NOT_ACTIVE_CODE = 2002
+	USER_NOT_ACTIVE_MESS = "User not active"
+
+	EMAIL_ALREADY_REGISTERED_CODE = 2003
+	EMAIL_ALREADY_REGISTERED_MESS = "Email already registered"
+)
+
+// CONST
+
+const (
+	USER_ROLE_GUEST = 0
+	USER_ROLE_ADMIN = 1
+	USER_ROLE_USER  = 2
+
+	USER_STATUS_INACTIVE = 0
+	USER_STATUS_ACTIVE   = 1
+)
