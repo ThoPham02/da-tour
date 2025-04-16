@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Lock, ArrowLeft, Mail } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import BgImg1 from '../../assets/images/bg-1.png';
+import * as actions from "../../store/actions/authActions";
 import { ROUTE_PATHS } from '../../common/path';
+import { AppDispatch, RootState } from '../../store/redux';
 
 function SignUp() {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { isLogined } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    isLogined && navigate(ROUTE_PATHS.ROOT);
+  }, [isLogined, navigate]);
+
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',
@@ -21,7 +32,8 @@ function SignUp() {
       return;
     }
     console.log('Sign up submitted:', formData);
-    // Add your signup logic here
+
+    dispatch(actions.register(formData));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

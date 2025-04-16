@@ -1,5 +1,6 @@
 import React, { useEffect, MouseEvent } from "react";
 import { TfiViewList } from "react-icons/tfi";
+import User from "./User";
 
 interface HeaderManageProps {
   isExpanded: boolean;
@@ -34,18 +35,17 @@ const HeaderManage: React.FC<HeaderManageProps> = ({
   return (
     <div>
       <header
-        className={`fixed flex items-center justify-between h-70 px-4 bg-gray-300 z-20 transition-width duration-300 w-full ${
-          isExpanded ? "width260px" : "width80px"
+        className={`fixed top-0 left-0 h-[70px] flex items-center justify-between px-4 bg-gray-300 z-20 transition-all duration-300 ${
+          isExpanded ? "w-[calc(100%-260px)] left-[260px]" : "w-[calc(100%-80px)] left-[80px]"
         }`}
       >
-        <div className="flex items-center w-full">
+        <div className="flex items-center">
           <HeaderButton
             icon={<TfiViewList className="text-xl" />}
             onClick={() => setIsExpanded(!isExpanded)}
           />
         </div>
-        {/* <User /> */}
-        <div></div>
+        <User />
       </header>
       <div className="h-70"></div>
     </div>

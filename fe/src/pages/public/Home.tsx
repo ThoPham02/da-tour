@@ -7,13 +7,13 @@ import BgImg1 from '../../assets/images/bg-1.png';
 import { ROUTE_PATHS } from '../../common/path';
 import { RootState } from '../../store/redux';
 import { USER_ROLES } from '../../common/const';
+import User from '../../components/ui/User';
 
 function Home() {
   const navigate = useNavigate();
 
-  const isAdmin = useSelector((state: RootState) => state.auth.user?.role === USER_ROLES.USER);
-
-  console.log('isAdmin:', useSelector((state: RootState) => state.auth.user?.role === USER_ROLES.USER));
+  const { isLogined, user } = useSelector((state: RootState) => state.auth);
+  const isAdmin = user?.role === USER_ROLES.ADMIN;
 
   useEffect(() => {
     isAdmin && navigate(ROUTE_PATHS.MANAGE_DASHBOARD);
@@ -41,7 +41,10 @@ function Home() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <div className="fixed top-0 right-0 p-6 z-50">
+      {isLogined ?
+      <User />
+       :
+       <div className="fixed top-0 right-0 p-6 z-50">
         <button 
           onClick={() => navigate(`${ROUTE_PATHS.LOGIN}`)}
           className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-300 flex items-center"
@@ -49,7 +52,8 @@ function Home() {
           <LogIn className="w-4 h-4 mr-2" />
           Login
         </button>
-      </div>
+      </div> 
+      }
 
       {/* Hero Section */}
       <div 

@@ -6,6 +6,7 @@ export default {
       width: {
         260: "260px",
         80: "80px",
+        360: "360px",
       },
       height: {
         70: "70px",

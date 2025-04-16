@@ -7,6 +7,7 @@ import { publicRoute } from "../pages/public/route";
 import { ROUTE_PATHS } from "../common/path";
 import { ErrorLayout, DefaultLayout, ManageLayout } from "../components/layout";
 import { adminRoute } from "../pages/admin/route";
+import { USER_ROLES } from "../common/const";
 
 // Kiểu cho Props của ProtectedRoute
 interface ProtectedRouteProps {
@@ -23,7 +24,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
 
-  return user && allowedRoles.includes(user.role ?? 2) ? (
+  return user && allowedRoles.includes(user.role ?? USER_ROLES.ADMIN) ? (
     element
   ) : (
     <Navigate to={redirectPath} replace />
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
   },
   {
     path: ROUTE_PATHS.ROOT,
-    element: <ManageLayout />,
+    element: <ProtectedRoute element={<ManageLayout />} allowedRoles={[1]} />,
     errorElement: <ErrorLayout />,
     children: adminRoute,
   },

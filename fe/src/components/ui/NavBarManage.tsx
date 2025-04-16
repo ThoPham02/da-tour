@@ -5,7 +5,6 @@ import { MdOutlineDashboardCustomize, MdPerson, MdShoppingCart, MdPayment, MdTra
 
 import logo from "../../assets/images/logo.png";
 import { ROUTE_PATHS } from "../../common/path";
-import { USER_ROLES } from "../../common/const";
 import { RootState } from "../../store/redux";
 
 interface NavBarManageProps {
@@ -20,12 +19,9 @@ interface MenuItem {
 
 const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const { user } = useSelector((state: RootState) => state.auth);
   const { currentPage } = useSelector((state: RootState) => state.app);
 
-  const menuItems: MenuItem[] =
-    user?.role !== USER_ROLES.ADMIN
-      ? [
+  const menuItems: MenuItem[] = [
           {
             icon: <MdOutlineDashboardCustomize className="text-3xl" />,
             label: "Dashboard",
@@ -51,9 +47,7 @@ const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
             label: "Thanh toán",
             path: ROUTE_PATHS.MANAGE_PAYMENT,
           },
-        ]
-      : [];
-
+        ];
   const shouldExpand = isExpanded || isHovered;
 
   return (
