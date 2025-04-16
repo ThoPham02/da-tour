@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { MapPin, Star, Users, Phone, Mail, Calendar, LogIn, Send } from 'lucide-react';
 
 import BgImg1 from '../../assets/images/bg-1.png';
 import { ROUTE_PATHS } from '../../common/path';
+import { RootState } from '../../store/redux';
+import { USER_ROLES } from '../../common/const';
 
 function Home() {
   const navigate = useNavigate();
+
+  const isAdmin = useSelector((state: RootState) => state.auth.user?.role === USER_ROLES.USER);
+
+  console.log('isAdmin:', useSelector((state: RootState) => state.auth.user?.role === USER_ROLES.USER));
+
+  useEffect(() => {
+    isAdmin && navigate(ROUTE_PATHS.MANAGE_DASHBOARD);
+  }, [isAdmin, navigate]);
+
   const [formData, setFormData] = useState({
     fullname: '',
     phone: '',
