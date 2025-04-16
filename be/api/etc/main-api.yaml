@@ -1,3 +1,7 @@
 Name: main-api
 Host: 0.0.0.0
 Port: 8888
+Auth:
+  AccessSecret: xxxxxxxxxxxxxxxxx
+  AccessExpire: 604800000
+DataSource: root:123456@tcp(127.0.0.1:3306)/china_tour

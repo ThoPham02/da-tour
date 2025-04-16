@@ -15,20 +15,45 @@ type (
 
 type (
 	User {
-		UserID      int64  `json:"userID"`
-		Phone       string `json:"phone"`
-		Role        int64  `json:"role"`
-		Status      int64  `json:"status"`
-		Address     string `json:"address"`
-		FullName    string `json:"fullName"`
-		AvatarUrl   string `json:"avatarUrl"`
-		Birthday    int64  `json:"birthday"`
-		Gender      int64  `json:"gender"`
-		CccdNumber  string `json:"cccdNumber"`
-		CccdDate    int64  `json:"cccdDate"`
-		CccdAddress string `json:"cccdAddress"`
-		CreatedAt   int64  `json:"createdAt"`
-		UpdatedAt   int64  `json:"updatedAt"`
+		UserID   int64  `json:"userID"`
+		FullName string `json:"fullName"`
+		Email    string `json:"email"`
+		Role     int64  `json:"role"`
+		Status   int64  `json:"status"`
+	}
+
+	Tour {
+		ID          int64     `json:"id"`
+		Name        string    `json:"name"`
+		BgUrl       string    `json:"bgUrl"`
+		Description string    `json:"description"`
+		Destination int64     `json:"destination"`
+		NumberDay   int64     `json:"numberDay"`
+		Overview    string    `json:"overview"`
+		Utils       []Util    `json:"utils"`
+		Includes    []Include `json:"includes"`
+		Journeys    []Journey `json:"journey"`
+		Price       int64     `json:"price"`
+		TimeStart   int64     `json:"timeStart"`
+		Quantity    int64     `json:"quantity"`
+		Remain      int64     `json:"remain"`
+	}
+
+	Util {
+		ID     int64  `json:"id"`
+		Title  string `json:"title"`
+		Detail string `json:"detail"`
+	}
+
+	Include {
+		ID     int64  `json:"id"`
+		Title  string `json:"title"`
+		Detail string `json:"detail"`
+	}
+
+	Journey {
+		ID     int64  `json:"id"`
+		Detail string `json:"detail"`
 	}
 )
 
@@ -36,7 +61,7 @@ type (
 
 type (
 	LoginReq {
-		Phone    string `form:"phone"`    // user_name
+		Email    string `form:"email"`    // user_name
 		Password string `form:"password"` //  password
 	}
 	LoginRes {
@@ -44,10 +69,21 @@ type (
 		Token  string `json:"token"` // jwt token for api
 		User   User   `json:"user"`  // Account info
 	}
+
+	RegisterReq {
+		Fullname string `form:"fullname"`
+		Email    string `form:"email"`
+		Password string `form:"password"`
+	}
+	RegisterRes {
+		Result Result `json:"result"`
+		Token  string `json:"token"` // jwt token for api
+		User   User   `json:"user"`  // Account info
+	}
 )
 
 @server (
-	prefix: /users
+	prefix:     /
 )
 service main-api {
 	@doc (
@@ -55,4 +91,10 @@ service main-api {
 	)
 	@handler Login
 	post /login (LoginReq) returns (LoginRes)
+
+	@doc (
+		summary: "User Register"
+	)
+	@handler Register
+	post /register (RegisterReq) returns (RegisterRes)
 }
