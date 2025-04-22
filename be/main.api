@@ -80,10 +80,30 @@ type (
 		Token  string `json:"token"` // jwt token for api
 		User   User   `json:"user"`  // Account info
 	}
+	
+	UpdateUserReq {
+
+	}
+
+	UpdateUserRes {
+
+	}
+)
+
+type (
+	SendMessageReq {
+
+	}
+
+	SendMessageRes {
+
+	}
+
+	
 )
 
 @server (
-	prefix:     /
+	prefix: /
 )
 service main-api {
 	@doc (
@@ -97,4 +117,30 @@ service main-api {
 	)
 	@handler Register
 	post /register (RegisterReq) returns (RegisterRes)
+
+	@doc (
+		summary: "Update User Info"
+	)
+	@handler UpdateUser
+	put /user/:userID (UpdateUserReq) returns (UpdateUserRes)
+
+	@doc (
+		summary: "Send Message"
+	)
+	@handler SendMessage
+	post /message (SendMessageReq) returns (SendMessageRes)
+
+	@doc (
+		summary: "Search Tour"
+	)
+	@handler SearchTour
+	get /tour (SearchTourReq) returns (SearchTourRes)
+
+	@doc (
+		summary: "Tour Detail"
+	)
+	@handler TourDetail
+	get /tour/:tourID (TourDetailReq) returns (TourDetailRes)
+
+
 }
