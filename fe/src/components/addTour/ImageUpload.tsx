@@ -1,12 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { Upload, Image as ImageIcon, X } from 'lucide-react';
+import React, { useState, useRef } from "react";
+import { Upload, Image as ImageIcon, X } from "lucide-react";
 
 interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
   currentImage: string;
+  error?: {};
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, currentImage }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({
+  onImageUpload,
+  currentImage,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState(currentImage);
@@ -23,7 +27,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, currentImage }
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleImageFile(e.dataTransfer.files[0]);
     }
@@ -48,20 +52,22 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, currentImage }
   };
 
   const removeImage = () => {
-    setPreviewUrl('');
-    onImageUpload('');
-    if (fileInputRef.current) fileInputRef.current.value = '';
+    setPreviewUrl("");
+    onImageUpload("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">Tour Image</label>
-      
+      <label className="block text-sm font-medium text-gray-700">
+        Tour Image <span className="text-red-500">*</span>
+      </label>
+
       {previewUrl ? (
         <div className="relative rounded-lg overflow-hidden h-64 bg-gray-100">
-          <img 
-            src={previewUrl} 
-            alt="Tour preview" 
+          <img
+            src={previewUrl}
+            alt="Tour preview"
             className="w-full h-full object-cover"
           />
           <button
@@ -75,7 +81,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, currentImage }
       ) : (
         <div
           className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center h-64 transition-colors cursor-pointer
-            ${isDragging ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-red-400 hover:bg-gray-50'}`}
+            ${isDragging ? "border-red-500 bg-red-50" : "border-gray-300 hover:border-red-400 hover:bg-gray-50"}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -83,12 +89,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, currentImage }
         >
           <Upload size={36} className="text-gray-400 mb-4" />
           <p className="text-sm text-gray-600 text-center">
-            <span className="font-medium text-red-600">Click to upload</span> or drag and drop
+            <span className="font-medium text-red-600">Click to upload</span> or
+            drag and drop
           </p>
           <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 5MB</p>
         </div>
       )}
-      
+
       <input
         type="file"
         ref={fileInputRef}

@@ -1,44 +1,55 @@
-import React, { useState } from 'react';
-import { Tour, Activity, Service } from '../types/tour';
-import { Plus, Trash2 } from 'lucide-react';
+import React, { useState } from "react";
+import { Tour, Activity, Service } from "../../types/tour";
+import { Plus, Trash2 } from "lucide-react";
 
 interface TourDetailsProps {
   tour: Tour;
   onActivitiesChange: (activities: Activity[]) => void;
   onServicesChange: (services: Service[]) => void;
+  errors?: {};
 }
 
-const TourDetails: React.FC<TourDetailsProps> = ({ 
-  tour, 
-  onActivitiesChange, 
-  onServicesChange 
+const TourDetails: React.FC<TourDetailsProps> = ({
+  tour,
+  onActivitiesChange,
+  onServicesChange,
 }) => {
-  const [newActivity, setNewActivity] = useState('');
-  const [newService, setNewService] = useState('');
+  const [newActivity, setNewActivity] = useState("");
+  const [newService, setNewService] = useState("");
 
   const addActivity = () => {
     if (newActivity.trim()) {
-      const updatedActivities = [...tour.activities, { id: Date.now().toString(), name: newActivity.trim() }];
+      const updatedActivities = [
+        ...tour.activities,
+        { id: Date.now().toString(), name: newActivity.trim() },
+      ];
       onActivitiesChange(updatedActivities);
-      setNewActivity('');
+      setNewActivity("");
     }
   };
 
   const removeActivity = (id: string) => {
-    const updatedActivities = tour.activities.filter(activity => activity.id !== id);
+    const updatedActivities = tour.activities.filter(
+      (activity) => activity.id !== id
+    );
     onActivitiesChange(updatedActivities);
   };
 
   const addService = () => {
     if (newService.trim()) {
-      const updatedServices = [...tour.services, { id: Date.now().toString(), name: newService.trim() }];
+      const updatedServices = [
+        ...tour.services,
+        { id: Date.now().toString(), name: newService.trim() },
+      ];
       onServicesChange(updatedServices);
-      setNewService('');
+      setNewService("");
     }
   };
 
   const removeService = (id: string) => {
-    const updatedServices = tour.services.filter(service => service.id !== id);
+    const updatedServices = tour.services.filter(
+      (service) => service.id !== id
+    );
     onServicesChange(updatedServices);
   };
 
@@ -46,7 +57,7 @@ const TourDetails: React.FC<TourDetailsProps> = ({
     e: React.KeyboardEvent<HTMLInputElement>,
     action: () => void
   ) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       action();
     }
@@ -55,7 +66,9 @@ const TourDetails: React.FC<TourDetailsProps> = ({
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Tour Activities</h3>
+        <h3 className="text-lg font-medium text-gray-800 mb-4">
+          Tour Activities <span className="text-red-500">*</span>
+        </h3>
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
             <input
@@ -77,11 +90,13 @@ const TourDetails: React.FC<TourDetailsProps> = ({
 
           <div className="space-y-2">
             {tour.activities.length === 0 && (
-              <p className="text-sm text-gray-500 italic">No activities added yet.</p>
+              <p className="text-sm text-gray-500 italic">
+                No activities added yet.
+              </p>
             )}
-            
+
             {tour.activities.map((activity) => (
-              <div 
+              <div
                 key={activity.id}
                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md group"
               >
@@ -100,7 +115,9 @@ const TourDetails: React.FC<TourDetailsProps> = ({
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Included Services</h3>
+        <h3 className="text-lg font-medium text-gray-800 mb-4">
+          Included Services <span className="text-red-500">*</span>
+        </h3>
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
             <input
@@ -122,11 +139,13 @@ const TourDetails: React.FC<TourDetailsProps> = ({
 
           <div className="space-y-2">
             {tour.services.length === 0 && (
-              <p className="text-sm text-gray-500 italic">No services added yet.</p>
+              <p className="text-sm text-gray-500 italic">
+                No services added yet.
+              </p>
             )}
-            
+
             {tour.services.map((service) => (
-              <div 
+              <div
                 key={service.id}
                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md group"
               >

@@ -1,9 +1,14 @@
 import React from 'react';
-import { Tour } from '../types/tour';
+import { Tour } from '../../types/tour';
 
 interface TourBasicInfoProps {
   tour: Tour;
   onChange: (data: Partial<Tour>) => void;
+  errors?: {
+    price?: string;
+    seats?: string;
+    departureDate?: string;
+  };
 }
 
 const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
@@ -21,7 +26,7 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
     <div className="space-y-6">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Tour Name
+          Tour Name <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -31,13 +36,12 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
           onChange={handleInputChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
           placeholder="e.g., Beijing Imperial Experience"
-          required
         />
       </div>
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-          Description
+          Description <span className="text-red-500">*</span>
         </label>
         <textarea
           id="description"
@@ -47,14 +51,13 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
           rows={3}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
           placeholder="Brief description of the tour..."
-          required
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-            Duration (days)
+            Duration (days) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -64,13 +67,12 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
             onChange={handleDurationChange}
             min="1"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
-            required
           />
         </div>
 
         <div>
           <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-            Location
+            Location <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -80,14 +82,13 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
             onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
             placeholder="e.g., Beijing, Shanghai, Xi'an"
-            required
           />
         </div>
       </div>
 
       <div>
         <label htmlFor="overview" className="block text-sm font-medium text-gray-700">
-          Tour Overview
+          Tour Overview <span className="text-red-500">*</span>
         </label>
         <textarea
           id="overview"
@@ -97,7 +98,6 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
           rows={5}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
           placeholder="Detailed overview of the tour experience..."
-          required
         />
       </div>
     </div>

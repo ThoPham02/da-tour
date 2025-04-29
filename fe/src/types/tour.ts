@@ -30,3 +30,7 @@ export interface Tour {
   seats: number;
   departureDate: string;
 }
+
+export interface ValidationErrors {
+  [key: string]: string;
+}
