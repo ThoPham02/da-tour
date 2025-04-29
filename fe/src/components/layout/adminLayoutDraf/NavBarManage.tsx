@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { MdOutlineDashboardCustomize, MdPerson, MdShoppingCart, MdPayment, MdTravelExplore  } from "react-icons/md";
+import {
+  MdOutlineDashboardCustomize,
+  MdPerson,
+  MdShoppingCart,
+  MdPayment,
+  MdTravelExplore,
+} from "react-icons/md";
 
 import logo from "../../assets/images/logo.png";
-import { ROUTE_PATHS } from "../../common/path";
-import { RootState } from "../../store/redux";
+import { ROUTE_PATHS } from "../../../common/path";
+import { RootState } from "../../../store/redux";
 
 interface NavBarManageProps {
   isExpanded: boolean;
@@ -22,32 +28,32 @@ const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
   const { currentPage } = useSelector((state: RootState) => state.app);
 
   const menuItems: MenuItem[] = [
-          {
-            icon: <MdOutlineDashboardCustomize className="text-3xl" />,
-            label: "Dashboard",
-            path: ROUTE_PATHS.MANAGE_DASHBOARD,
-          },
-          {
-            icon: <MdTravelExplore className="text-3xl" />,
-            label: "Sản phẩm",
-            path: ROUTE_PATHS.MANAGE_TOUR,
-          },
-          {
-            icon: <MdShoppingCart className="text-3xl" />,
-            label: "Đơn hàng",
-            path: ROUTE_PATHS.MANAGE_ORDER,
-          },
-          {
-            icon: <MdPerson className="text-3xl" />,
-            label: "Khách hàng",
-            path: ROUTE_PATHS.MANAGE_USER,
-          },
-          {
-            icon: <MdPayment className="text-3xl" />,
-            label: "Thanh toán",
-            path: ROUTE_PATHS.MANAGE_PAYMENT,
-          },
-        ];
+    {
+      icon: <MdOutlineDashboardCustomize className="text-3xl" />,
+      label: "Dashboard",
+      path: ROUTE_PATHS.MANAGE_DASHBOARD,
+    },
+    {
+      icon: <MdTravelExplore className="text-3xl" />,
+      label: "Sản phẩm",
+      path: ROUTE_PATHS.MANAGE_TOUR,
+    },
+    {
+      icon: <MdShoppingCart className="text-3xl" />,
+      label: "Đơn hàng",
+      path: ROUTE_PATHS.MANAGE_ORDER,
+    },
+    {
+      icon: <MdPerson className="text-3xl" />,
+      label: "Khách hàng",
+      path: ROUTE_PATHS.MANAGE_USER,
+    },
+    {
+      icon: <MdPayment className="text-3xl" />,
+      label: "Thanh toán",
+      path: ROUTE_PATHS.MANAGE_PAYMENT,
+    },
+  ];
   const shouldExpand = isExpanded || isHovered;
 
   return (
@@ -75,7 +81,7 @@ const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
               />
               {shouldExpand && (
                 <h1 className="text-xl font-bold ml-4 uppercase whitespace-nowrap text-red-600">
-                  China Tour <br/> Admin
+                  China Tour <br /> Admin
                 </h1>
               )}
             </div>
@@ -93,7 +99,9 @@ const NavBarManage: React.FC<NavBarManageProps> = ({ isExpanded }) => {
                   <Link to={item.path} className="flex items-center">
                     {item.icon}
                     {shouldExpand && (
-                      <span className="ml-4 whitespace-nowrap">{item.label}</span>
+                      <span className="ml-4 whitespace-nowrap">
+                        {item.label}
+                      </span>
                     )}
                   </Link>
                 </li>

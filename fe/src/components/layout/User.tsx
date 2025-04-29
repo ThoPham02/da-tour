@@ -7,8 +7,8 @@ import { MdOutlineTour } from "react-icons/md";
 
 import defaultAvatar from "../../assets/images/default_avatar.png";
 import * as actions from "../../store/actions/authActions";
-import AccountModal from "./Modal/AccountModal";
-import BookedToursModal from "./Modal/BookedToursModal";
+import AccountModal from "../ui/Modal/AccountModal";
+import BookedToursModal from "../ui/Modal/BookedToursModal";
 
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 

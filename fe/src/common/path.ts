@@ -15,10 +15,10 @@ export const API_URL = {
 
     // admin routes
     MANAGE_DASHBOARD: "/admin/dashboard",
-    MANAGE_TOUR: "/admin/manage-tour",
-    MANAGE_ORDER: "/admin/manage-order",
-    MANAGE_USER: "/admin/manage-user",
-    MANAGE_PAYMENT: "/admin/manage-payment",
+    MANAGE_TOUR: "/admin/tours",
+    MANAGE_ORDER: "/admin/orders",
+    MANAGE_USER: "/admin/users",
+    MANAGE_PAYMENT: "/admin/payments",
   } as const;
   
   export const BREADCRUMB_DETAIL: Record<string, string> = {

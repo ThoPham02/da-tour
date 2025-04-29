@@ -15,7 +15,7 @@ interface TourCardProps {
   onEdit: () => void;
 }
 
-const TourCard: React.FC<TourCardProps> = ({
+const TourCardTmp: React.FC<TourCardProps> = ({
   name,
   destination,
   price,
@@ -68,4 +68,4 @@ const TourCard: React.FC<TourCardProps> = ({
   );
 };
 
-export default TourCard;
+export default TourCardTmp;

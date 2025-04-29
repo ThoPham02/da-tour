@@ -1,27 +1,27 @@
 import { RouteObject } from "react-router-dom";
 
 import { ROUTE_PATHS } from "../../common/path";
-import Dashboard from "./Dashboard";
-import Product from "./Product";
-import Order from "./Order";
 import Customer from "./Customer";
-import Payment from "./Payment";
+import DashboardPage from "./dashboard/DashboardPage";
+import ToursPage from "./tours/ToursPage";
+import OrdersPage from "./orders/OrdersPage";
+import PaymentsPage from "./payments/PaymentsPage";
 
 export const adminRoute: RouteObject[] = [
     {
         id: "adminDashboard",
         path: ROUTE_PATHS.MANAGE_DASHBOARD,
-        element: <Dashboard />,
+        element: <DashboardPage />,
     },
     {
         id: "adminProduct",
         path: ROUTE_PATHS.MANAGE_TOUR,
-        element: <Product />,
+        element: <ToursPage />,
     },
     {
         id: "adminOrder",
         path: ROUTE_PATHS.MANAGE_ORDER,
-        element: <Order />,
+        element: <OrdersPage />,
     },
     {
         id: "adminCustomer",
@@ -31,6 +31,6 @@ export const adminRoute: RouteObject[] = [
     {
         id: "adminPayment",
         path: ROUTE_PATHS.MANAGE_PAYMENT,
-        element: <Payment />,
+        element: <PaymentsPage />,
     },
 ];

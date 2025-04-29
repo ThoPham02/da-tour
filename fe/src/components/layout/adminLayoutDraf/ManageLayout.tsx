@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { HeaderManage, NavBarManage } from "../ui";
+import { HeaderManage, NavBarManage } from "../../ui";
 
 const ManageLayout: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
