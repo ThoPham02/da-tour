@@ -80,26 +80,47 @@ type (
 		Token  string `json:"token"` // jwt token for api
 		User   User   `json:"user"`  // Account info
 	}
-	
-	UpdateUserReq {
 
+	UpdateUserReq {
 	}
 
 	UpdateUserRes {
-
 	}
 )
 
 type (
 	SendMessageReq {
-
 	}
-
 	SendMessageRes {
-
 	}
 
-	
+	SearchTourReq {
+	}
+	SearchTourRes {
+	}
+
+	TourDetailReq {
+	}
+	TourDetailRes {
+	}
+
+	CreateTourReq {
+		Image         string  `form:"image"`
+		Name          string  `form:"name"`
+		Description   string  `form:"description"`
+		Duration      int64   `form:"duration"`
+		Location      int64   `form:"location"`
+		Overview      string  `form:"overview"`
+		Activities    string  `form:"activities"`
+		Services      string  `form:"services"`
+		Itinerary     string  `form:"itinerary"`
+		Price         float64 `form:"price"`
+		Seats         int64   `form:"seats"`
+		DepartureDate int64   `form:"departureDate"`
+	}
+	CreateTourRes {
+		Result Result `json:"result"`
+	}
 )
 
 @server (
@@ -134,13 +155,24 @@ service main-api {
 		summary: "Search Tour"
 	)
 	@handler SearchTour
-	get /tour (SearchTourReq) returns (SearchTourRes)
+	get /tour/filter (SearchTourReq) returns (SearchTourRes)
 
 	@doc (
 		summary: "Tour Detail"
 	)
 	@handler TourDetail
 	get /tour/:tourID (TourDetailReq) returns (TourDetailRes)
+}
 
-
+@server (
+	jwt:        Auth
+	middleware: UserTokenMiddleware
+	prefix:     /
+)
+service main-api {
+	@doc (
+		summary: "Create Tour"
+	)
+	@handler CreateTour
+	post /tour (CreateTourReq) returns (CreateTourRes)
 }

@@ -36,10 +36,9 @@ type (
 
 	IncludedTbl struct {
 		Id          int64          `db:"id"`
+		TourId      sql.NullInt64  `db:"tour_id"`
 		Name        string         `db:"name"`
 		Description sql.NullString `db:"description"`
-		Icon        sql.NullInt64  `db:"icon"`
-		TemplateId  sql.NullInt64  `db:"template_id"`
 		CreatedAt   sql.NullInt64  `db:"created_at"`
 		UpdatedAt   sql.NullInt64  `db:"updated_at"`
 	}
@@ -80,14 +79,14 @@ func (m *defaultIncludedTblModel) FindOne(ctx context.Context, id int64) (*Inclu
 }
 
 func (m *defaultIncludedTblModel) Insert(ctx context.Context, data *IncludedTbl) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, includedTblRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.Name, data.Description, data.Icon, data.TemplateId, data.CreatedAt, data.UpdatedAt)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, includedTblRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.TourId, data.Name, data.Description, data.CreatedAt, data.UpdatedAt)
 	return ret, err
 }
 
 func (m *defaultIncludedTblModel) Update(ctx context.Context, data *IncludedTbl) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, includedTblRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.Name, data.Description, data.Icon, data.TemplateId, data.CreatedAt, data.UpdatedAt, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.TourId, data.Name, data.Description, data.CreatedAt, data.UpdatedAt, data.Id)
 	return err
 }
 

@@ -11,6 +11,9 @@ const (
 
 	UNKNOWN_ERR_CODE = 2
 	UNKNOWN_ERR_MESS = "Unknown error"
+
+	INVALID_REQUEST_CODE = 3
+	INVALID_REQUEST_MESS = "Invalid request"
 )
 
 const (

@@ -70,3 +70,46 @@ type RegisterRes struct {
 	Token  string `json:"token"` // jwt token for api
 	User   User   `json:"user"`  // Account info
 }
+
+type UpdateUserReq struct {
+}
+
+type UpdateUserRes struct {
+}
+
+type SendMessageReq struct {
+}
+
+type SendMessageRes struct {
+}
+
+type SearchTourReq struct {
+}
+
+type SearchTourRes struct {
+}
+
+type TourDetailReq struct {
+}
+
+type TourDetailRes struct {
+}
+
+type CreateTourReq struct {
+	Image         string  `form:"image"`
+	Name          string  `form:"name"`
+	Description   string  `form:"description"`
+	Duration      int64   `form:"duration"`
+	Location      int64   `form:"location"`
+	Overview      string  `form:"overview"`
+	Activities    string  `form:"activities"`
+	Services      string  `form:"services"`
+	Itinerary     string  `form:"itinerary"`
+	Price         float64 `form:"price"`
+	Seats         int64   `form:"seats"`
+	DepartureDate int64   `form:"departureDate"`
+}
+
+type CreateTourRes struct {
+	Result Result `json:"result"`
+}

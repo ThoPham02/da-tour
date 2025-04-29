@@ -22,7 +22,42 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/register",
 				Handler: RegisterHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/user/:userID",
+				Handler: UpdateUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/message",
+				Handler: SendMessageHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/tour/filter",
+				Handler: SearchTourHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/tour/:tourID",
+				Handler: TourDetailHandler(serverCtx),
+			},
 		},
+		rest.WithPrefix("/"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.UserTokenMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/tour",
+					Handler: CreateTourHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/"),
 	)
 }
