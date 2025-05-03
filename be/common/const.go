@@ -36,6 +36,17 @@ const (
 const (
 	TOUR_NOT_ENOUGH_CODE = 3000
 	TOUR_NOT_ENOUGH_MESS = "Tour not enough"
+
+	TOUR_NOT_FOUND_CODE = 3001
+	TOUR_NOT_FOUND_MESS = "Tour not found"
+
+	TOUR_STATUS_ERR_CODE = 3002
+	TOUR_STATUS_ERR_MESS = "Tour status error"
+)
+
+const (
+	ORDER_STATUS_ERR_CODE = 4000
+	ORDER_STATUS_ERR_MESS = "Order status error"
 )
 
 // CONST

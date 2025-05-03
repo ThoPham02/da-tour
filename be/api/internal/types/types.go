@@ -67,14 +67,14 @@ type Order struct {
 }
 
 type Payment struct {
-	ID            int64  `json:"id"`
-	OrderID       int64  `json:"orderID"`
-	OrderCode     string `json:"orderCode"`
-	PaymentMethod string `json:"paymentMethod"`
-	PaymentDate   string `json:"paymentDate"`
-	Amount        int64  `json:"amount"`
-	Status        int64  `json:"status"`
-	Url           string `json:"url"`
+	ID          int64   `json:"id"`
+	OrderID     int64   `json:"orderID"`
+	OrderCode   string  `json:"orderCode"`
+	Method      int64   `json:"method"`
+	PaymentDate int64   `json:"paymentDate"`
+	Amount      float64 `json:"amount"`
+	Status      int64   `json:"status"`
+	Url         string  `json:"url"`
 }
 
 type LoginReq struct {
@@ -199,8 +199,10 @@ type GetOrderReq struct {
 }
 
 type GetOrderRes struct {
-	Result Result `json:"result"`
-	Order  Order  `json:"order"`
+	Result   Result    `json:"result"`
+	Order    Order     `json:"order"`
+	Tour     Tour      `json:"tour"`
+	Payments []Payment `json:"payments"`
 }
 
 type FilterOrderReq struct {
@@ -255,6 +257,7 @@ type CreatePaymentRes struct {
 
 type FilterPaymentReq struct {
 	OrderID int64 `form:"orderID"`
+	UserID  int64 `form:"userID"`
 	Status  int64 `form:"status"`
 	Limit   int64 `form:"limit"`
 	Offset  int64 `form:"offset"`

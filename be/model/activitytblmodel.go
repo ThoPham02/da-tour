@@ -16,6 +16,7 @@ type (
 	ActivityTblModel interface {
 		activityTblModel
 		FindByTourID(ctx context.Context, tourID int64) ([]*ActivityTbl, error)
+		DeleteByTourID(ctx context.Context, tourID int64) error
 	}
 
 	customActivityTblModel struct {
@@ -43,4 +44,14 @@ func (m *customActivityTblModel) FindByTourID(ctx context.Context, tourID int64)
 	default:
 		return nil, err
 	}
+}
+
+// DeleteByTourID implements ActivityTblModel interface.
+func (m *customActivityTblModel) DeleteByTourID(ctx context.Context, tourID int64) error {
+	query := fmt.Sprintf("delete from %s where `tour_id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, tourID)
+	if err != nil {
+		return err
+	}
+	return nil
 }

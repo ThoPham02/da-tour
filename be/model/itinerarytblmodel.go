@@ -16,6 +16,7 @@ type (
 	ItineraryTblModel interface {
 		itineraryTblModel
 		FindByTourID(ctx context.Context, tourID int64) ([]*ItineraryTbl, error)
+		DeleteByTourID(ctx context.Context, tourID int64) error
 	}
 
 	customItineraryTblModel struct {
@@ -43,4 +44,14 @@ func (m *customItineraryTblModel) FindByTourID(ctx context.Context, tourID int64
 	default:
 		return nil, err
 	}
+}
+
+// DeleteByTourID implements ItineraryTblModel interface.
+func (m *customItineraryTblModel) DeleteByTourID(ctx context.Context, tourID int64) error {
+	query := fmt.Sprintf("delete from %s where `tour_id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, tourID)
+	if err != nil {
+		return err
+	}
+	return nil
 }

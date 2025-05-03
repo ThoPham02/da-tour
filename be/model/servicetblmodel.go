@@ -16,6 +16,7 @@ type (
 	ServiceTblModel interface {
 		serviceTblModel
 		FindByTourID(ctx context.Context, tourID int64) ([]*ServiceTbl, error)
+		DeleteByTourID(ctx context.Context, tourID int64) error
 	}
 
 	customServiceTblModel struct {
@@ -43,4 +44,14 @@ func (m *customServiceTblModel) FindByTourID(ctx context.Context, tourID int64) 
 	default:
 		return nil, err
 	}
+}
+
+// DeleteByTourID implements ServiceTblModel interface.
+func (m *customServiceTblModel) DeleteByTourID(ctx context.Context, tourID int64) error {
+	query := fmt.Sprintf("delete from %s where `tour_id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, tourID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
