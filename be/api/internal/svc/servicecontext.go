@@ -21,6 +21,8 @@ type ServiceContext struct {
 	ActivityTblModel  model.ActivityTblModel
 	ItineraryTblModel model.ItineraryTblModel
 	ServiceTblModel   model.ServiceTblModel
+	OrderTblModel     model.OrderTblModel
+	PaymentTblModel   model.PaymentTblModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -39,5 +41,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ActivityTblModel:  model.NewActivityTblModel(sqlx.NewMysql(c.DataSource)),
 		ItineraryTblModel: model.NewItineraryTblModel(sqlx.NewMysql(c.DataSource)),
 		ServiceTblModel:   model.NewServiceTblModel(sqlx.NewMysql(c.DataSource)),
+		OrderTblModel:     model.NewOrderTblModel(sqlx.NewMysql(c.DataSource)),
+		PaymentTblModel:   model.NewPaymentTblModel(sqlx.NewMysql(c.DataSource)),
 	}
 }

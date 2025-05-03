@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -50,4 +52,12 @@ func GetTimeNow() int64 {
 
 func GetID() int64 {
 	return time.Now().UnixMilli()
+}
+
+func GetUserIDFromContext(ctx context.Context) (userID int64, err error) {
+	ret, err := ctx.Value(("userID")).(json.Number).Int64()
+	if err != nil {
+		return 0, err
+	}
+	return ret, nil
 }

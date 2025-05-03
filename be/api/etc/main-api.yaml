@@ -4,9 +4,9 @@ Port: 8888
 Auth:
   AccessSecret: xxxxxxxxxxxxxxxxx
   AccessExpire: 604800000
-DataSource: root:123456@tcp(127.0.0.1:3306)/china_tour
+DataSource: root:123456@tcp(127.0.0.1:3306)/china-tour
 Storage:
-  CloudName: "ddhsgiwcv"
-  APIKey: "584168378272983"
-  APISecret: "VSBpeP9AKFEzssd3BCvxhc6tyoI"
+  CloudName: "dh3bucb7g"
+  APIKey: "682546917226798"
+  APISecret: "oNvDbjQw8pYlN5jhu2ntImMO3lU"
   DirName: "china-tour"

@@ -50,6 +50,30 @@ type Itinerary struct {
 	Description string `json:"description"`
 }
 
+type Order struct {
+	ID            int64  `json:"id"`
+	Code          string `json:"code"`
+	TourID        int64  `json:"tourID"`
+	UserID        int64  `json:"userID"`
+	FullName      string `json:"fullName"`
+	Email         string `json:"email"`
+	Phone         string `json:"phone"`
+	Status        int64  `json:"status"`
+	PaymentStatus int64  `json:"paymentStatus"`
+	CreateDate    int64  `json:"createDate"`
+}
+
+type Payment struct {
+	ID            int64  `json:"id"`
+	OrderID       int64  `json:"orderID"`
+	OrderCode     string `json:"orderCode"`
+	PaymentMethod string `json:"paymentMethod"`
+	PaymentDate   string `json:"paymentDate"`
+	Amount        int64  `json:"amount"`
+	Status        int64  `json:"status"`
+	Url           string `json:"url"`
+}
+
 type LoginReq struct {
 	Email    string `form:"email"`    // user_name
 	Password string `form:"password"` //  password
@@ -71,12 +95,6 @@ type RegisterRes struct {
 	Result Result `json:"result"`
 	Token  string `json:"token"` // jwt token for api
 	User   User   `json:"user"`  // Account info
-}
-
-type UpdateUserReq struct {
-}
-
-type UpdateUserRes struct {
 }
 
 type SendMessageReq struct {
@@ -107,6 +125,20 @@ type TourDetailRes struct {
 	Result Result `json:"result"`
 }
 
+type UpdateUserReq struct {
+}
+
+type UpdateUserRes struct {
+}
+
+type UploadFileReq struct {
+}
+
+type UploadFileRes struct {
+	Result Result `json:"result"`
+	Url    string `json:"url"`
+}
+
 type CreateTourReq struct {
 	Image         string  `form:"image"`
 	Name          string  `form:"name"`
@@ -123,5 +155,136 @@ type CreateTourReq struct {
 }
 
 type CreateTourRes struct {
+	Result Result `json:"result"`
+}
+
+type UpdateTourReq struct {
+	TourID        int64   `path:"tourID"`
+	Image         string  `form:"image"`
+	Name          string  `form:"name"`
+	Description   string  `form:"description"`
+	Duration      int64   `form:"duration"`
+	Location      int64   `form:"location"`
+	Overview      string  `form:"overview"`
+	Activities    string  `form:"activities"`
+	Services      string  `form:"services"`
+	Itinerary     string  `form:"itinerary"`
+	Price         float64 `form:"price"`
+	Seats         int64   `form:"seats"`
+	DepartureDate int64   `form:"departureDate"`
+}
+
+type UpdateTourRes struct {
+	Result Result `json:"result"`
+}
+
+type CreateOrderReq struct {
+	TourID   int64  `form:"tourID"`
+	UserID   int64  `form:"userID"`
+	Fullname string `form:"fullname"`
+	Email    string `form:"email"`
+	Phone    string `form:"phone"`
+	Seats    int64  `form:"seats"`
+}
+
+type CreateOrderRes struct {
+	Result Result `json:"result"`
+}
+
+type GetOrderReq struct {
+	OrderID int64 `path:"orderID"`
+}
+
+type GetOrderRes struct {
+	Result Result `json:"result"`
+	Order  Order  `json:"order"`
+}
+
+type FilterOrderReq struct {
+	UserID int64 `form:"userID"`
+	Status int64 `form:"status"`
+	Limit  int64 `form:"limit"`
+	Offset int64 `form:"offset"`
+}
+
+type FilterOrderRes struct {
+	Result Result  `json:"result"`
+	Orders []Order `json:"orders"`
+	Total  int64   `json:"total"`
+}
+
+type UpdateOrderStatusReq struct {
+	OrderID int64 `path:"orderID"`
+	Status  int64 `form:"status"`
+}
+
+type UpdateOrderStatusRes struct {
+	Result Result `json:"result"`
+}
+
+type UpdateOrderReq struct {
+	OrderID  int64  `path:"orderID"`
+	TourID   int64  `form:"tourID"`
+	UserID   int64  `form:"userID"`
+	Fullname string `form:"fullname"`
+	Email    string `form:"email"`
+	Phone    string `form:"phone"`
+	Seats    int64  `form:"seats"`
+}
+
+type UpdateOrderRes struct {
+	Result Result `json:"result"`
+}
+
+type CreatePaymentReq struct {
+	OrderID       int64  `form:"orderID"`
+	OrderCode     string `form:"orderCode"`
+	PaymentMethod string `form:"paymentMethod"`
+	Amount        int64  `form:"amount"`
+}
+
+type CreatePaymentRes struct {
+	Result Result `json:"result"`
+}
+
+type FilterPaymentReq struct {
+	OrderID int64 `form:"orderID"`
+	Status  int64 `form:"status"`
+	Limit   int64 `form:"limit"`
+	Offset  int64 `form:"offset"`
+}
+
+type FilterPaymentRes struct {
+	Result   Result    `json:"result"`
+	Payments []Payment `json:"payments"`
+	Total    int64     `json:"total"`
+}
+
+type UpdatePaymentReq struct {
+	PaymentID     int64  `path:"paymentID"`
+	OrderID       int64  `form:"orderID"`
+	OrderCode     string `form:"orderCode"`
+	PaymentMethod string `form:"paymentMethod"`
+	Amount        int64  `form:"amount"`
+}
+
+type UpdatePaymentRes struct {
+	Result Result `json:"result"`
+}
+
+type DeletePaymentReq struct {
+	PaymentID int64 `path:"paymentID"`
+}
+
+type DeletePaymentRes struct {
+	Result Result `json:"result"`
+}
+
+type UpdatePaymentStatusReq struct {
+	PaymentID int64 `path:"paymentID"`
+	Status    int64 `form:"status"`
+}
+
+type UpdatePaymentStatusRes struct {
 	Result Result `json:"result"`
 }

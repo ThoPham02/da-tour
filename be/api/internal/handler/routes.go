@@ -23,11 +23,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: RegisterHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPut,
-				Path:    "/user/:userID",
-				Handler: UpdateUserHandler(serverCtx),
-			},
-			{
 				Method:  http.MethodPost,
 				Path:    "/message",
 				Handler: SendMessageHandler(serverCtx),
@@ -51,9 +46,74 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.UserTokenMiddleware},
 			[]rest.Route{
 				{
+					Method:  http.MethodPut,
+					Path:    "/user/:userID",
+					Handler: UpdateUserHandler(serverCtx),
+				},
+				{
 					Method:  http.MethodPost,
 					Path:    "/tour",
 					Handler: CreateTourHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/tour/:tourID",
+					Handler: UpdateTourHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/upload",
+					Handler: UploadFileHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/order",
+					Handler: CreateOrderHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/order/:orderID",
+					Handler: GetOrderHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/order/filter",
+					Handler: FilterOrderHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/order/:orderID/status",
+					Handler: UpdateOrderStatusHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/order/:orderID",
+					Handler: UpdateOrderHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/payment",
+					Handler: CreatePaymentHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/payment/filter",
+					Handler: FilterPaymentHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/payment/:paymentID",
+					Handler: UpdatePaymentHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/payment/:paymentID",
+					Handler: DeletePaymentHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/payment/:paymentID/status",
+					Handler: UpdatePaymentStatusHandler(serverCtx),
 				},
 			}...,
 		),
