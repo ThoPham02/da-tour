@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"da-tour/api/internal/svc"
 	"da-tour/api/internal/types"
@@ -106,8 +107,8 @@ func (l *CreateOrderLogic) CreateOrder(req *types.CreateOrderReq) (resp *types.C
 			},
 		}, nil
 	}
-	orderCode = "DA" + string(total+1)
 
+	orderCode = fmt.Sprintf("ORD-%04d", total+1)
 	tourModel.Remain = tourModel.Remain - req.Seats
 	if tourModel.Remain == 0 {
 		tourModel.Status = common.TOUR_STATUS_SOLD_OUT
@@ -131,6 +132,7 @@ func (l *CreateOrderLogic) CreateOrder(req *types.CreateOrderReq) (resp *types.C
 		TourId:        req.TourID,
 		Code:          orderCode,
 		Quantity:      req.Seats,
+		Total:         float64(req.Seats) * tourModel.Price,
 		Status:        orderStatus,
 		PaymentStatus: paymentStatus,
 		CreatedAt:     sql.NullInt64{Valid: true, Int64: currentTime},

@@ -58,6 +58,37 @@ CREATE TABLE `service_tbl` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `order_tbl` (
+  `id` bigint,
+  `user_id` bigint,
+  `user_name` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `tour_id` bigint NOT NULL,
+  `quantity` int NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `status` int NOT NULL,
+  `payment_status` int NOT NULL,
+  `created_at` bigint,
+  `updated_at` bigint,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `payment_tbl` (
+  `id` bigint,
+  `order_id` bigint,
+  `code` varchar(255) NOT NULL,
+  `method` int NOT NULL,
+  `payment_date` bigint,
+  `amount` decimal(10,2) NOT NULL,
+  `url` varchar(255),
+  `status` int NOT NULL,
+  `created_at` bigint,
+  `updated_at` bigint,
+  PRIMARY KEY (`id`)
+);
+
 -- CREATE TABLE `request_tbl` (
 --   `id` bigint,
 --   `user_id` bigint,
@@ -70,32 +101,3 @@ CREATE TABLE `service_tbl` (
 --   `updated_at` bigint,
 --   PRIMARY KEY (`id`)
 -- );
-
-CREATE TABLE `order_tbl` (
-  `id` bigint,
-  `user_id` bigint,
-  `user_name` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `tour_id` bigint NOT NULL,
-  `quantity` int NOT NULL,
-  `status` int NOT NULL,
-  `payment_status` int NOT NULL,
-  `created_at` bigint,
-  `updated_at` bigint,
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `payment_tbl` (
-  `id` bigint,
-  `order_id` bigint,
-  `method` int NOT NULL,
-  `payment_date` bigint,
-  `amount` decimal(10,2) NOT NULL,
-  `url` varchar(255),
-  `status` int NOT NULL,
-  `created_at` bigint,
-  `updated_at` bigint,
-  PRIMARY KEY (`id`)
-);

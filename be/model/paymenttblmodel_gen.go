@@ -37,6 +37,7 @@ type (
 	PaymentTbl struct {
 		Id          int64          `db:"id"`
 		OrderId     sql.NullInt64  `db:"order_id"`
+		Code        string         `db:"code"`
 		Method      int64          `db:"method"`
 		PaymentDate sql.NullInt64  `db:"payment_date"`
 		Amount      float64        `db:"amount"`
@@ -75,14 +76,14 @@ func (m *defaultPaymentTblModel) FindOne(ctx context.Context, id int64) (*Paymen
 }
 
 func (m *defaultPaymentTblModel) Insert(ctx context.Context, data *PaymentTbl) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, paymentTblRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.OrderId, data.Method, data.PaymentDate, data.Amount, data.Url, data.Status, data.CreatedAt, data.UpdatedAt)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, paymentTblRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.OrderId, data.Code, data.Method, data.PaymentDate, data.Amount, data.Url, data.Status, data.CreatedAt, data.UpdatedAt)
 	return ret, err
 }
 
 func (m *defaultPaymentTblModel) Update(ctx context.Context, data *PaymentTbl) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, paymentTblRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.OrderId, data.Method, data.PaymentDate, data.Amount, data.Url, data.Status, data.CreatedAt, data.UpdatedAt, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.OrderId, data.Code, data.Method, data.PaymentDate, data.Amount, data.Url, data.Status, data.CreatedAt, data.UpdatedAt, data.Id)
 	return err
 }
 

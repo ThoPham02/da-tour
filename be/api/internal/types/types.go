@@ -51,16 +51,19 @@ type Itinerary struct {
 }
 
 type Order struct {
-	ID            int64  `json:"id"`
-	Code          string `json:"code"`
-	TourID        int64  `json:"tourID"`
-	UserID        int64  `json:"userID"`
-	FullName      string `json:"fullName"`
-	Email         string `json:"email"`
-	Phone         string `json:"phone"`
-	Status        int64  `json:"status"`
-	PaymentStatus int64  `json:"paymentStatus"`
-	CreateDate    int64  `json:"createDate"`
+	ID            int64   `json:"id"`
+	Code          string  `json:"code"`
+	TourID        int64   `json:"tourID"`
+	TourName      string  `json:"tourName"`
+	UserID        int64   `json:"userID"`
+	FullName      string  `json:"fullName"`
+	Email         string  `json:"email"`
+	Phone         string  `json:"phone"`
+	Status        int64   `json:"status"`
+	Quantity      int64   `json:"quantity"`
+	TotalPrice    float64 `json:"totalPrice"`
+	PaymentStatus int64   `json:"paymentStatus"`
+	CreateDate    int64   `json:"createDate"`
 }
 
 type Payment struct {
@@ -202,6 +205,7 @@ type GetOrderRes struct {
 
 type FilterOrderReq struct {
 	UserID int64 `form:"userID"`
+	TourID int64 `form:"tourID"`
 	Status int64 `form:"status"`
 	Limit  int64 `form:"limit"`
 	Offset int64 `form:"offset"`
@@ -237,10 +241,12 @@ type UpdateOrderRes struct {
 }
 
 type CreatePaymentReq struct {
-	OrderID       int64  `form:"orderID"`
-	OrderCode     string `form:"orderCode"`
-	PaymentMethod string `form:"paymentMethod"`
-	Amount        int64  `form:"amount"`
+	OrderID     int64   `form:"orderID"`
+	Method      int64   `form:"method"`
+	PaymentDate int64   `form:"paymentDate"`
+	Amount      float64 `form:"amount"`
+	Url         string  `form:"url"`
+	Status      int64   `form:"status"`
 }
 
 type CreatePaymentRes struct {

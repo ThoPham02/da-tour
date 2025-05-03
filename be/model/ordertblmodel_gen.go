@@ -43,6 +43,7 @@ type (
 		Code          string        `db:"code"`
 		TourId        int64         `db:"tour_id"`
 		Quantity      int64         `db:"quantity"`
+		Total         float64       `db:"total"`
 		Status        int64         `db:"status"`
 		PaymentStatus int64         `db:"payment_status"`
 		CreatedAt     sql.NullInt64 `db:"created_at"`
@@ -78,14 +79,14 @@ func (m *defaultOrderTblModel) FindOne(ctx context.Context, id int64) (*OrderTbl
 }
 
 func (m *defaultOrderTblModel) Insert(ctx context.Context, data *OrderTbl) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, orderTblRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.UserId, data.UserName, data.Phone, data.Email, data.Code, data.TourId, data.Quantity, data.Status, data.PaymentStatus, data.CreatedAt, data.UpdatedAt)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, orderTblRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.UserId, data.UserName, data.Phone, data.Email, data.Code, data.TourId, data.Quantity, data.Total, data.Status, data.PaymentStatus, data.CreatedAt, data.UpdatedAt)
 	return ret, err
 }
 
 func (m *defaultOrderTblModel) Update(ctx context.Context, data *OrderTbl) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, orderTblRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.UserName, data.Phone, data.Email, data.Code, data.TourId, data.Quantity, data.Status, data.PaymentStatus, data.CreatedAt, data.UpdatedAt, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.UserName, data.Phone, data.Email, data.Code, data.TourId, data.Quantity, data.Total, data.Status, data.PaymentStatus, data.CreatedAt, data.UpdatedAt, data.Id)
 	return err
 }
 
