@@ -15,37 +15,39 @@ type User struct {
 }
 
 type Tour struct {
-	ID          int64     `json:"id"`
-	Name        string    `json:"name"`
-	BgUrl       string    `json:"bgUrl"`
-	Description string    `json:"description"`
-	Destination int64     `json:"destination"`
-	NumberDay   int64     `json:"numberDay"`
-	Overview    string    `json:"overview"`
-	Utils       []Util    `json:"utils"`
-	Includes    []Include `json:"includes"`
-	Journeys    []Journey `json:"journey"`
-	Price       int64     `json:"price"`
-	TimeStart   int64     `json:"timeStart"`
-	Quantity    int64     `json:"quantity"`
-	Remain      int64     `json:"remain"`
+	ID            int64       `json:"id"`
+	Name          string      `json:"name"`
+	Image         string      `json:"image"`
+	Description   string      `json:"description"`
+	Duration      int64       `json:"duration"`
+	Location      int64       `json:"location"`
+	Overview      string      `json:"overview"`
+	Activities    []Activity  `json:"activities"`
+	Services      []Service   `json:"services"`
+	Itineraries   []Itinerary `json:"itineraries"`
+	Price         float64     `json:"price"`
+	DepartureDate int64       `json:"departureDate"`
+	Quantity      int64       `json:"quantity"`
+	Remain        int64       `json:"remain"`
+	Status        int64       `json:"status"`
 }
 
-type Util struct {
+type Activity struct {
 	ID     int64  `json:"id"`
 	Title  string `json:"title"`
 	Detail string `json:"detail"`
 }
 
-type Include struct {
+type Service struct {
 	ID     int64  `json:"id"`
 	Title  string `json:"title"`
 	Detail string `json:"detail"`
 }
 
-type Journey struct {
-	ID     int64  `json:"id"`
-	Detail string `json:"detail"`
+type Itinerary struct {
+	ID          int64  `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 type LoginReq struct {
@@ -84,15 +86,25 @@ type SendMessageRes struct {
 }
 
 type SearchTourReq struct {
+	Location      int64 `form:"location"`
+	DepartureDate int64 `form:"departureDate"`
+	Limit         int64 `form:"limit"`
+	Offset        int64 `form:"offset"`
 }
 
 type SearchTourRes struct {
+	Tours  []Tour `json:"tours"`
+	Total  int64  `json:"total"`
+	Result Result `json:"result"`
 }
 
 type TourDetailReq struct {
+	TourID int64 `path:"tourID"`
 }
 
 type TourDetailRes struct {
+	Tour   Tour   `json:"tour"`
+	Result Result `json:"result"`
 }
 
 type CreateTourReq struct {

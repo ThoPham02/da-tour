@@ -14,6 +14,9 @@ const (
 
 	INVALID_REQUEST_CODE = 3
 	INVALID_REQUEST_MESS = "Invalid request"
+
+	NOT_FOUND_CODE = 4
+	NOT_FOUND_MESS = "Not found"
 )
 
 const (
@@ -39,4 +42,10 @@ const (
 
 	USER_STATUS_INACTIVE = 0
 	USER_STATUS_ACTIVE   = 1
+)
+
+// TOUR_STATUS
+const (
+	TOUR_STATUS_ACTIVE   = 1
+	TOUR_STATUS_INACTIVE = 2
 )

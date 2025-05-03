@@ -9,4 +9,10 @@ type Config struct {
 		AccessExpire int64
 	}
 	DataSource string
+	Storage    struct {
+		CloudName string
+		APIKey    string
+		APISecret string
+		DirName   string
+	}
 }

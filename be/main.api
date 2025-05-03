@@ -23,42 +23,43 @@ type (
 	}
 
 	Tour {
-		ID          int64     `json:"id"`
-		Name        string    `json:"name"`
-		BgUrl       string    `json:"bgUrl"`
-		Description string    `json:"description"`
-		Destination int64     `json:"destination"`
-		NumberDay   int64     `json:"numberDay"`
-		Overview    string    `json:"overview"`
-		Utils       []Util    `json:"utils"`
-		Includes    []Include `json:"includes"`
-		Journeys    []Journey `json:"journey"`
-		Price       int64     `json:"price"`
-		TimeStart   int64     `json:"timeStart"`
-		Quantity    int64     `json:"quantity"`
-		Remain      int64     `json:"remain"`
+		ID            int64       `json:"id"`
+		Name          string      `json:"name"`
+		Image         string      `json:"image"`
+		Description   string      `json:"description"`
+		Duration      int64       `json:"duration"`
+		Location      int64       `json:"location"`
+		Overview      string      `json:"overview"`
+		Activities    []Activity  `json:"activities"`
+		Services      []Service   `json:"services"`
+		Itineraries   []Itinerary `json:"itineraries"`
+		Price         float64     `json:"price"`
+		DepartureDate int64       `json:"departureDate"`
+		Quantity      int64       `json:"quantity"`
+		Remain        int64       `json:"remain"`
+		Status        int64       `json:"status"`
 	}
 
-	Util {
+	Activity {
 		ID     int64  `json:"id"`
 		Title  string `json:"title"`
 		Detail string `json:"detail"`
 	}
 
-	Include {
+	Service {
 		ID     int64  `json:"id"`
 		Title  string `json:"title"`
 		Detail string `json:"detail"`
 	}
 
-	Journey {
-		ID     int64  `json:"id"`
-		Detail string `json:"detail"`
+	Itinerary {
+		ID          int64  `json:"id"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
 	}
 )
 
 // API
-
 type (
 	LoginReq {
 		Email    string `form:"email"`    // user_name
@@ -95,13 +96,23 @@ type (
 	}
 
 	SearchTourReq {
+		Location      int64 `form:"location"`
+		DepartureDate int64 `form:"departureDate"`
+		Limit         int64 `form:"limit"`
+		Offset        int64 `form:"offset"`
 	}
 	SearchTourRes {
+		Tours  []Tour `json:"tours"`
+		Total  int64  `json:"total"`
+		Result Result `json:"result"`
 	}
 
 	TourDetailReq {
+		TourID int64 `path:"tourID"`
 	}
 	TourDetailRes {
+		Tour   Tour   `json:"tour"`
+		Result Result `json:"result"`
 	}
 
 	CreateTourReq {
@@ -132,31 +143,31 @@ service main-api {
 	)
 	@handler Login
 	post /login (LoginReq) returns (LoginRes)
-
+	
 	@doc (
 		summary: "User Register"
 	)
 	@handler Register
 	post /register (RegisterReq) returns (RegisterRes)
-
+	
 	@doc (
 		summary: "Update User Info"
 	)
 	@handler UpdateUser
 	put /user/:userID (UpdateUserReq) returns (UpdateUserRes)
-
+	
 	@doc (
 		summary: "Send Message"
 	)
 	@handler SendMessage
 	post /message (SendMessageReq) returns (SendMessageRes)
-
+	
 	@doc (
 		summary: "Search Tour"
 	)
 	@handler SearchTour
 	get /tour/filter (SearchTourReq) returns (SearchTourRes)
-
+	
 	@doc (
 		summary: "Tour Detail"
 	)

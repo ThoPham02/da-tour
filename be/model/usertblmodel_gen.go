@@ -53,13 +53,6 @@ func newUserTblModel(conn sqlx.SqlConn) *defaultUserTblModel {
 	}
 }
 
-func (m *defaultUserTblModel) withSession(session sqlx.Session) *defaultUserTblModel {
-	return &defaultUserTblModel{
-		conn:  sqlx.NewSqlConnFromSession(session),
-		table: "`user_tbl`",
-	}
-}
-
 func (m *defaultUserTblModel) Delete(ctx context.Context, id int64) error {
 	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 	_, err := m.conn.ExecCtx(ctx, query, id)

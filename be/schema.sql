@@ -22,12 +22,13 @@ CREATE TABLE `tour_tbl` (
   `quantity` int NOT NULL,
   `remain` int NOT NULL,
   `departure_date` bigint,
+  `status` int NOT NULL,
   `created_at` bigint,
   `updated_at` bigint,
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `journey_tbl` (
+CREATE TABLE `itinerary_tbl` (
   `id` bigint,
   `tour_id` bigint,
   `name` varchar(255) NOT NULL,
@@ -37,7 +38,17 @@ CREATE TABLE `journey_tbl` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `included_tbl` (
+CREATE TABLE `activity_tbl` (
+  `id` bigint,
+  `tour_id` bigint,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `created_at` bigint,
+  `updated_at` bigint,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `service_tbl` (
   `id` bigint,
   `tour_id` bigint,
   `name` varchar(255) NOT NULL,

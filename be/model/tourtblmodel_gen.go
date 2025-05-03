@@ -46,6 +46,7 @@ type (
 		Quantity      int64          `db:"quantity"`
 		Remain        int64          `db:"remain"`
 		DepartureDate sql.NullInt64  `db:"departure_date"`
+		Status        int64          `db:"status"`
 		CreatedAt     sql.NullInt64  `db:"created_at"`
 		UpdatedAt     sql.NullInt64  `db:"updated_at"`
 	}
@@ -54,13 +55,6 @@ type (
 func newTourTblModel(conn sqlx.SqlConn) *defaultTourTblModel {
 	return &defaultTourTblModel{
 		conn:  conn,
-		table: "`tour_tbl`",
-	}
-}
-
-func (m *defaultTourTblModel) withSession(session sqlx.Session) *defaultTourTblModel {
-	return &defaultTourTblModel{
-		conn:  sqlx.NewSqlConnFromSession(session),
 		table: "`tour_tbl`",
 	}
 }
@@ -86,14 +80,14 @@ func (m *defaultTourTblModel) FindOne(ctx context.Context, id int64) (*TourTbl, 
 }
 
 func (m *defaultTourTblModel) Insert(ctx context.Context, data *TourTbl) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tourTblRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.Image, data.Name, data.Description, data.Duration, data.Location, data.Overview, data.Price, data.Quantity, data.Remain, data.DepartureDate, data.CreatedAt, data.UpdatedAt)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tourTblRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.Image, data.Name, data.Description, data.Duration, data.Location, data.Overview, data.Price, data.Quantity, data.Remain, data.DepartureDate, data.Status, data.CreatedAt, data.UpdatedAt)
 	return ret, err
 }
 
 func (m *defaultTourTblModel) Update(ctx context.Context, data *TourTbl) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, tourTblRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.Image, data.Name, data.Description, data.Duration, data.Location, data.Overview, data.Price, data.Quantity, data.Remain, data.DepartureDate, data.CreatedAt, data.UpdatedAt, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.Image, data.Name, data.Description, data.Duration, data.Location, data.Overview, data.Price, data.Quantity, data.Remain, data.DepartureDate, data.Status, data.CreatedAt, data.UpdatedAt, data.Id)
 	return err
 }
 

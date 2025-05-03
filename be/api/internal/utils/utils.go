@@ -47,3 +47,7 @@ func ConfirmPassword(password string, hashpassword string) bool {
 func GetTimeNow() int64 {
 	return time.Now().UnixMilli()
 }
+
+func GetID() int64 {
+	return time.Now().UnixMilli()
+}
