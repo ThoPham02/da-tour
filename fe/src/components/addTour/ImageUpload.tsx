@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Upload, Image as ImageIcon, X } from "lucide-react";
+import { Upload, Image as X } from "lucide-react";
 import { uploadImage } from "../../store/services/authService";
 import { BiLoaderCircle } from "react-icons/bi";
 

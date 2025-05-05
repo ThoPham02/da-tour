@@ -13,11 +13,10 @@ export interface Itinerary {
   dayNumber: number;
   title: string;
   description: string;
-  activities: Activity[];
 }
 
 export interface Tour {
-  id?: number
+  id?: number;
   image: string;
   name: string;
   description: string;
@@ -28,8 +27,9 @@ export interface Tour {
   services: Service[];
   itinerary: Itinerary[];
   price: number;
-  seats: number;
-  status?: string;
+  quantity: number;
+  remain?: number;
+  status?: number;
   departureDate: string;
 }
 

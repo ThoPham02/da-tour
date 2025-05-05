@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import axios from "../axios";
 import { Tour } from "../../types/tour";
+import { getTimeStamp } from "../../utils/utils";
 
 // Kiểu dữ liệu chung
 export interface AuthPayload {
@@ -104,9 +105,9 @@ export const convertTourToFormData = (tour: Tour): FormData => {
   formData.append("location", tour.location.toString());
   formData.append("overview", tour.overview);
   formData.append("price", tour.price.toString());
-  formData.append("seats", tour.seats.toString());
+  formData.append("seats", tour.quantity.toString());
 
-  const departureTimestamp = new Date(tour.departureDate).getTime();
+  const departureTimestamp = getTimeStamp(tour.departureDate);
   formData.append("departureDate", departureTimestamp.toString());
 
   // Normalize activities: ensure id is number
@@ -160,7 +161,9 @@ export const apiFilterTour = async (
     const response: AxiosResponse<ApiResponse<Tour[]>> = await axios({
       method: "get",
       url: "/tour/filter",
-      data: filter,
+      params: {
+        ...filter,
+      },
     });
 
     return response.data;

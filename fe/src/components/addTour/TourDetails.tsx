@@ -21,14 +21,14 @@ const TourDetails: React.FC<TourDetailsProps> = ({
     if (newActivity.trim()) {
       const updatedActivities = [
         ...tour.activities,
-        { id: Date.now().toString(), name: newActivity.trim() },
+        { id: Date.now(), name: newActivity.trim() },
       ];
       onActivitiesChange(updatedActivities);
       setNewActivity("");
     }
   };
 
-  const removeActivity = (id: string) => {
+  const removeActivity = (id: number) => {
     const updatedActivities = tour.activities.filter(
       (activity) => activity.id !== id
     );
@@ -39,14 +39,14 @@ const TourDetails: React.FC<TourDetailsProps> = ({
     if (newService.trim()) {
       const updatedServices = [
         ...tour.services,
-        { id: Date.now().toString(), name: newService.trim() },
+        { id: Date.now(), name: newService.trim() },
       ];
       onServicesChange(updatedServices);
       setNewService("");
     }
   };
 
-  const removeService = (id: string) => {
+  const removeService = (id: number) => {
     const updatedServices = tour.services.filter(
       (service) => service.id !== id
     );

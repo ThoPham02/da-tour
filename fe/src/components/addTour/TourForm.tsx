@@ -41,7 +41,7 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
     services: [],
     itinerary: [],
     price: 0,
-    seats: 0,
+    quantity: 0,
     departureDate: "",
   });
 
@@ -76,7 +76,7 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
     const detailsHasError =
       tour.activities.length === 0 || tour.services.length === 0;
     const itineraryHasError = tour.itinerary.length === 0;
-    const pricingHasError = !tour.price || !tour.seats || !tour.departureDate;
+    const pricingHasError = !tour.price || !tour.quantity || !tour.departureDate;
 
     setTabErrors([
       basicInfoHasError,

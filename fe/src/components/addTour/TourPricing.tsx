@@ -19,7 +19,7 @@ const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange }) => {
 
   const handleSeatsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0;
-    onChange({ seats: value });
+    onChange({ quantity: value });
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +63,7 @@ const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange }) => {
         <input
           type="number"
           id="seats"
-          value={tour.seats || ""}
+          value={tour.quantity || 0}
           onChange={handleSeatsChange}
           min="1"
           className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
