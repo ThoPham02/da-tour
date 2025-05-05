@@ -1,5 +1,4 @@
 import { AxiosResponse } from "axios";
-import { Api } from "../../common/path";
 import axios from "../axios";
 
 // Kiểu dữ liệu chung
