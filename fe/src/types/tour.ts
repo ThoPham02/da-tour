@@ -44,8 +44,13 @@ export interface Customer {
 }
 
 export interface Order {
+  id?: string;
+  orderCode?: string;
   tourId: number;
   customer: Customer;
   quantity: number;
   totalAmount: number;
+  status?: number;
+  createdAt?: number;
+  tourName?: string;
 }

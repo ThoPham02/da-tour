@@ -103,7 +103,7 @@ const OrdersPage: React.FC = () => {
           </div>
         </div>
 
-        <OrderTable statusFilter={statusFilter} />
+        <OrderTable statusFilter={0} orders={[]} />
       </div>
 
       <OrderModal isOpen={isModalOpen} onClose={closeModal} />

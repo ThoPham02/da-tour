@@ -47,3 +47,19 @@ export const TOUR_STATUS = {
   INACTIVE: 2,
   SOLD_OUT: 3,
 };
+
+export const ORDER_STATUS = {
+  ALL: 0,
+  PENDING: 1,
+  CONFIRMED: 2,
+  CANCELLED: 3,
+  COMPLETED: 4,
+};
+
+export const ORDER_STATUS_TEXT = {
+  [ORDER_STATUS.ALL]: "Tất cả",
+  [ORDER_STATUS.PENDING]: "Chờ xác nhận",
+  [ORDER_STATUS.CONFIRMED]: "Đã xác nhận",
+  [ORDER_STATUS.CANCELLED]: "Đã hủy",
+  [ORDER_STATUS.COMPLETED]: "Hoàn thành",
+};
