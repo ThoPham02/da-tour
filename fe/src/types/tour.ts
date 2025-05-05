@@ -1,36 +1,56 @@
 export interface Activity {
-  id: string;
+  id: number;
   name: string;
 }
 
 export interface Service {
-  id: string;
+  id: number;
   name: string;
 }
 
 export interface Itinerary {
-  id: string;
+  id: number;
   dayNumber: number;
   title: string;
   description: string;
-  activities: Activity[];
 }
 
 export interface Tour {
+  id?: number;
   image: string;
   name: string;
   description: string;
   duration: number;
-  location: string;
+  location: number;
   overview: string;
-  activities: Activity[];
-  services: Service[];
-  itinerary: Itinerary[];
+  activities?: Activity[];
+  services?: Service[];
+  itinerary?: Itinerary[];
   price: number;
-  seats: number;
+  quantity: number;
+  remain?: number;
+  status?: number;
   departureDate: string;
 }
 
 export interface ValidationErrors {
   [key: string]: string;
+}
+
+export interface Customer {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export interface Order {
+  id?: string;
+  orderCode?: string;
+  tourId: number;
+  customer: Customer;
+  quantity: number;
+  totalAmount: number;
+  status?: number;
+  createdAt?: number;
+  tourName?: string;
 }

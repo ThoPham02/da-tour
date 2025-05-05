@@ -1,43 +1,65 @@
 export const USER_ROLES = {
-    GUEST: 0,
-    ADMIN: 1,
-    USER: 2,
-}
+  GUEST: 0,
+  ADMIN: 1,
+  USER: 2,
+};
 
 export const API_METHOD = {
-    GET: "get",
-    POST: "post",
-    PUT: "put",
-    DELETE: "delete",
+  GET: "get",
+  POST: "post",
+  PUT: "put",
+  DELETE: "delete",
 };
 
 export const DEFAULT_MESSAGE = {
-    PENDING: "Đang xử lý...",
-    SUCCESS: "Xử lý thành công!",
-    ERROR: "Lỗi hệ thống! Xin vui lòng thử lại!",
-    SESSION_EXPIRED: "Phiên đăng nhập hết hạn! Vui lòng đăng nhập lại!",
+  PENDING: "Đang xử lý...",
+  SUCCESS: "Xử lý thành công!",
+  ERROR: "Lỗi hệ thống! Xin vui lòng thử lại!",
+  SESSION_EXPIRED: "Phiên đăng nhập hết hạn! Vui lòng đăng nhập lại!",
 };
 
 export const HANDLE_ERROR_CODE = {
-    UNAUTHORIZED: 401,
-    FORBIDDEN: 403,
-    NOT_FOUND: 404,
-    INTERNAL_SERVER: 500,
-  
-    TAI_KHOAN_TON_TAI: 10000,
-    SAI_MAT_KHAU: 10001,
-    SAI_TAI_KHOAN: 10002,
-  };
-  
-  export const HANDLE_ERROR_MESSAGE = {
-    [HANDLE_ERROR_CODE.UNAUTHORIZED]: "Không có quyền truy cập",
-    [HANDLE_ERROR_CODE.FORBIDDEN]: "Không có quyền truy cập",
-    [HANDLE_ERROR_CODE.NOT_FOUND]: "Không tìm thấy trang",
-    [HANDLE_ERROR_CODE.INTERNAL_SERVER]: "Lỗi server",
-  
-    [HANDLE_ERROR_CODE.TAI_KHOAN_TON_TAI]: "Email đã tồn tại!",
-    [HANDLE_ERROR_CODE.SAI_TAI_KHOAN]:
-      "Thông tin tài khoản hoặc mật khẩu không chính xác!",
-    [HANDLE_ERROR_CODE.SAI_MAT_KHAU]:
-      "Thông tin tài khoản hoặc mật khẩu không chính xác!",
-  };
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER: 500,
+
+  TAI_KHOAN_TON_TAI: 10000,
+  SAI_MAT_KHAU: 10001,
+  SAI_TAI_KHOAN: 10002,
+};
+
+export const HANDLE_ERROR_MESSAGE = {
+  [HANDLE_ERROR_CODE.UNAUTHORIZED]: "Không có quyền truy cập",
+  [HANDLE_ERROR_CODE.FORBIDDEN]: "Không có quyền truy cập",
+  [HANDLE_ERROR_CODE.NOT_FOUND]: "Không tìm thấy trang",
+  [HANDLE_ERROR_CODE.INTERNAL_SERVER]: "Lỗi server",
+
+  [HANDLE_ERROR_CODE.TAI_KHOAN_TON_TAI]: "Email đã tồn tại!",
+  [HANDLE_ERROR_CODE.SAI_TAI_KHOAN]:
+    "Thông tin tài khoản hoặc mật khẩu không chính xác!",
+  [HANDLE_ERROR_CODE.SAI_MAT_KHAU]:
+    "Thông tin tài khoản hoặc mật khẩu không chính xác!",
+};
+
+export const TOUR_STATUS = {
+  ACTIVE: 1,
+  INACTIVE: 2,
+  SOLD_OUT: 3,
+};
+
+export const ORDER_STATUS = {
+  ALL: 0,
+  PENDING: 1,
+  CONFIRMED: 2,
+  CANCELLED: 3,
+  COMPLETED: 4,
+};
+
+export const ORDER_STATUS_TEXT = {
+  [ORDER_STATUS.ALL]: "Tất cả",
+  [ORDER_STATUS.PENDING]: "Chờ xác nhận",
+  [ORDER_STATUS.CONFIRMED]: "Đã xác nhận",
+  [ORDER_STATUS.CANCELLED]: "Đã hủy",
+  [ORDER_STATUS.COMPLETED]: "Hoàn thành",
+};

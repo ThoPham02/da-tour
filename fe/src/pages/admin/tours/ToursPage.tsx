@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Plus,
   Search,
@@ -6,16 +6,48 @@ import {
   Map,
   CheckCircle,
   ChevronDown,
+  Calendar,
 } from "lucide-react";
+
+import { location as LOCATIONS } from "../../../assets/data/location";
 import TourTable from "./TourTable";
 import TourModal from "../../../components/addTour/TourModal";
+import { Tour } from "../../../types/tour";
+import { apiFilterTour } from "../../../store/services/authService";
+import { getTimeStamp } from "../../../utils/utils";
 
 const ToursPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState(0);
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [location, setLocation] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  useEffect(() => {
+    fetchTours();
+  }, [activeTab]);
+
+  const fetchTours = async () => {
+    try {
+      const response = await apiFilterTour({
+        search: searchText,
+        location: location ? Number(location) : 0,
+        departureDate: getTimeStamp(departureDate),
+      });
+      
+      setTours(response.tours || []);
+    } catch (error) {
+      console.error("Failed to fetch tours");
+    }
+  };
+
+  const handleSearch = async () => {
+    fetchTours();
+  };
 
   return (
     <div className="space-y-6">
@@ -34,65 +66,102 @@ const ToursPage: React.FC = () => {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-4 border-b border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center space-x-4 gap-2">
+              {/* Search by name */}
               <div className="relative">
                 <input
                   type="text"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
                   placeholder="Search tours..."
-                  className="pl-9 pr-4 py-2 w-full md:w-64 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  className="pl-9 pr-4 py-2 w-44 md:w-56 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                <Search
+                  onClick={handleSearch}
+                  className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 cursor-pointer"
+                />
               </div>
 
+              {/* Select location */}
               <div className="relative">
-                <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filter
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </button>
+                <select
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-48 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm"
+                >
+                  <option value={0}>All Locations</option>
+                  {LOCATIONS.map((loc) => (
+                    <option key={loc.id} value={loc.id}>
+                      {loc.name}
+                    </option>
+                  ))}
+                </select>
+                <Map className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
               </div>
+
+              {/* Departure date */}
+              <div className="relative">
+                <input
+                  type="date"
+                  value={departureDate}
+                  onChange={(e) => setDepartureDate(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-40 md:w-44 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+                <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+              </div>
+
+              {/* Filter button */}
+              <button
+                className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                onClick={handleSearch}
+              >
+                <Filter className="w-4 h-4 mr-2" />
+                Filter
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
             </div>
 
+            {/* Tab status */}
             <div className="flex space-x-2">
-              <button
-                className={`px-3 py-1.5 rounded-md font-medium text-sm ${
-                  activeTab === "all"
-                    ? "bg-red-50 text-red-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-                onClick={() => setActiveTab("all")}
-              >
-                All Tours
-              </button>
-
-              <button
-                className={`px-3 py-1.5 rounded-md font-medium text-sm ${
-                  activeTab === "active"
-                    ? "bg-green-50 text-green-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-                onClick={() => setActiveTab("active")}
-              >
-                <CheckCircle className="w-4 h-4 inline mr-1" />
-                Active
-              </button>
-
-              <button
-                className={`px-3 py-1.5 rounded-md font-medium text-sm ${
-                  activeTab === "upcoming"
-                    ? "bg-purple-50 text-purple-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-                onClick={() => setActiveTab("upcoming")}
-              >
-                <Map className="w-4 h-4 inline mr-1" />
-                Upcoming
-              </button>
+              {[0, 1, 2, 3].map((status) => (
+                <button
+                  key={status}
+                  className={`px-3 py-1.5 rounded-md font-medium text-sm ${
+                    activeTab === status
+                      ? status === 1
+                        ? "bg-green-50 text-green-600"
+                        : status === 2
+                          ? "bg-red-50 text-red-600"
+                          : status === 3
+                            ? "bg-gray-100 text-gray-600"
+                            : "bg-purple-50 text-purple-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                  onClick={() => setActiveTab(status)}
+                >
+                  {status === 1 && (
+                    <>
+                      <CheckCircle className="w-4 h-4 inline mr-1" /> Active
+                    </>
+                  )}
+                  {status === 2 && (
+                    <>
+                      <Map className="w-4 h-4 inline mr-1" /> Inactive
+                    </>
+                  )}
+                  {status === 3 && (
+                    <>
+                      <Map className="w-4 h-4 inline mr-1" /> Sold Out
+                    </>
+                  )}
+                  {status === 0 && "All Tours"}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        <TourTable activeTab={activeTab} />
+        <TourTable activeTab={activeTab} tours={tours} />
       </div>
 
       {isModalOpen && <TourModal onClose={closeModal} />}

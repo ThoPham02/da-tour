@@ -13,6 +13,7 @@ import {
   ValidationErrors,
 } from "../../types/tour";
 import { tourSchema } from "../../validation/tourSchema";
+import { apiCreateTour } from "../../store/services/authService";
 
 interface TourFormProps {
   onClose: () => void;
@@ -34,13 +35,13 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
     name: "",
     description: "",
     duration: 0,
-    location: "",
+    location: 0,
     overview: "",
     activities: [],
     services: [],
     itinerary: [],
     price: 0,
-    seats: 0,
+    quantity: 0,
     departureDate: "",
   });
 
@@ -73,9 +74,9 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
       !tour.location ||
       !tour.overview;
     const detailsHasError =
-      tour.activities.length === 0 || tour.services.length === 0;
-    const itineraryHasError = tour.itinerary.length === 0;
-    const pricingHasError = !tour.price || !tour.seats || !tour.departureDate;
+      tour?.activities?.length === 0 || tour?.services?.length === 0;
+    const itineraryHasError = tour?.itinerary?.length === 0;
+    const pricingHasError = !tour.price || !tour.quantity || !tour.departureDate;
 
     setTabErrors([
       basicInfoHasError,
@@ -125,15 +126,20 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
       if (firstErrorTab !== -1) {
         setActiveTab(firstErrorTab);
       }
-      return;
+      // return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Submitting tour:", tour);
-      setIsSubmitting(false);
-      onClose();
-    }, 1500);
+    try {
+      const resp = await apiCreateTour(tour);
+
+      if (resp?.result?.code === 0) {
+        onClose();
+      } else {
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error("Error submitting tour data:", error);
+    }
   };
 
   const tabs = [
@@ -165,7 +171,7 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
       case 2:
         return (
           <TourItinerary
-            itinerary={tour.itinerary}
+            itinerary={tour.itinerary || []}
             onChange={handleItineraryChange}
             errors={errors}
           />

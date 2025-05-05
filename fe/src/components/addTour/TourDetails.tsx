@@ -20,36 +20,36 @@ const TourDetails: React.FC<TourDetailsProps> = ({
   const addActivity = () => {
     if (newActivity.trim()) {
       const updatedActivities = [
-        ...tour.activities,
-        { id: Date.now().toString(), name: newActivity.trim() },
+        ...tour?.activities || [],
+        { id: Date.now(), name: newActivity.trim() },
       ];
       onActivitiesChange(updatedActivities);
       setNewActivity("");
     }
   };
 
-  const removeActivity = (id: string) => {
-    const updatedActivities = tour.activities.filter(
+  const removeActivity = (id: number) => {
+    const updatedActivities = tour?.activities?.filter(
       (activity) => activity.id !== id
-    );
+    ) || [];
     onActivitiesChange(updatedActivities);
   };
 
   const addService = () => {
     if (newService.trim()) {
       const updatedServices = [
-        ...tour.services,
-        { id: Date.now().toString(), name: newService.trim() },
+        ...tour?.services || [],
+        { id: Date.now(), name: newService.trim() },
       ];
       onServicesChange(updatedServices);
       setNewService("");
     }
   };
 
-  const removeService = (id: string) => {
-    const updatedServices = tour.services.filter(
+  const removeService = (id: number) => {
+    const updatedServices = tour?.services?.filter(
       (service) => service.id !== id
-    );
+    ) || [];
     onServicesChange(updatedServices);
   };
 
@@ -89,13 +89,13 @@ const TourDetails: React.FC<TourDetailsProps> = ({
           </div>
 
           <div className="space-y-2">
-            {tour.activities.length === 0 && (
+            {tour?.activities?.length === 0 && (
               <p className="text-sm text-gray-500 italic">
                 No activities added yet.
               </p>
             )}
 
-            {tour.activities.map((activity) => (
+            {tour?.activities?.map((activity) => (
               <div
                 key={activity.id}
                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md group"
@@ -138,13 +138,13 @@ const TourDetails: React.FC<TourDetailsProps> = ({
           </div>
 
           <div className="space-y-2">
-            {tour.services.length === 0 && (
+            {tour?.services?.length === 0 && (
               <p className="text-sm text-gray-500 italic">
                 No services added yet.
               </p>
             )}
 
-            {tour.services.map((service) => (
+            {tour?.services?.map((service) => (
               <div
                 key={service.id}
                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md group"

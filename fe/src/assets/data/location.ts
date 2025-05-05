@@ -1,0 +1,22 @@
+export const location = [
+    { "id": 1, "name": "Great Wall Explorer" },
+    { "id": 2, "name": "Terracotta Warriors & Xi'an" },
+    { "id": 3, "name": "Shanghai City Experience" },
+    { "id": 4, "name": "Forbidden City, Beijing" },
+    { "id": 5, "name": "Zhangjiajie National Forest Park" },
+    { "id": 6, "name": "Guilin & Li River Cruise" },
+    { "id": 7, "name": "Chengdu Panda Base" },
+    { "id": 8, "name": "Potala Palace, Lhasa" },
+    { "id": 9, "name": "West Lake, Hangzhou" },
+    { "id": 10, "name": "The Bund, Shanghai" },
+    { "id": 11, "name": "Yellow Mountain (Huangshan)" },
+    { "id": 12, "name": "Jiuzhaigou Valley" },
+    { "id": 13, "name": "Suzhou Classical Gardens" },
+    { "id": 14, "name": "Mount Everest Base Camp (Tibet side)" },
+    { "id": 15, "name": "Hong Kong Skyline & Victoria Peak" },
+    { "id": 16, "name": "Lijiang Old Town" },
+    { "id": 17, "name": "Dunhuang Mogao Caves" },
+    { "id": 18, "name": "Yangshuo Countryside" },
+    { "id": 19, "name": "Summer Palace, Beijing" },
+    { "id": 20, "name": "Silk Road Adventure (Kashgar)" }
+]

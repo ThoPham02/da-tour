@@ -14,7 +14,7 @@ const TourItinerary: React.FC<TourItineraryProps> = ({
 }) => {
   const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
 
-  const toggleDayExpansion = (dayId: string) => {
+  const toggleDayExpansion = (dayId: number) => {
     setExpandedDays((prev) => ({
       ...prev,
       [dayId]: !prev[dayId],
@@ -23,11 +23,10 @@ const TourItinerary: React.FC<TourItineraryProps> = ({
 
   const addDay = () => {
     const newDay: Itinerary = {
-      id: Date.now().toString(),
+      id: Date.now(),
       dayNumber: itinerary.length + 1,
       title: `Day ${itinerary.length + 1}`,
       description: "",
-      activities: [],
     };
 
     onChange([...itinerary, newDay]);
@@ -39,7 +38,7 @@ const TourItinerary: React.FC<TourItineraryProps> = ({
     }));
   };
 
-  const removeDay = (id: string) => {
+  const removeDay = (id: number) => {
     const updatedItinerary = itinerary
       .filter((day) => day.id !== id)
       .map((day, index) => ({
@@ -51,7 +50,7 @@ const TourItinerary: React.FC<TourItineraryProps> = ({
     onChange(updatedItinerary);
   };
 
-  const updateDay = (id: string, data: Partial<Itinerary>) => {
+  const updateDay = (id: number, data: Partial<Itinerary>) => {
     const updatedItinerary = itinerary.map((day) =>
       day.id === id ? { ...day, ...data } : day
     );
@@ -59,41 +58,41 @@ const TourItinerary: React.FC<TourItineraryProps> = ({
     onChange(updatedItinerary);
   };
 
-  const addActivityToDay = (dayId: string, activity: string) => {
-    if (!activity.trim()) return;
+  // const addActivityToDay = (dayId: number, activity: string) => {
+  //   if (!activity.trim()) return;
 
-    const updatedItinerary = itinerary.map((day) => {
-      if (day.id === dayId) {
-        return {
-          ...day,
-          activities: [
-            ...day.activities,
-            {
-              id: Date.now().toString(),
-              name: activity.trim(),
-            },
-          ],
-        };
-      }
-      return day;
-    });
+  //   const updatedItinerary = itinerary.map((day) => {
+  //     if (day.id === dayId) {
+  //       return {
+  //         ...day,
+  //         activities: [
+  //           ...day.activities,
+  //           {
+  //             id: Date.now().toString(),
+  //             name: activity.trim(),
+  //           },
+  //         ],
+  //       };
+  //     }
+  //     return day;
+  //   });
 
-    onChange(updatedItinerary);
-  };
+  //   onChange(updatedItinerary);
+  // };
 
-  const removeActivityFromDay = (dayId: string, activityId: string) => {
-    const updatedItinerary = itinerary.map((day) => {
-      if (day.id === dayId) {
-        return {
-          ...day,
-          activities: day.activities.filter((a) => a.id !== activityId),
-        };
-      }
-      return day;
-    });
+  // const removeActivityFromDay = (dayId: number, activityId: number) => {
+  //   const updatedItinerary = itinerary.map((day) => {
+  //     if (day.id === dayId) {
+  //       return {
+  //         ...day,
+  //         activities: day.activities.filter((a) => a.id !== activityId),
+  //       };
+  //     }
+  //     return day;
+  //   });
 
-    onChange(updatedItinerary);
-  };
+  //   onChange(updatedItinerary);
+  // };
 
   return (
     <div className="space-y-6">
@@ -180,7 +179,7 @@ const TourItinerary: React.FC<TourItineraryProps> = ({
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Day Activities
                   </label>
@@ -231,7 +230,7 @@ const TourItinerary: React.FC<TourItineraryProps> = ({
                       </button>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
           </div>

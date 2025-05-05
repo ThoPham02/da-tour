@@ -1,5 +1,7 @@
 import { AxiosResponse } from "axios";
 import axios from "../axios";
+import { Tour } from "../../types/tour";
+import { getTimeStamp } from "../../utils/utils";
 
 // Kiểu dữ liệu chung
 export interface AuthPayload {
@@ -65,23 +67,108 @@ export const apiGetCurrent = (): Promise<ApiResponse> =>
     }
   });
 
-  type UploadResponse = {
-    url: string;
+type UploadResponse = {
+  url: string;
+};
+
+export const uploadImage = async (image: File): Promise<string> => {
+  try {
+    const formData = new FormData();
+    formData.append("file", image);
+
+    const response: AxiosResponse<UploadResponse> = await axios({
+      method: "post",
+      url: "/upload",
+      data: formData,
+    });
+
+    return response.data.url;
+  } catch (error) {
+    return "";
+  }
+};
+
+type CreateTourResponse = {
+  result: {
+    code: number;
+    message?: string;
   };
-  
-  export const uploadImage = async (image: File): Promise<string> => {
-    try {
-      const formData = new FormData();
-      formData.append('file', image);
-  
-      const response: AxiosResponse<UploadResponse> = await axios({
-        method: "post",
-        url:"/upload",
-        data: formData,
-      });
-  
-      return response.data.url;
-    } catch (error) {
-      return "";
-    }
-  };
+};
+
+export const convertTourToFormData = (tour: Tour): FormData => {
+  const formData = new FormData();
+
+  formData.append("image", tour.image);
+  formData.append("name", tour.name);
+  formData.append("description", tour.description);
+  formData.append("duration", tour.duration.toString());
+  formData.append("location", tour.location.toString());
+  formData.append("overview", tour.overview);
+  formData.append("price", tour.price.toString());
+  formData.append("seats", tour.quantity.toString());
+
+  const departureTimestamp = getTimeStamp(tour.departureDate);
+  formData.append("departureDate", departureTimestamp.toString());
+
+  // Normalize activities: ensure id is number
+  const normalizedActivities = tour.activities.map((a) => ({
+    id: Number(a.id),
+    title: a.name,
+  }));
+  formData.append("activities", JSON.stringify(normalizedActivities));
+
+  // Normalize services: ensure id is number
+  const normalizedServices = tour.services.map((s) => ({
+    id: Number(s.id),
+    title: s.name,
+  }));
+  formData.append("services", JSON.stringify(normalizedServices));
+
+  // Normalize itinerary and nested activities
+  const normalizedItinerary = tour.itinerary.map((item) => ({
+    id: Number(item.id),
+    dayNumber: item.dayNumber,
+    name: item.title,
+    description: item.description,
+  }));
+  formData.append("itinerary", JSON.stringify(normalizedItinerary));
+
+  return formData;
+};
+
+export const apiCreateTour = async (
+  tourData: Tour
+): Promise<CreateTourResponse | null> => {
+  try {
+    const formData = convertTourToFormData(tourData);
+    const response: AxiosResponse<CreateTourResponse> = await axios({
+      method: "post",
+      url: "/tour",
+      data: formData,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating tour:", error);
+    return null;
+  }
+};
+
+export const apiFilterTour = async (
+  filter: any
+): Promise<ApiResponse<Tour[]>> => {
+  try {
+    const response: AxiosResponse<ApiResponse<Tour[]>> = await axios({
+      method: "get",
+      url: "/tour/filter",
+      params: {
+        ...filter,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error filtering tours:", error);
+    throw error;
+  }
+};
