@@ -25,4 +25,10 @@ export const API_URL = {
     [ROUTE_PATHS.HOME]: "Trang chủ",
     [ROUTE_PATHS.ERROR]: "Lỗi",
   };
-  
+
+export const Api = {
+  UploadImage: {
+    url: "/invent/upload",
+    method: "post",
+  },
+}

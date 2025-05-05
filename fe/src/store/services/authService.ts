@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+import { Api } from "../../common/path";
 import axios from "../axios";
 
 // Kiểu dữ liệu chung
@@ -63,3 +65,24 @@ export const apiGetCurrent = (): Promise<ApiResponse> =>
       reject(error);
     }
   });
+
+  type UploadResponse = {
+    url: string;
+  };
+  
+  export const uploadImage = async (image: File): Promise<string> => {
+    try {
+      const formData = new FormData();
+      formData.append('file', image);
+  
+      const response: AxiosResponse<UploadResponse> = await axios({
+        method: "post",
+        url:"/upload",
+        data: formData,
+      });
+  
+      return response.data.url;
+    } catch (error) {
+      return "";
+    }
+  };

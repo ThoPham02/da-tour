@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Upload, Image as ImageIcon, X } from "lucide-react";
+import { uploadImage } from "../../store/services/authService";
 
 interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
@@ -39,12 +40,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
-  const handleImageFile = (file: File) => {
-    // For demo purposes, we'll create a temporary URL
-    // In a real application, you'd upload this to a server
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-    onImageUpload(url);
+  const handleImageFile = async (file: File) => {
+    try {
+      const url = await uploadImage(file);
+      setPreviewUrl(url);
+      onImageUpload(url);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return null;
+    }
   };
 
   const handleButtonClick = () => {
