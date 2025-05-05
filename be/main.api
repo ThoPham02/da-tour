@@ -115,10 +115,10 @@ type (
 	}
 
 	SearchTourReq {
-		Location      int64 `form:"location"`
-		DepartureDate int64 `form:"departureDate"`
-		Limit         int64 `form:"limit"`
-		Offset        int64 `form:"offset"`
+		Location      int64 `form:"location, optional"`
+		DepartureDate int64 `form:"departureDate, optional"`
+		Limit         int64 `form:"limit, optional"`
+		Offset        int64 `form:"offset, optional"`
 	}
 	SearchTourRes {
 		Tours  []Tour `json:"tours"`
@@ -144,25 +144,25 @@ service main-api {
 	)
 	@handler Login
 	post /login (LoginReq) returns (LoginRes)
-	
+
 	@doc (
 		summary: "User Register"
 	)
 	@handler Register
 	post /register (RegisterReq) returns (RegisterRes)
-	
+
 	@doc (
 		summary: "Send Message"
 	)
 	@handler SendMessage
 	post /message (SendMessageReq) returns (SendMessageRes)
-	
+
 	@doc (
 		summary: "Search Tour"
 	)
 	@handler SearchTour
 	get /tour/filter (SearchTourReq) returns (SearchTourRes)
-	
+
 	@doc (
 		summary: "Tour Detail"
 	)
@@ -338,79 +338,79 @@ service main-api {
 	)
 	@handler UpdateUser
 	put /user/:userID (UpdateUserReq) returns (UpdateUserRes)
-	
+
 	@doc (
 		summary: "Create Tour"
 	)
 	@handler CreateTour
 	post /tour (CreateTourReq) returns (CreateTourRes)
-	
+
 	@doc (
 		summary: "Update Tour"
 	)
 	@handler UpdateTour
 	put /tour/:tourID (UpdateTourReq) returns (UpdateTourRes)
-	
+
 	@doc(
 		summary: "Upload File"
 	)
 	@handler UploadFile
 	post /upload (UploadFileReq) returns (UploadFileRes)
-	
+
 	@doc (
 		summary: "Create Order"
 	)
 	@handler CreateOrder
 	post /order (CreateOrderReq) returns (CreateOrderRes)
-	
+
 	@doc (
 		summary: "Get Order"
 	)
 	@handler GetOrder
 	get /order/:orderID (GetOrderReq) returns (GetOrderRes)
-	
+
 	@doc (
 		summary: "Filter Order"
 	)
 	@handler FilterOrder
 	get /order/filter (FilterOrderReq) returns (FilterOrderRes)
-	
+
 	@doc (
 		summary: "Update Order Status"
 	)
 	@handler UpdateOrderStatus
 	put /order/:orderID/status (UpdateOrderStatusReq) returns (UpdateOrderStatusRes)
-	
+
 	@doc (
 		summary: "Update Order"
 	)
 	@handler UpdateOrder
 	put /order/:orderID (UpdateOrderReq) returns (UpdateOrderRes)
-	
+
 	@doc(
 		summary: "Create Payment"
 	)
 	@handler CreatePayment
 	post /payment (CreatePaymentReq) returns (CreatePaymentRes)
-	
+
 	@doc(
 		summary: "Filter Payment"
 	)
 	@handler FilterPayment
 	get /payment/filter (FilterPaymentReq) returns (FilterPaymentRes)
-	
+
 	@doc(
 		summary: "Update Payment"
 	)
 	@handler UpdatePayment
 	put /payment/:paymentID (UpdatePaymentReq) returns (UpdatePaymentRes)
-	
+
 	@doc(
 		summary: "Delete Payment"
 	)
 	@handler DeletePayment
 	delete /payment/:paymentID (DeletePaymentReq) returns (DeletePaymentRes)
-	
+
 	@doc (
 		summary: "Update Payment Status"
 	)

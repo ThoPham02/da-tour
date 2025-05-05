@@ -107,10 +107,10 @@ type SendMessageRes struct {
 }
 
 type SearchTourReq struct {
-	Location      int64 `form:"location"`
-	DepartureDate int64 `form:"departureDate"`
-	Limit         int64 `form:"limit"`
-	Offset        int64 `form:"offset"`
+	Location      int64 `form:"location, optional"`
+	DepartureDate int64 `form:"departureDate, optional"`
+	Limit         int64 `form:"limit, optional"`
+	Offset        int64 `form:"offset, optional"`
 }
 
 type SearchTourRes struct {

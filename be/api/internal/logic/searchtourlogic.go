@@ -30,6 +30,7 @@ func (l *SearchTourLogic) SearchTour(req *types.SearchTourReq) (resp *types.Sear
 
 	var toursModel []*model.TourTbl
 	var total int64
+	var tours []types.Tour
 
 	total, err = l.svcCtx.TourTblModel.CountTour(l.ctx, req.Location, req.DepartureDate)
 	if err != nil {
@@ -62,7 +63,7 @@ func (l *SearchTourLogic) SearchTour(req *types.SearchTourReq) (resp *types.Sear
 	}
 
 	for _, tourModel := range toursModel {
-		resp.Tours = append(resp.Tours, types.Tour{
+		tours = append(tours, types.Tour{
 			ID:            tourModel.Id,
 			Name:          tourModel.Name,
 			Image:         tourModel.Image,
@@ -83,7 +84,7 @@ func (l *SearchTourLogic) SearchTour(req *types.SearchTourReq) (resp *types.Sear
 			Code:    common.SUCCESS_CODE,
 			Message: common.SUCCESS_MESS,
 		},
-		Tours: resp.Tours,
+		Tours: tours,
 		Total: total,
 	}, nil
 }
