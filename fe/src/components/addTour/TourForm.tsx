@@ -14,7 +14,6 @@ import {
 } from "../../types/tour";
 import { tourSchema } from "../../validation/tourSchema";
 import { apiCreateTour } from "../../store/services/authService";
-import { on } from "events";
 
 interface TourFormProps {
   onClose: () => void;
@@ -36,7 +35,7 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
     name: "",
     description: "",
     duration: 0,
-    location: "",
+    location: 0,
     overview: "",
     activities: [],
     services: [],
@@ -130,8 +129,6 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
       // return;
     }
 
-    // Submit the form data to the server or perform any other action
-    console.log("Tour data submitted:", tour);
     try {
       const resp = await apiCreateTour(tour);
 

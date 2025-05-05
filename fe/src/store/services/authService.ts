@@ -97,44 +97,40 @@ type CreateTourResponse = {
 export const convertTourToFormData = (tour: Tour): FormData => {
   const formData = new FormData();
 
-  formData.append('image', tour.image);
-  formData.append('name', tour.name);
-  formData.append('description', tour.description);
-  formData.append('duration', tour.duration.toString());
-  formData.append('location', tour.location);
-  formData.append('overview', tour.overview);
-  formData.append('price', tour.price.toString());
-  formData.append('seats', tour.seats.toString());
+  formData.append("image", tour.image);
+  formData.append("name", tour.name);
+  formData.append("description", tour.description);
+  formData.append("duration", tour.duration.toString());
+  formData.append("location", tour.location.toString());
+  formData.append("overview", tour.overview);
+  formData.append("price", tour.price.toString());
+  formData.append("seats", tour.seats.toString());
 
   const departureTimestamp = new Date(tour.departureDate).getTime();
-  formData.append('departureDate', departureTimestamp.toString());
+  formData.append("departureDate", departureTimestamp.toString());
 
   // Normalize activities: ensure id is number
   const normalizedActivities = tour.activities.map((a) => ({
     id: Number(a.id),
-    name: a.name,
+    title: a.name,
   }));
-  formData.append('activities', JSON.stringify(normalizedActivities));
+  formData.append("activities", JSON.stringify(normalizedActivities));
 
   // Normalize services: ensure id is number
   const normalizedServices = tour.services.map((s) => ({
     id: Number(s.id),
-    name: s.name,
+    title: s.name,
   }));
-  formData.append('services', JSON.stringify(normalizedServices));
+  formData.append("services", JSON.stringify(normalizedServices));
 
   // Normalize itinerary and nested activities
   const normalizedItinerary = tour.itinerary.map((item) => ({
     id: Number(item.id),
     dayNumber: item.dayNumber,
-    title: item.title,
+    name: item.title,
     description: item.description,
-    activities: item.activities.map((a) => ({
-      id: Number(a.id),
-      name: a.name,
-    })),
   }));
-  formData.append('itinerary', JSON.stringify(normalizedItinerary));
+  formData.append("itinerary", JSON.stringify(normalizedItinerary));
 
   return formData;
 };
@@ -154,5 +150,22 @@ export const apiCreateTour = async (
   } catch (error) {
     console.error("Error creating tour:", error);
     return null;
+  }
+};
+
+export const apiFilterTour = async (
+  filter: any
+): Promise<ApiResponse<Tour[]>> => {
+  try {
+    const response: AxiosResponse<ApiResponse<Tour[]>> = await axios({
+      method: "get",
+      url: "/tour/filter",
+      data: filter,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error filtering tours:", error);
+    throw error;
   }
 };

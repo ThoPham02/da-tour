@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Plus,
   Search,
@@ -9,13 +9,44 @@ import {
 } from "lucide-react";
 import TourTable from "./TourTable";
 import TourModal from "../../../components/addTour/TourModal";
+import { Tour } from "../../../types/tour";
+import { apiFilterTour } from "../../../store/services/authService";
 
 const ToursPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("all");
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [searchText, setSearchText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  useEffect(() => {
+    fetchTours();
+  }, [activeTab]);
+
+  const fetchTours = async () => {
+    try {
+      const response = await apiFilterTour({ status: activeTab });
+
+      console.log("Fetched tours:", response);
+
+      setTours(response.tours || []);
+    } catch (error) {
+      console.error("Failed to fetch tours");
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      const response = await apiFilterTour({
+        keyword: searchText,
+      });
+      setTours(response.tours || []);
+    } catch (error) {
+      console.error("Error filtering tours by search");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -38,14 +69,22 @@ const ToursPage: React.FC = () => {
               <div className="relative">
                 <input
                   type="text"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
                   placeholder="Search tours..."
                   className="pl-9 pr-4 py-2 w-full md:w-64 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
                 />
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                <Search
+                  onClick={handleSearch}
+                  className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 cursor-pointer"
+                />
               </div>
 
               <div className="relative">
-                <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <button
+                  className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                  onClick={handleSearch}
+                >
                   <Filter className="w-4 h-4 mr-2" />
                   Filter
                   <ChevronDown className="w-4 h-4 ml-1" />
@@ -54,45 +93,38 @@ const ToursPage: React.FC = () => {
             </div>
 
             <div className="flex space-x-2">
-              <button
-                className={`px-3 py-1.5 rounded-md font-medium text-sm ${
-                  activeTab === "all"
-                    ? "bg-red-50 text-red-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-                onClick={() => setActiveTab("all")}
-              >
-                All Tours
-              </button>
-
-              <button
-                className={`px-3 py-1.5 rounded-md font-medium text-sm ${
-                  activeTab === "active"
-                    ? "bg-green-50 text-green-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-                onClick={() => setActiveTab("active")}
-              >
-                <CheckCircle className="w-4 h-4 inline mr-1" />
-                Active
-              </button>
-
-              <button
-                className={`px-3 py-1.5 rounded-md font-medium text-sm ${
-                  activeTab === "upcoming"
-                    ? "bg-purple-50 text-purple-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-                onClick={() => setActiveTab("upcoming")}
-              >
-                <Map className="w-4 h-4 inline mr-1" />
-                Upcoming
-              </button>
+              {["all", "active", "upcoming"].map((status) => (
+                <button
+                  key={status}
+                  className={`px-3 py-1.5 rounded-md font-medium text-sm ${
+                    activeTab === status
+                      ? status === "active"
+                        ? "bg-green-50 text-green-600"
+                        : status === "upcoming"
+                        ? "bg-purple-50 text-purple-600"
+                        : "bg-red-50 text-red-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                  onClick={() => setActiveTab(status)}
+                >
+                  {status === "active" && (
+                    <>
+                      <CheckCircle className="w-4 h-4 inline mr-1" /> Active
+                    </>
+                  )}
+                  {status === "upcoming" && (
+                    <>
+                      <Map className="w-4 h-4 inline mr-1" /> Upcoming
+                    </>
+                  )}
+                  {status === "all" && "All Tours"}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        <TourTable activeTab={activeTab} />
+        <TourTable activeTab={activeTab} tours={tours} />
       </div>
 
       {isModalOpen && <TourModal onClose={closeModal} />}

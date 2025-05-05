@@ -17,17 +17,19 @@ export interface Itinerary {
 }
 
 export interface Tour {
+  id?: number
   image: string;
   name: string;
   description: string;
   duration: number;
-  location: string;
+  location: number;
   overview: string;
   activities: Activity[];
   services: Service[];
   itinerary: Itinerary[];
   price: number;
   seats: number;
+  status?: string;
   departureDate: string;
 }
 

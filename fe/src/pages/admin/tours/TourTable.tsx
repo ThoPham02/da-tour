@@ -1,69 +1,18 @@
 import React from 'react';
 import { Edit2, Trash, MoreVertical, ExternalLink } from 'lucide-react';
-
-// Mock tour data
-const tours = [
-  {
-    id: 1,
-    name: 'Beijing Cultural Experience',
-    destination: 'Beijing',
-    duration: 7,
-    price: 1200,
-    status: 'active',
-    bookings: 24,
-    startDate: '2025-06-15',
-  },
-  {
-    id: 2,
-    name: 'Shanghai City Tour',
-    destination: 'Shanghai',
-    duration: 5,
-    price: 950,
-    status: 'active',
-    bookings: 18,
-    startDate: '2025-06-22',
-  },
-  {
-    id: 3,
-    name: 'Great Wall Adventure',
-    destination: 'Beijing',
-    duration: 3,
-    price: 500,
-    status: 'upcoming',
-    bookings: 12,
-    startDate: '2025-07-10',
-  },
-  {
-    id: 4,
-    name: 'Yangtze River Cruise',
-    destination: 'Chongqing',
-    duration: 10,
-    price: 2200,
-    status: 'upcoming',
-    bookings: 6,
-    startDate: '2025-08-05',
-  },
-  {
-    id: 5,
-    name: 'Xi\'an Terracotta Army',
-    destination: 'Xi\'an',
-    duration: 4,
-    price: 800,
-    status: 'active',
-    bookings: 15,
-    startDate: '2025-07-01',
-  },
-];
+import { Tour } from '../../../types/tour';
+import { getDestinationNameById } from '../../../utils/utils';
 
 interface TourTableProps {
   activeTab: string;
+  tours: Array<Tour>;
 }
 
-const TourTable: React.FC<TourTableProps> = ({ activeTab }) => {
+const TourTable: React.FC<TourTableProps> = ({ activeTab, tours }) => {
   // Filter tours based on active tab
-  const filteredTours = activeTab === 'all' 
-    ? tours 
-    : tours.filter(tour => tour.status === activeTab);
+  // const filteredTours = activeTab === 'all' 
+  //   ? tours 
+  //   : tours.filter(tour => tour.status === activeTab);
   
   return (
     <div className="overflow-x-auto">
@@ -97,13 +46,13 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {filteredTours.map((tour) => (
+          {tours.map((tour) => (
             <tr key={tour.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-medium text-gray-900">{tour.name}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-500">{tour.destination}</div>
+                <div className="text-sm text-gray-500">{getDestinationNameById(tour.location)}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-500">{tour.duration} days</div>
@@ -121,10 +70,10 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab }) => {
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {tour.bookings}
+                {tour.seats}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {new Date(tour.startDate).toLocaleDateString()}
+                {new Date(tour.departureDate).toLocaleDateString()}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div className="flex items-center justify-end space-x-2">
@@ -147,7 +96,7 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab }) => {
         </tbody>
       </table>
       
-      {filteredTours.length === 0 && (
+      {tours.length === 0 && (
         <div className="text-center py-8">
           <p className="text-gray-500">No tours found for this filter.</p>
         </div>
@@ -155,7 +104,7 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab }) => {
       
       <div className="flex items-center justify-between px-6 py-3 border-t border-gray-200">
         <div className="text-sm text-gray-500">
-          Showing {filteredTours.length} of {tours.length} tours
+          Showing {tours.length} of {tours.length} tours
         </div>
         
         <div className="flex space-x-2">
