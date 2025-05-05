@@ -13,6 +13,8 @@ import {
   ValidationErrors,
 } from "../../types/tour";
 import { tourSchema } from "../../validation/tourSchema";
+import { apiCreateTour } from "../../store/services/authService";
+import { on } from "events";
 
 interface TourFormProps {
   onClose: () => void;
@@ -125,15 +127,22 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
       if (firstErrorTab !== -1) {
         setActiveTab(firstErrorTab);
       }
-      return;
+      // return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Submitting tour:", tour);
-      setIsSubmitting(false);
-      onClose();
-    }, 1500);
+    // Submit the form data to the server or perform any other action
+    console.log("Tour data submitted:", tour);
+    try {
+      const resp = await apiCreateTour(tour);
+
+      if (resp?.result?.code === 0) {
+        onClose();
+      } else {
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error("Error submitting tour data:", error);
+    }
   };
 
   const tabs = [

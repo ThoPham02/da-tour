@@ -1,15 +1,15 @@
 export interface Activity {
-  id: string;
+  id: number;
   name: string;
 }
 
 export interface Service {
-  id: string;
+  id: number;
   name: string;
 }
 
 export interface Itinerary {
-  id: string;
+  id: number;
   dayNumber: number;
   title: string;
   description: string;

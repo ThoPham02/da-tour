@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Upload, Image as ImageIcon, X } from "lucide-react";
 import { uploadImage } from "../../store/services/authService";
+import { BiLoaderCircle } from "react-icons/bi";
 
 interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
@@ -13,6 +14,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   currentImage,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState(currentImage);
 
@@ -41,6 +43,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleImageFile = async (file: File) => {
+    setIsUploading(true);
     try {
       const url = await uploadImage(file);
       setPreviewUrl(url);
@@ -49,6 +52,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       console.error("Error uploading image:", error);
       return null;
     }
+
+    setIsUploading(false);
   };
 
   const handleButtonClick = () => {
@@ -91,12 +96,25 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           onDrop={handleDrop}
           onClick={handleButtonClick}
         >
-          <Upload size={36} className="text-gray-400 mb-4" />
-          <p className="text-sm text-gray-600 text-center">
-            <span className="font-medium text-red-600">Click to upload</span> or
-            drag and drop
-          </p>
-          <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 5MB</p>
+          {isUploading ? (
+            <div className="flex items-center space-x-2">
+              <BiLoaderCircle className="animate-spin" />
+              <span>Uploading...</span>
+            </div>
+          ) : (
+            <>
+              <Upload size={36} className="text-gray-400 mb-4" />
+              <p className="text-sm text-gray-600 text-center">
+                <span className="font-medium text-red-600">
+                  Click to upload
+                </span>{" "}
+                or drag and drop
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                PNG, JPG, GIF up to 5MB
+              </p>
+            </>
+          )}
         </div>
       )}
 
@@ -106,6 +124,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         onChange={handleFileInputChange}
         accept="image/*"
         className="hidden"
+        disabled={isUploading}
       />
     </div>
   );
