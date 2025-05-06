@@ -44,13 +44,14 @@ export interface Customer {
 }
 
 export interface Order {
-  id?: string;
-  orderCode?: string;
+  id?: number;
+  code?: string;
   tourId: number;
   customer: Customer;
   quantity: number;
-  totalAmount: number;
+  totalPrice: number;
   status?: number;
-  createdAt?: number;
+  createDate?: number;
   tourName?: string;
+  fullName?: string;
 }

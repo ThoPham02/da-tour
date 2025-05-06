@@ -4,6 +4,7 @@ import TourSearch from "./TourSearch";
 import CustomerForm from "./CustomerForm";
 import OrderSummary from "./OrderSummary";
 import { Customer, Order, Tour } from "../../types/tour";
+import { apiCreateOrder } from "../../store/services/authService";
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -18,7 +19,9 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
     phone: "",
   });
   const [quantity, setQuantity] = useState(1);
-  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isVisible, setIsVisible] = useState(false);
 
@@ -36,9 +39,9 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (selectedTour) {
-      setTotalAmount(selectedTour?.price * quantity);
+      setTotalPrice(selectedTour?.price * quantity);
     } else {
-      setTotalAmount(0);
+      setTotalPrice(0);
     }
   }, [selectedTour, quantity]);
 
@@ -73,21 +76,29 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (validateForm() && selectedTour) {
       const order: Order = {
         tourId: selectedTour.id || 0,
         customer,
         quantity,
-        totalAmount,
+        totalPrice,
       };
 
-      console.log("Order:", order);
+      try {
+        const resp = await apiCreateOrder(order);
 
-      // onSave(order);
-      // handleClose();
+        if (resp?.result?.code === 0) {
+          onClose();
+        } else {
+          setIsSubmitting(false);
+        }
+      } catch (error) {
+        console.error("Error submitting tour data:", error);
+      }
     }
   };
 
@@ -155,7 +166,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
                     quantity={quantity}
                     onQuantityChange={setQuantity}
                     price={selectedTour?.price || 0}
-                    totalAmount={totalAmount}
+                    totalPrice={totalPrice}
                     errors={errors}
                   />
 
@@ -163,6 +174,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
                     <button
                       type="submit"
                       className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+                      disabled={isSubmitting}
                     >
                       Create Order
                     </button>

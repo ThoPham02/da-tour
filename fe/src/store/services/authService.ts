@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import axios from "../axios";
-import { Tour } from "../../types/tour";
+import { Order, Tour } from "../../types/tour";
 import { getTimeStamp } from "../../utils/utils";
 
 // Kiểu dữ liệu chung
@@ -111,21 +111,21 @@ export const convertTourToFormData = (tour: Tour): FormData => {
   formData.append("departureDate", departureTimestamp.toString());
 
   // Normalize activities: ensure id is number
-  const normalizedActivities = tour.activities.map((a) => ({
+  const normalizedActivities = tour?.activities?.map((a) => ({
     id: Number(a.id),
     title: a.name,
   }));
   formData.append("activities", JSON.stringify(normalizedActivities));
 
   // Normalize services: ensure id is number
-  const normalizedServices = tour.services.map((s) => ({
+  const normalizedServices = tour?.services?.map((s) => ({
     id: Number(s.id),
     title: s.name,
   }));
   formData.append("services", JSON.stringify(normalizedServices));
 
   // Normalize itinerary and nested activities
-  const normalizedItinerary = tour.itinerary.map((item) => ({
+  const normalizedItinerary = tour?.itinerary?.map((item) => ({
     id: Number(item.id),
     dayNumber: item.dayNumber,
     name: item.title,
@@ -169,6 +169,63 @@ export const apiFilterTour = async (
     return response.data;
   } catch (error) {
     console.error("Error filtering tours:", error);
+    throw error;
+  }
+};
+
+type CreateOrderResponse = {
+  result: {
+    code: number;
+    message?: string;
+  };
+};
+
+export const convertOrderToFormData = (order: Order): FormData => {
+  const formData = new FormData();
+
+  formData.append("tourID", order.tourId.toString());
+  formData.append("fullname", order.customer.name);
+  formData.append("email", order.customer.email);
+  formData.append("phone", order.customer.phone);
+  formData.append("seats", order.quantity.toString());
+
+  return formData;
+};
+
+export const apiCreateOrder = async (
+  orderData: Order
+): Promise<CreateOrderResponse | null> => {
+  try {
+    const formData = convertOrderToFormData(orderData);
+
+    const response: AxiosResponse<CreateOrderResponse> = await axios({
+      method: "post",
+      url: "/order",
+      data: formData,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating order:", error);
+    return null;
+  }
+};
+
+export const apiFilterOrder = async (
+  filter: any
+): Promise<ApiResponse<Order[]>> => {
+  try {
+    const response: AxiosResponse<ApiResponse<Order[]>> = await axios({
+      method: "get",
+      url: "/order/filter",
+      params: {
+        ...filter,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error filtering orders:", error);
     throw error;
   }
 };

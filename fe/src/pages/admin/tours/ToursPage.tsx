@@ -29,7 +29,7 @@ const ToursPage: React.FC = () => {
 
   useEffect(() => {
     fetchTours();
-  }, [activeTab]);
+  }, [isModalOpen]);
 
   const fetchTours = async () => {
     try {

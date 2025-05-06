@@ -4,7 +4,7 @@ interface OrderSummaryProps {
   quantity: number;
   onQuantityChange: (quantity: number) => void;
   price: number;
-  totalAmount: number;
+  totalPrice: number;
   errors: Record<string, string>;
 }
 
@@ -12,7 +12,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   quantity, 
   onQuantityChange, 
   price, 
-  totalAmount,
+  totalPrice,
   errors
 }) => {
   return (
@@ -64,7 +64,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         </div>
         <div className="flex justify-between font-medium text-lg text-gray-900 mt-3">
           <span>Total amount:</span>
-          <span>${totalAmount.toFixed(2)}</span>
+          <span>${totalPrice.toFixed(2)}</span>
         </div>
       </div>
     </div>

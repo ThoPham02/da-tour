@@ -57,9 +57,9 @@ export const ORDER_STATUS = {
 };
 
 export const ORDER_STATUS_TEXT = {
-  [ORDER_STATUS.ALL]: "Tất cả",
-  [ORDER_STATUS.PENDING]: "Chờ xác nhận",
-  [ORDER_STATUS.CONFIRMED]: "Đã xác nhận",
-  [ORDER_STATUS.CANCELLED]: "Đã hủy",
-  [ORDER_STATUS.COMPLETED]: "Hoàn thành",
+  [ORDER_STATUS.ALL]: "All",
+  [ORDER_STATUS.PENDING]: "Pending",
+  [ORDER_STATUS.CONFIRMED]: "Confirmed",
+  [ORDER_STATUS.CANCELLED]: "Cancelled",
+  [ORDER_STATUS.COMPLETED]: "Completed",
 };

@@ -1,14 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Filter, ChevronDown, Download, Plus } from "lucide-react";
 
 import OrderTable from "./OrderTable";
 import OrderModal from "../../../components/addOrder/OrderModal";
+import { apiFilterOrder } from "../../../store/services/authService";
+import { Order } from "../../../types/tour";
 
 const OrdersPage: React.FC = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [isModalOpen]);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await apiFilterOrder({});
+
+      setOrders(response.orders || []);
+    } catch (error) {
+      console.error("Failed to fetch tours");
+    }
+  };
+
+  const handleSearch = async () => {
+    fetchOrders();
+  };
 
   return (
     <div className="space-y-6">
@@ -41,13 +62,16 @@ const OrdersPage: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Search orders..."
-                  className="pl-9 pr-4 py-2 w-full md:w-64 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="pl-9 pr-4 py-2 w-44 md:w-56 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
               </div>
 
               <div className="relative">
-                <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <button
+                  className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                  onClick={handleSearch}
+                >
                   <Filter className="w-4 h-4 mr-2" />
                   Filter
                   <ChevronDown className="w-4 h-4 ml-1" />
@@ -103,7 +127,7 @@ const OrdersPage: React.FC = () => {
           </div>
         </div>
 
-        <OrderTable statusFilter={0} orders={[]} />
+        <OrderTable statusFilter={0} orders={orders} />
       </div>
 
       <OrderModal isOpen={isModalOpen} onClose={closeModal} />
