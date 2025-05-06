@@ -32,19 +32,23 @@ func NewTourTblModel(conn sqlx.SqlConn) TourTblModel {
 // FilterTour implements TourTblModel interface.
 func (m *customTourTblModel) FilterTour(ctx context.Context, location int64, departureDate int64, limit int64, offset int64) ([]*TourTbl, error) {
 	var tours []*TourTbl
+	var val []interface{}
 	query := `SELECT * FROM tour_tbl where 1=1 `
 
 	if location != 0 {
 		query += `AND location = ? `
+		val = append(val, location)
 	}
 	if departureDate != 0 {
 		query += `AND departure_date = ? `
+		val = append(val, departureDate)
 	}
 	if limit != 0 {
 		query += `LIMIT ? OFFSET ?`
+		val = append(val, limit, offset)
 	}
 
-	err := m.conn.QueryRowsCtx(ctx, &tours, query, location, departureDate, limit, offset)
+	err := m.conn.QueryRowsCtx(ctx, &tours, query, val...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,16 +58,19 @@ func (m *customTourTblModel) FilterTour(ctx context.Context, location int64, dep
 // CountTour implements TourTblModel interface.
 func (m *customTourTblModel) CountTour(ctx context.Context, location int64, departureDate int64) (int64, error) {
 	var total int64
+	var val []interface{}
 	query := `SELECT COUNT(*) FROM tour_tbl where 1=1 `
 
 	if location != 0 {
 		query += `AND location = ? `
+		val = append(val, location)
 	}
 	if departureDate != 0 {
 		query += `AND departure_date = ? `
+		val = append(val, departureDate)
 	}
 
-	err := m.conn.QueryRowCtx(ctx, &total, query, location, departureDate)
+	err := m.conn.QueryRowCtx(ctx, &total, query, val...)
 	if err != nil {
 		return 0, err
 	}
