@@ -30,6 +30,7 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 
 	var total int64
 	var ordersModel []*model.OrderTbl
+	var orders []types.Order
 
 	total, err = l.svcCtx.OrderTblModel.CountFilter(l.ctx, req.UserID, req.Status, req.TourID)
 	if err != nil {
@@ -64,7 +65,7 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 			}, nil
 		}
 
-		resp.Orders = append(resp.Orders, types.Order{
+		orders = append(orders, types.Order{
 			ID:            order.Id,
 			Code:          order.Code,
 			TourID:        order.TourId,
@@ -87,7 +88,7 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 			Code:    common.SUCCESS_CODE,
 			Message: common.SUCCESS_MESS,
 		},
-		Orders: resp.Orders,
+		Orders: orders,
 		Total:  total,
 	}, nil
 }
