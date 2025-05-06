@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MoreVertical, ExternalLink, Edit2, Trash } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { Order } from "../../../types/tour";
 import { getDate } from "../../../utils/utils";
 import { ORDER_STATUS, ORDER_STATUS_TEXT } from "../../../common/const";
@@ -20,19 +20,6 @@ const OrderTable: React.FC<OrderTableProps> = ({ statusFilter, orders }) => {
 
   const [openActionId, setOpenActionId] = React.useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const handleAction = (type: string, order: Order) => {
-    console.log(`${type} clicked for:`, order);
-    if (type === "view") {
-      // Handle view action
-    }
-    if (type === "edit") {
-      // Handle edit action
-    }
-    if (type === "delete") {
-      // Handle delete action
-    }
-  };
 
   const totalPages = Math.ceil(filteredOrders.length / ORDER_PER_PAGE);
   const startIndex = (currentPage - 1) * ORDER_PER_PAGE;

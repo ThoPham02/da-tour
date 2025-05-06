@@ -11,6 +11,7 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
 }) => {
   const handleAction = (type: string) => {
     console.log(`${type} clicked for:`, orderID);
+    console.log("Order status:", orderStatus);
     if (type === "view") {
       // Handle view action
     }
