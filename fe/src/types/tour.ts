@@ -54,4 +54,5 @@ export interface Order {
   createDate?: number;
   tourName?: string;
   fullName?: string;
+  tourDetail?: Tour;
 }

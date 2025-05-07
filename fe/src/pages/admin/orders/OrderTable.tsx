@@ -4,6 +4,8 @@ import { Order } from "../../../types/tour";
 import { getDate } from "../../../utils/utils";
 import { ORDER_STATUS, ORDER_STATUS_TEXT } from "../../../common/const";
 import OrderActionButton from "./OrderActionButton";
+import OrderModal from "../../../components/addOrder/OrderModal";
+import OrderDetailModal from "../../../components/addOrder/OrderDetailModal";
 
 interface OrderTableProps {
   statusFilter: number;
@@ -20,6 +22,8 @@ const OrderTable: React.FC<OrderTableProps> = ({ statusFilter, orders }) => {
 
   const [openActionId, setOpenActionId] = React.useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isModalOpen, setIsModelOpen] = useState(false);
+  const [selectOrder, setSelectOrder] = useState<Order | null>(null);
 
   const totalPages = Math.ceil(filteredOrders.length / ORDER_PER_PAGE);
   const startIndex = (currentPage - 1) * ORDER_PER_PAGE;
@@ -147,13 +151,26 @@ const OrderTable: React.FC<OrderTableProps> = ({ statusFilter, orders }) => {
                   onMouseLeave={() => setOpenActionId(0)}
                 >
                   <MoreVertical className="w-5 h-5 text-gray-500 hover:text-gray-800" />
-                  {openActionId === order.id && <OrderActionButton orderID={order.id || 0} orderStatus={order?.status || 0} />}
+                  {openActionId === order.id && (
+                    <OrderActionButton
+                      orderID={order.id || 0}
+                      orderStatus={order?.status || 0}
+                      setModel={setIsModelOpen}
+                      setSelectOrder={setSelectOrder}
+                    />
+                  )}
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <OrderDetailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModelOpen(false)}
+        order={selectOrder}
+      />
 
       {filteredOrders.length === 0 && (
         <div className="text-center py-8">
