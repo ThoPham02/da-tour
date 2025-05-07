@@ -173,6 +173,20 @@ export const apiFilterTour = async (
   }
 };
 
+export const apiGetTourById = async (id: number): Promise<Tour | null> => {
+  try {
+    const response: AxiosResponse<ApiResponse<Tour>> = await axios({
+      method: "get",
+      url: `/tour/${id}`,
+    });
+
+    return response.data.data || null;
+  } catch (error) {
+    console.error("Error fetching tour by ID:", error);
+    return null;
+  }
+};
+
 type CreateOrderResponse = {
   result: {
     code: number;
@@ -227,5 +241,35 @@ export const apiFilterOrder = async (
   } catch (error) {
     console.error("Error filtering orders:", error);
     throw error;
+  }
+};
+
+export const apiGetOrderById = async (id: number): Promise<Order | null> => {
+  try {
+    const response: AxiosResponse<ApiResponse<Order>> = await axios({
+      method: "get",
+      url: `/order/${id}`,
+    });
+
+    const order = {
+      tourDetail: response.data.tour,
+      id: response.data.order.id,
+      code: response.data.order.code,
+      tourId: response.data.order.tourID,
+      customer: {
+        name: response.data.order.fullname,
+        email: response.data.order.email,
+        phone: response.data.order.phone,
+      },
+      quantity: response.data.order.quantity,
+      totalPrice: response.data.order.totalPrice,
+      status: response.data.order.status,
+      createDate: response.data.order.createDate,
+    } as Order;
+
+    return order
+  } catch (error) {
+    console.error("Error fetching order by ID:", error);
+    return null;
   }
 };

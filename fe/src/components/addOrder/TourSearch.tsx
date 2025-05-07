@@ -51,8 +51,6 @@ const TourSearch: React.FC<TourSearchProps> = ({
     setSearchTerm("");
   };
 
-  console.log("Selected Tour:", selectedTour);
-
   return (
     <div className="mb-6">
       <label

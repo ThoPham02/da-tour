@@ -1,27 +1,65 @@
-import { ExternalLink, Edit2, Trash, DollarSign, XCircle, CheckCircle } from "lucide-react";
+import {
+  ExternalLink,
+  Edit2,
+  Trash,
+  DollarSign,
+  XCircle,
+  CheckCircle,
+} from "lucide-react";
+import { apiGetOrderById } from "../../../store/services/authService";
 
 interface OrderActionProps {
   orderStatus: number;
   orderID: number;
+  setModel: any;
+  setSelectOrder: any;
 }
 
 const OrderActionButton: React.FC<OrderActionProps> = ({
   orderStatus,
   orderID,
+  setModel,
+  setSelectOrder,
 }) => {
   const handleAction = (type: string) => {
-    console.log(`${type} clicked for:`, orderID);
-    // TODO: Thêm logic xử lý từng action
+    switch (type) {
+      case "view":
+        fetchOrderDetails(orderID);
+        break;
+      case "edit":
+        break;
+      case "confirm":
+        break;
+      case "add_payment":
+        break;
+      case "cancel":
+        break;
+      case "delete":
+        break;
+      default:
+        break;
+    }
+  };
+
+  const fetchOrderDetails = async (orderID: number) => {
+    try {
+      const response = await apiGetOrderById(orderID);
+
+      setSelectOrder(response);
+
+      setTimeout(() => {
+        setModel(true);
+      }, 300);
+    } catch (error) {
+      console.error("Failed to fetch order details", error);
+    }
   };
 
   const isPending = orderStatus === 1;
   const isConfirmed = orderStatus === 2;
-  const isCancelled = orderStatus === 3;
-  const isCompleted = orderStatus === 4;
 
   return (
     <div className="absolute right-0 mr-2 w-44 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-      {/* View */}
       <button
         onClick={() => handleAction("view")}
         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -30,7 +68,6 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
         View
       </button>
 
-      {/* Edit */}
       {(isPending || isConfirmed) && (
         <button
           onClick={() => handleAction("edit")}
@@ -41,7 +78,6 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
         </button>
       )}
 
-      {/* Confirm (only for pending) */}
       {isPending && (
         <button
           onClick={() => handleAction("confirm")}
@@ -52,7 +88,6 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
         </button>
       )}
 
-      {/* Add Payment (only for confirmed) */}
       {isConfirmed && (
         <button
           onClick={() => handleAction("add_payment")}
@@ -63,7 +98,6 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
         </button>
       )}
 
-      {/* Cancel (only for confirmed) */}
       {isConfirmed && (
         <button
           onClick={() => handleAction("cancel")}
@@ -74,7 +108,6 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
         </button>
       )}
 
-      {/* Delete (only for pending) */}
       {isPending && (
         <button
           onClick={() => handleAction("delete")}
