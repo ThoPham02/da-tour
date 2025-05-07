@@ -29,6 +29,8 @@ func (l *GetOrderLogic) GetOrder(req *types.GetOrderReq) (resp *types.GetOrderRe
 	l.Logger.Info("GetOrder ", req)
 
 	var orderModel *model.OrderTbl
+	var payments []types.Payment
+
 	orderModel, err = l.svcCtx.OrderTblModel.FindOne(l.ctx, req.OrderID)
 	if err != nil || orderModel == nil {
 		l.Logger.Error(err)
@@ -64,7 +66,7 @@ func (l *GetOrderLogic) GetOrder(req *types.GetOrderReq) (resp *types.GetOrderRe
 		}, nil
 	}
 	for _, payment := range paymentsModel {
-		resp.Payments = append(resp.Payments, types.Payment{
+		payments = append(payments, types.Payment{
 			ID:          payment.Id,
 			OrderID:     payment.OrderId.Int64,
 			OrderCode:   "",
@@ -111,7 +113,7 @@ func (l *GetOrderLogic) GetOrder(req *types.GetOrderReq) (resp *types.GetOrderRe
 			Remain:        tourModel.Remain,
 			Status:        tourModel.Status,
 		},
-		Payments: resp.Payments,
+		Payments: payments,
 	}, nil
 
 }
