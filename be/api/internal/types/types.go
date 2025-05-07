@@ -183,7 +183,7 @@ type UpdateTourRes struct {
 
 type CreateOrderReq struct {
 	TourID   int64  `form:"tourID"`
-	UserID   int64  `form:"userID"`
+	UserID   int64  `form:"userID,optional"`
 	Fullname string `form:"fullname"`
 	Email    string `form:"email"`
 	Phone    string `form:"phone"`
@@ -206,11 +206,11 @@ type GetOrderRes struct {
 }
 
 type FilterOrderReq struct {
-	UserID int64 `form:"userID"`
-	TourID int64 `form:"tourID"`
-	Status int64 `form:"status"`
-	Limit  int64 `form:"limit"`
-	Offset int64 `form:"offset"`
+	UserID int64 `form:"userID,optional"`
+	TourID int64 `form:"tourID,optional"`
+	Status int64 `form:"status,optional"`
+	Limit  int64 `form:"limit,optional"`
+	Offset int64 `form:"offset,optional"`
 }
 
 type FilterOrderRes struct {
