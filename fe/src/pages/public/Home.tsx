@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+// import TourCard from "./TourCard";
+import { TOUR_LOCATION_LABELS } from "../../common/const";
+import { Tour } from "../../types/tour";
+import { apiFilterTour } from "../../store/services/authService";
+import { getTimeStamp } from "../../utils/utils";
 import {
   MapPin,
   Star,
@@ -19,6 +24,24 @@ import { USER_ROLES } from "../../common/const";
 import User from "../../components/layout/User";
 
 function Home() {
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [location, setLocation] = useState("");
+  const fetchTours = async () => {
+    try {
+      const response = await apiFilterTour({
+        search: searchText,
+        location: location ? Number(location) : 0,
+        departureDate: getTimeStamp(departureDate),
+      });
+
+      setTours(response.tours || []);
+    } catch (error) {
+      console.error("Failed to fetch tours");
+    }
+  };
+
   const navigate = useNavigate();
 
   const { isLogined, user } = useSelector((state: RootState) => state.auth);
@@ -26,6 +49,7 @@ function Home() {
 
   useEffect(() => {
     isAdmin && navigate(ROUTE_PATHS.MANAGE_DASHBOARD);
+    fetchTours();
   }, [isAdmin, navigate]);
 
   const [formData, setFormData] = useState({
@@ -90,7 +114,7 @@ function Home() {
         </div>
       </div>
 
-      {/* Featured Tours */}
+      {/* Popular Tours */}
       <div className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">
@@ -110,7 +134,9 @@ function Home() {
                 <div className="p-6">
                   <div className="flex items-center mb-2">
                     <MapPin className="w-5 h-5 text-red-600 mr-2" />
-                    <span className="text-gray-600">{tour.location}</span>
+                    <span className="text-gray-600">
+                      {TOUR_LOCATION_LABELS[tour.location]}
+                    </span>
                   </div>
                   <h3 className="text-xl font-bold mb-2">{tour.name}</h3>
                   <p className="text-gray-600 mb-4">{tour.description}</p>
