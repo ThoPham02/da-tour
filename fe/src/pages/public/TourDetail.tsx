@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, Calendar, Users, ArrowLeft, Star, Utensils, Hotel, Bus, Camera, Coffee, Shield } from 'lucide-react';
+import {
+  MapPin, Calendar, Users, ArrowLeft, Star,
+  Utensils, Hotel, Bus, Camera, Coffee, Shield
+} from 'lucide-react';
+import { apiGetTourById } from "../../store/services/authService";
+import { Tour } from '../../types/tour';
+import { TOUR_LOCATION_LABELS } from "../../common/const";
 
 function TourDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const tourIndex = parseInt(id!) - 1;
-  const tour = tours[tourIndex];
+  const [tourDetail, setTourDetail] = useState<Tour | null>(null);
+
+  const fetchTour = async () => {
+    try {
+      if (!id) return;
+      const response = await apiGetTourById(Number(id));
+      setTourDetail(response);
+      console.log('Tour detail:', response);
+      // console.log('Tour ID:', response?.itineraries);
+    } catch (error) {
+      console.error('Lỗi khi fetch tour:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTour();
+  }, [id]);
 
   const [bookingData, setBookingData] = useState({
     date: '',
@@ -16,7 +37,7 @@ function TourDetail() {
     phone: ''
   });
 
-  if (!tour) {
+  if (!tourDetail) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -61,27 +82,27 @@ function TourDetail() {
       </div>
 
       {/* Hero Section */}
-      <div 
+      <div
         className="h-screen bg-cover bg-center relative"
-        style={{ backgroundImage: `url(${tour.image})` }}
+        style={{ backgroundImage: `url(${tourDetail.image})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/20">
           <div className="container mx-auto px-4 h-full flex items-center">
             <div className="text-white max-w-3xl">
-              <h1 className="text-6xl font-bold mb-6">{tour.name}</h1>
-              <p className="text-2xl mb-8">{tour.description}</p>
+              <h1 className="text-6xl font-bold mb-6">{tourDetail.name}</h1>
+              <p className="text-2xl mb-8">{tourDetail.description}</p>
               <div className="flex items-center space-x-8 text-lg">
                 <div className="flex items-center">
                   <MapPin className="w-6 h-6 mr-2" />
-                  <span>{tour.location}</span>
+                  {TOUR_LOCATION_LABELS[tourDetail.location]}
                 </div>
                 <div className="flex items-center">
                   <Calendar className="w-6 h-6 mr-2" />
-                  <span>{tour.duration} days</span>
+                  <span>{tourDetail.duration} days</span>
                 </div>
                 <div className="flex items-center">
-                  <Star className="w-6 h-6 mr-2 text-yellow-400" />
-                  <span>{tour.rating} ({tour.reviews} reviews)</span>
+                  {/* <Star className="w-6 h-6 mr-2 text-yellow-400" /> */}
+                  {/* <span>{tourDetail.rating} ({tourDetail.reviews} reviews)</span> */}
                 </div>
               </div>
             </div>
@@ -94,18 +115,18 @@ function TourDetail() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-8">Tour Overview</h2>
-            <p className="text-xl text-gray-600 leading-relaxed">{tour.fullDescription}</p>
+            <p className="text-xl text-gray-600 leading-relaxed">{tourDetail.overview}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            {tour.highlights.map((highlight, index) => (
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            {tourDetail.highlights.map((highlight, index) => (
               <div key={index} className="bg-gray-50 p-6 rounded-xl">
                 <Star className="w-8 h-8 text-red-600 mb-4" />
                 <h3 className="text-xl font-semibold mb-2">{highlight}</h3>
                 <p className="text-gray-600">Experience the magic of {highlight.toLowerCase()} with our expert guides.</p>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -151,13 +172,13 @@ function TourDetail() {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16">Your Journey</h2>
           <div className="max-w-4xl mx-auto">
-            {tour.itinerary.map((day, index) => (
-              <div key={index} className="relative pl-8 pb-12 last:pb-0">
+            {tourDetail.itineraries?.map((day, index) => (
+              <div key={day.id} className="relative pl-8 pb-12 last:pb-0">
                 <div className="absolute left-0 top-0 h-full w-px bg-red-600"></div>
                 <div className="absolute left-0 top-2 w-2 h-2 rounded-full bg-red-600 -translate-x-1/2"></div>
                 <div className="bg-gray-50 p-6 rounded-xl">
-                  <h3 className="text-2xl font-bold mb-4">Day {index + 1}</h3>
-                  <p className="text-gray-600 leading-relaxed">{day}</p>
+                  <h3 className="text-2xl font-bold mb-4">{day.name || `Day ${index + 1}`}</h3>
+                  <p className="text-gray-600 leading-relaxed">{day.description}</p>
                 </div>
               </div>
             ))}
@@ -181,15 +202,15 @@ function TourDetail() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">Tour Price</span>
-                      <span className="font-semibold">${tour.price}/person</span>
+                      <span className="font-semibold">${tourDetail.price}/person</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">Duration</span>
-                      <span className="font-semibold">{tour.duration} days</span>
+                      <span className="font-semibold">{tourDetail.duration} days</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">Location</span>
-                      <span className="font-semibold">{tour.location}</span>
+                      <span className="font-semibold">{TOUR_LOCATION_LABELS[tourDetail.location]}</span>
                     </div>
                   </div>
                 </div>
@@ -290,7 +311,7 @@ function TourDetail() {
                   <div className="flex justify-between items-center text-lg mb-4">
                     <span className="font-semibold">Total Amount</span>
                     <span className="text-2xl font-bold text-red-600">
-                      ${parseInt(tour.price) * bookingData.travelers}
+                      {/* ${parseInt(tourDetail.price) * bookingData.travelers} */}
                     </span>
                   </div>
                   <button

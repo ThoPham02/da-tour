@@ -180,7 +180,7 @@ export const apiGetTourById = async (id: number): Promise<Tour | null> => {
       url: `/tour/${id}`,
     });
 
-    return response.data.data || null;
+    return response.data.tour || null;
   } catch (error) {
     console.error("Error fetching tour by ID:", error);
     return null;

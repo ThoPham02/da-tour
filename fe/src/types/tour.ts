@@ -26,6 +26,11 @@ export interface Tour {
   activities?: Activity[];
   services?: Service[];
   itinerary?: Itinerary[];
+  itineraries?: {
+    id: number;
+    name: string;
+    description: string;
+  }[];
   price: number;
   quantity: number;
   remain?: number;
