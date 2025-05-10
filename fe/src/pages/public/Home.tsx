@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import TourCard from "./TourCard";
+import { Tour } from "../../types/tour";
+import { apiFilterTour } from "../../store/services/authService";
+import { getTimeStamp } from "../../utils/utils";
 import {
-  MapPin,
   Star,
   Users,
   Phone,
@@ -19,6 +22,24 @@ import { USER_ROLES } from "../../common/const";
 import User from "../../components/layout/User";
 
 function Home() {
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [location, setLocation] = useState("");
+  const fetchTours = async () => {
+    try {
+      const response = await apiFilterTour({
+        search: searchText,
+        location: location ? Number(location) : 0,
+        departureDate: getTimeStamp(departureDate),
+      });
+
+      setTours(response.tours || []);
+    } catch (error) {
+      console.error("Failed to fetch tours");
+    }
+  };
+
   const navigate = useNavigate();
 
   const { isLogined, user } = useSelector((state: RootState) => state.auth);
@@ -26,6 +47,7 @@ function Home() {
 
   useEffect(() => {
     isAdmin && navigate(ROUTE_PATHS.MANAGE_DASHBOARD);
+    fetchTours();
   }, [isAdmin, navigate]);
 
   const [formData, setFormData] = useState({
@@ -82,15 +104,14 @@ function Home() {
                 Experience ancient wonders, vibrant cities, and timeless
                 traditions
               </p>
-              <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-300">
+              {/* <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-300">
                 Explore Tours
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Featured Tours */}
       <div className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">
@@ -98,35 +119,7 @@ function Home() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tours.map((tour, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg overflow-hidden shadow-lg transition duration-300 hover:shadow-xl"
-              >
-                <img
-                  src={tour.image}
-                  alt={tour.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <div className="flex items-center mb-2">
-                    <MapPin className="w-5 h-5 text-red-600 mr-2" />
-                    <span className="text-gray-600">{tour.location}</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{tour.name}</h3>
-                  <p className="text-gray-600 mb-4">{tour.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-red-600">
-                      ${tour.price}
-                    </span>
-                    <button
-                      onClick={() => navigate(`/tour/${index + 1}`)}
-                      className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300"
-                    >
-                      Book Now
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <TourCard key={index} tour={tour} />
             ))}
           </div>
         </div>
@@ -274,34 +267,5 @@ function Home() {
     </div>
   );
 }
-
-const tours = [
-  {
-    name: "Great Wall Explorer",
-    location: "Beijing",
-    description:
-      "5-day adventure exploring the most scenic sections of the Great Wall",
-    price: "1299",
-    image:
-      "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&q=80",
-  },
-  {
-    name: "Terracotta Warriors & Xi'an",
-    location: "Xi'an",
-    description:
-      "4-day journey discovering ancient warriors and Tang Dynasty culture",
-    price: "999",
-    image:
-      "https://images.unsplash.com/photo-1591014935536-c4702580aeca?auto=format&fit=crop&q=80",
-  },
-  {
-    name: "Shanghai City Experience",
-    location: "Shanghai",
-    description: "3-day exploration of China's most dynamic and modern city",
-    price: "899",
-    image:
-      "https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?auto=format&fit=crop&q=80",
-  },
-];
 
 export default Home;

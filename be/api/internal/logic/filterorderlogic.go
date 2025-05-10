@@ -5,6 +5,7 @@ import (
 
 	"da-tour/api/internal/svc"
 	"da-tour/api/internal/types"
+	"da-tour/api/internal/utils"
 	"da-tour/common"
 	"da-tour/model"
 
@@ -28,11 +29,37 @@ func NewFilterOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Filte
 func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.FilterOrderRes, err error) {
 	l.Logger.Info("FilterOrder ", req)
 
+	var userID int64
 	var total int64
 	var ordersModel []*model.OrderTbl
 	var orders []types.Order
 
-	total, err = l.svcCtx.OrderTblModel.CountFilter(l.ctx, req.UserID, req.Status, req.TourID)
+	userID, err = utils.GetUserIDFromContext(l.ctx)
+	if err != nil {
+		l.Logger.Error(err)
+		return &types.FilterOrderRes{
+			Result: types.Result{
+				Code:    common.UNKNOWN_ERR_CODE,
+				Message: common.UNKNOWN_ERR_MESS,
+			},
+		}, nil
+	}
+
+	userModel, err := l.svcCtx.UserTblModel.FindOne(l.ctx, userID)
+	if err != nil {
+		l.Logger.Error(err)
+		return &types.FilterOrderRes{
+			Result: types.Result{
+				Code:    common.DB_ERR_CODE,
+				Message: common.DB_ERR_MESS,
+			},
+		}, nil
+	}
+	if userModel.Role == common.USER_ROLE_ADMIN {
+		userID = 0
+	}
+
+	total, err = l.svcCtx.OrderTblModel.CountFilter(l.ctx, userID, req.Status, req.TourID)
 	if err != nil {
 		l.Logger.Error(err)
 		return &types.FilterOrderRes{
@@ -43,7 +70,7 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 		}, nil
 	}
 
-	ordersModel, err = l.svcCtx.OrderTblModel.FilterOrder(l.ctx, req.UserID, req.Status, req.TourID, req.Limit, req.Offset)
+	ordersModel, err = l.svcCtx.OrderTblModel.FilterOrder(l.ctx, userID, req.Status, req.TourID, req.Limit, req.Offset)
 	if err != nil {
 		l.Logger.Error(err)
 		return &types.FilterOrderRes{
@@ -70,6 +97,7 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 			Code:          order.Code,
 			TourID:        order.TourId,
 			TourName:      tourModel.Name,
+			DepartureDate: tourModel.DepartureDate.Int64,
 			UserID:        order.UserId.Int64,
 			FullName:      order.UserName,
 			Email:         order.Email,

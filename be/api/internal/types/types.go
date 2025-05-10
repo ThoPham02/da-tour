@@ -55,6 +55,7 @@ type Order struct {
 	Code          string  `json:"code"`
 	TourID        int64   `json:"tourID"`
 	TourName      string  `json:"tourName"`
+	DepartureDate int64   `json:"departureDate"`
 	UserID        int64   `json:"userID"`
 	FullName      string  `json:"fullName"`
 	Email         string  `json:"email"`
@@ -206,7 +207,7 @@ type GetOrderRes struct {
 }
 
 type FilterOrderReq struct {
-	UserID int64 `form:"userID,optional"`
+	// UserID int64 `form:"userID,optional"`
 	TourID int64 `form:"tourID,optional"`
 	Status int64 `form:"status,optional"`
 	Limit  int64 `form:"limit,optional"`

@@ -48,6 +48,54 @@ export const TOUR_STATUS = {
   SOLD_OUT: 3,
 };
 
+export const TOUR_LOCATION = {
+  ALL: 0,
+  GREAT_WALL: 1,
+  TERRACOTTA_WARRIORS: 2,
+  SHANGHAI_CITY: 3,
+  FORBIDDEN_CITY: 4,
+  ZHANGJIAJIE: 5,
+  GUILIN_CRUISE: 6,
+  CHENGDU_PANDA: 7,
+  POTALA_PALACE: 8,
+  WEST_LAKE: 9,
+  THE_BUND: 10,
+  YELLOW_MOUNTAIN: 11,
+  JIUZHAIGOU: 12,
+  SUZHOU_GARDENS: 13,
+  EVEREST_TIBET: 14,
+  HONGKONG_SKYLINE: 15,
+  LIJIANG: 16,
+  DUNHUANG_CAVES: 17,
+  YANGSHUO: 18,
+  SUMMER_PALACE: 19,
+  SILK_ROAD_KASHGAR: 20,
+};
+
+export const TOUR_LOCATION_LABELS = {
+  [TOUR_LOCATION.ALL]: "All Locations",
+  [TOUR_LOCATION.GREAT_WALL]: "Great Wall Explorer",
+  [TOUR_LOCATION.TERRACOTTA_WARRIORS]: "Terracotta Warriors & Xi'an",
+  [TOUR_LOCATION.SHANGHAI_CITY]: "Shanghai City Experience",
+  [TOUR_LOCATION.FORBIDDEN_CITY]: "Forbidden City, Beijing",
+  [TOUR_LOCATION.ZHANGJIAJIE]: "Zhangjiajie National Forest Park",
+  [TOUR_LOCATION.GUILIN_CRUISE]: "Guilin & Li River Cruise",
+  [TOUR_LOCATION.CHENGDU_PANDA]: "Chengdu Panda Base",
+  [TOUR_LOCATION.POTALA_PALACE]: "Potala Palace, Lhasa",
+  [TOUR_LOCATION.WEST_LAKE]: "West Lake, Hangzhou",
+  [TOUR_LOCATION.THE_BUND]: "The Bund, Shanghai",
+  [TOUR_LOCATION.YELLOW_MOUNTAIN]: "Yellow Mountain (Huangshan)",
+  [TOUR_LOCATION.JIUZHAIGOU]: "Jiuzhaigou Valley",
+  [TOUR_LOCATION.SUZHOU_GARDENS]: "Suzhou Classical Gardens",
+  [TOUR_LOCATION.EVEREST_TIBET]: "Mount Everest Base Camp (Tibet side)",
+  [TOUR_LOCATION.HONGKONG_SKYLINE]: "Hong Kong Skyline & Victoria Peak",
+  [TOUR_LOCATION.LIJIANG]: "Lijiang Old Town",
+  [TOUR_LOCATION.DUNHUANG_CAVES]: "Dunhuang Mogao Caves",
+  [TOUR_LOCATION.YANGSHUO]: "Yangshuo Countryside",
+  [TOUR_LOCATION.SUMMER_PALACE]: "Summer Palace, Beijing",
+  [TOUR_LOCATION.SILK_ROAD_KASHGAR]: "Silk Road Adventure (Kashgar)",
+}
+
 export const ORDER_STATUS = {
   ALL: 0,
   PENDING: 1,
@@ -63,3 +111,4 @@ export const ORDER_STATUS_TEXT = {
   [ORDER_STATUS.CANCELLED]: "Cancelled",
   [ORDER_STATUS.COMPLETED]: "Completed",
 };
+

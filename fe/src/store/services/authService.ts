@@ -180,7 +180,7 @@ export const apiGetTourById = async (id: number): Promise<Tour | null> => {
       url: `/tour/${id}`,
     });
 
-    return response.data.data || null;
+    return response.data.tour || null;
   } catch (error) {
     console.error("Error fetching tour by ID:", error);
     return null;
@@ -217,6 +217,7 @@ export const apiCreateOrder = async (
       url: "/order",
       data: formData,
     });
+    console.log("apiCreateOrder response:", response);
 
     return response.data;
   } catch (error) {
@@ -226,7 +227,7 @@ export const apiCreateOrder = async (
 };
 
 export const apiFilterOrder = async (
-  filter: any
+  filter: any,
 ): Promise<ApiResponse<Order[]>> => {
   try {
     const response: AxiosResponse<ApiResponse<Order[]>> = await axios({
@@ -234,9 +235,9 @@ export const apiFilterOrder = async (
       url: "/order/filter",
       params: {
         ...filter,
-      },
+      },  
     });
-
+    console.log("apiFilterOrder response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error filtering orders:", error);

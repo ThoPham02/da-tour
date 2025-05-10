@@ -62,6 +62,7 @@ type (
 		ID            int64   `json:"id"`
 		Code          string  `json:"code"`
 		TourID        int64   `json:"tourID"`
+		Tour   Tour `json:"tour"`
 		TourName      string  `json:"tourName"`
 		UserID        int64   `json:"userID"`
 		FullName      string  `json:"fullName"`

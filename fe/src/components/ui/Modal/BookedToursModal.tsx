@@ -1,22 +1,49 @@
+import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
+import { apiFilterOrder } from "../../../store/services/authService";
+import { Order, Tour } from "../../../types/tour";
+import { TOUR_LOCATION_LABELS } from "../../../common/const";
+import { apiGetTourById } from "../../../store/services/authService";
+import { getDate } from "../../../utils/utils";
 
-interface TourBooking {
-  bookingDate: string;
-  tourName: string;
-  departureDate: string;
-  quantity: number;
-  totalAmount: number;
-  paidAmount: number;
-  status: "Chờ xác nhận" | "Đã xác nhận" | "Đã hủy";
+interface Props {
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  bookings: TourBooking[];
 }
 
-const BookedToursModal = ({ isOpen, onClose, bookings }: Props) => {
+const BookedToursModal = ({ isOpen, onClose }: Props) => {
+  const [bookings, setBookings] = useState<Order[]>([]);
+  const [tourDetailsMap, setTourDetailsMap] = useState<Record<number, Tour>>({});
+
+  useEffect(() => {
+    if (isOpen) {
+      const fetchBookings = async () => {
+        try {
+          const response = await apiFilterOrder({});
+          console.log("Response:", response);
+          if (response && Array.isArray(response.orders)) {
+            setBookings(response.orders);
+            
+          } else {
+            setBookings([]);
+          }
+          console.log("Bookings:", response.orders);
+        } catch (error) {
+          console.error("Không thể tải danh sách tour", error);
+        }
+      };
+
+      fetchBookings();
+    }
+  }, [isOpen]);
+
+
+
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
@@ -43,25 +70,28 @@ const BookedToursModal = ({ isOpen, onClose, bookings }: Props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {bookings.map((tour, idx) => (
+                  {bookings.map((order, idx) => (
                     <tr key={idx} className="border-t">
-                      <td className="px-4 py-2 border">{tour.bookingDate}</td>
-                      <td className="px-4 py-2 border">{tour.tourName}</td>
-                      <td className="px-4 py-2 border">{tour.departureDate}</td>
-                      <td className="px-4 py-2 border">{tour.quantity}</td>
-                      <td className="px-4 py-2 border">${tour.totalAmount.toFixed(2)}</td>
-                      <td className="px-4 py-2 border">${tour.paidAmount.toFixed(2)}</td>
+                      <td className="px-4 py-2 border">{getDate(order.createDate || 0)}</td>
+                      <td className="px-4 py-2 border">{order.tourName}</td>
+                      <td className="px-4 py-2 border">{getDate(order.departureDate || 0)}</td>
+                      <td className="px-4 py-2 border">{order.quantity}</td>
+                      <td className="px-4 py-2 border">${order.totalPrice.toFixed(2)}</td>
+                      <td className="px-4 py-2 border">${order.totalPrice.toFixed(2)}</td>
                       <td className="px-4 py-2 border">
                         <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${
-                            tour.status === "Chờ xác nhận"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : tour.status === "Đã xác nhận"
+                          className={`px-2 py-1 rounded text-xs font-medium ${order.status === 0
+                            ? "bg-yellow-100 text-yellow-800"
+                            : order.status === 1
                               ? "bg-green-100 text-green-800"
                               : "bg-red-100 text-red-600"
-                          }`}
+                            }`}
                         >
-                          {tour.status}
+                          {order.status === 0
+                            ? "Chờ xác nhận"
+                            : order.status === 1
+                              ? "Đã xác nhận"
+                              : "Đã hủy"}
                         </span>
                       </td>
                     </tr>
