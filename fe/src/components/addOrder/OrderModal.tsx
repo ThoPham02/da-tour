@@ -9,17 +9,23 @@ import { apiCreateOrder } from "../../store/services/authService";
 interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
+  typeInput: string;
+  order?: Order;
 }
 
-const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
-  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
-  const [customer, setCustomer] = useState<Customer>({
+const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, typeInput, order }) => {
+  const disabledInput = typeInput === "view";
+  const modalTitle = typeInput === "edit" ? "Edit Order" : typeInput === "view" ? "Order Detail" : "Create Order";
+
+  const [type, setType] = useState<string>(typeInput);
+  const [selectedTour, setSelectedTour] = useState<Tour | null>(order?.tourDetail || null);
+  const [customer, setCustomer] = useState<Customer>(order?.customer || {
     name: "",
     email: "",
     phone: "",
   });
-  const [quantity, setQuantity] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [quantity, setQuantity] = useState(order?.quantity || 1);
+  const [totalPrice, setTotalPrice] = useState(order?.totalPrice || 0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -89,12 +95,21 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
       };
 
       try {
-        const resp = await apiCreateOrder(order);
+        switch (type) {
+          case "create":
+            const resp = await apiCreateOrder(order);
 
-        if (resp?.result?.code === 0) {
-          onClose();
-        } else {
-          setIsSubmitting(false);
+            if (resp?.result?.code === 0) {
+              onClose();
+            } else {
+              setIsSubmitting(false);
+            }
+            break;
+          case "edit":
+            // Handle edit order logic here
+            break;
+          default:
+            break;
         }
       } catch (error) {
         console.error("Error submitting tour data:", error);
@@ -144,13 +159,22 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
             <div className="sm:flex sm:items-start">
               <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
                 <h3 className="text-xl leading-6 font-bold text-gray-900 mb-4">
-                  New Tour Order
+                  {modalTitle}
                 </h3>
+
+                {type !== "create" && (
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-500">
+                      OrderCode: {order?.code || "N/A"}
+                    </p>
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmit}>
                   <TourSearch
                     onSelectTour={setSelectedTour}
                     selectedTour={selectedTour}
+                    disabledInput={disabledInput}
                   />
                   {errors.tour && (
                     <p className="mt-1 text-sm text-red-600">{errors.tour}</p>
@@ -160,6 +184,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
                     customer={customer}
                     onCustomerChange={setCustomer}
                     errors={errors}
+                    disabledInput={disabledInput}
                   />
 
                   <OrderSummary
@@ -168,16 +193,17 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose }) => {
                     price={selectedTour?.price || 0}
                     totalPrice={totalPrice}
                     errors={errors}
+                    disabledInput={disabledInput}
                   />
 
                   <div className="mt-8 sm:flex sm:flex-row-reverse">
-                    <button
+                    {type !== "view" && <button
                       type="submit"
                       className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
                       disabled={isSubmitting}
                     >
-                      Create Order
-                    </button>
+                      Submit
+                    </button>} 
                     <button
                       type="button"
                       className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:w-auto sm:text-sm transition-colors"

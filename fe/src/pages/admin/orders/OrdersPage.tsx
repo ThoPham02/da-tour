@@ -128,7 +128,7 @@ const OrdersPage: React.FC = () => {
         <OrderTable statusFilter={0} orders={orders} />
       </div>
 
-      <OrderModal isOpen={isModalOpen} onClose={closeModal} />
+      <OrderModal isOpen={isModalOpen} onClose={closeModal} typeInput="create" />
     </div>
   );
 };

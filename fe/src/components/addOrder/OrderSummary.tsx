@@ -6,6 +6,7 @@ interface OrderSummaryProps {
   price: number;
   totalPrice: number;
   errors: Record<string, string>;
+  disabledInput?: boolean;
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({ 
@@ -13,7 +14,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   onQuantityChange, 
   price, 
   totalPrice,
-  errors
+  errors,
+  disabledInput
 }) => {
   return (
     <div className="space-y-4 mt-6">
@@ -24,14 +26,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           Number of Travelers
         </label>
         <div className="flex items-center">
-          <button
+          {!disabledInput && <button
             type="button"
             onClick={() => quantity > 1 && onQuantityChange(quantity - 1)}
             className="px-3 py-2 bg-gray-200 text-gray-600 rounded-l-md border border-gray-300 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            disabled={quantity <= 1}
+            disabled={disabledInput || quantity <= 1}
           >
             -
-          </button>
+          </button>}
           <input
             type="number"
             id="quantity"
@@ -41,14 +43,16 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             className={`block w-16 text-center py-2 border-t border-b ${
               errors.quantity ? 'border-red-500' : 'border-gray-300'
             } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+            disabled={disabledInput}
           />
-          <button
+          {!disabledInput && <button
             type="button"
             onClick={() => onQuantityChange(quantity + 1)}
             className="px-3 py-2 bg-gray-200 text-gray-600 rounded-r-md border border-gray-300 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={disabledInput}
           >
             +
-          </button>
+          </button>}
         </div>
         {errors.quantity && <p className="mt-1 text-sm text-red-600">{errors.quantity}</p>}
       </div>

@@ -5,15 +5,18 @@ interface CustomerFormProps {
   customer: Customer;
   onCustomerChange: (customer: Customer) => void;
   errors: Record<string, string>;
+  disabledInput?: boolean;
 }
 
 const CustomerForm: React.FC<CustomerFormProps> = ({
   customer,
   onCustomerChange,
   errors,
+  disabledInput,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     onCustomerChange({
       ...customer,
       [name]: value,
@@ -37,6 +40,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             errors.name ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           placeholder="Enter customer name"
+          disabled={disabledInput}
+          autoComplete='off'
         />
         {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
       </div>
@@ -55,6 +60,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             errors.email ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           placeholder="Enter email address"
+          disabled={disabledInput}
         />
         {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
       </div>
@@ -73,6 +79,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             errors.phone ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           placeholder="Enter phone number"
+          disabled={disabledInput}
+          autoComplete='off'
         />
         {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
       </div>

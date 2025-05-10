@@ -258,7 +258,7 @@ export const apiGetOrderById = async (id: number): Promise<Order | null> => {
       code: response.data.order.code,
       tourId: response.data.order.tourID,
       customer: {
-        name: response.data.order.fullname,
+        name: response.data.order.fullName,
         email: response.data.order.email,
         phone: response.data.order.phone,
       },

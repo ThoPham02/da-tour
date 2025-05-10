@@ -7,11 +7,13 @@ import { apiFilterTour } from "../../store/services/authService";
 interface TourSearchProps {
   onSelectTour: (tour: Tour | null) => void;
   selectedTour: Tour | null;
+  disabledInput: boolean;
 }
 
 const TourSearch: React.FC<TourSearchProps> = ({
   onSelectTour,
   selectedTour,
+  disabledInput
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<Tour[]>([]);
@@ -62,19 +64,24 @@ const TourSearch: React.FC<TourSearchProps> = ({
       <div className="relative">
         <div className="flex">
           <div className="relative flex-grow">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              id="tour-search"
-              className="block w-full pl-10 pr-12 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-              placeholder="Search by tour name or location..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onFocus={() => setSearchResults(searchResults)}
-            />
-            {searchTerm && (
+            {!disabledInput && 
+            <>
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                id="tour-search"
+                className="block w-full pl-10 pr-12 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                placeholder="Search by tour name or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setSearchResults(searchResults)}
+                autoComplete='off'
+              />
+            </>
+            }
+            {!disabledInput && searchTerm && (
               <button
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                 onClick={handleClearSelection}
@@ -82,6 +89,7 @@ const TourSearch: React.FC<TourSearchProps> = ({
                 <span className="text-xl">&times;</span>
               </button>
             )}
+          
           </div>
         </div>
 

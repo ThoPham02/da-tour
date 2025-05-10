@@ -7,51 +7,61 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { apiGetOrderById } from "../../../store/services/authService";
+import { useEffect, useState } from "react";
+import { Order } from "../../../types/tour";
+import OrderModal from "../../../components/addOrder/OrderModal";
 
 interface OrderActionProps {
   orderStatus: number;
   orderID: number;
-  setModel: any;
-  setSelectOrder: any;
 }
 
 const OrderActionButton: React.FC<OrderActionProps> = ({
   orderStatus,
   orderID,
-  setModel,
-  setSelectOrder,
 }) => {
+  const [selectOrder, setSelectOrder] = useState<Order>();
+  const [type, setType] = useState<string>("");
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      const resp = await apiGetOrderById(orderID);
+
+      setSelectOrder(resp || {} as Order);
+    };
+    fetchOrder();
+  }, []);
+
+
   const handleAction = (type: string) => {
     switch (type) {
       case "view":
-        fetchOrderDetails(orderID);
+        setType("view");
+
+        setIsOrderOpen(true);
         break;
       case "edit":
+        setType("edit");
+        
+        setIsOrderOpen(true);
         break;
       case "confirm":
+        setType("confirm");
         break;
       case "add_payment":
+        setType("add_payment");
         break;
       case "cancel":
+        setType("cancel");
         break;
       case "delete":
+        setType("delete");
+
         break;
       default:
         break;
-    }
-  };
-
-  const fetchOrderDetails = async (orderID: number) => {
-    try {
-      const response = await apiGetOrderById(orderID);
-
-      setSelectOrder(response);
-
-      setTimeout(() => {
-        setModel(true);
-      }, 300);
-    } catch (error) {
-      console.error("Failed to fetch order details", error);
     }
   };
 
@@ -117,6 +127,13 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
           Delete
         </button>
       )}
+    
+      {isOrderOpen && 
+      <OrderModal 
+      isOpen={isOrderOpen} 
+      onClose={() => setIsOrderOpen(false)}
+      typeInput={type} 
+      order={selectOrder} />}
     </div>
   );
 };
