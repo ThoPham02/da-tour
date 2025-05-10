@@ -132,7 +132,7 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
       <OrderModal 
       isOpen={isOrderOpen} 
       onClose={() => setIsOrderOpen(false)}
-      typeInput={type} 
+      type={type} 
       order={selectOrder} />}
     </div>
   );

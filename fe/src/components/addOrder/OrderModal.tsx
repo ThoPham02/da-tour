@@ -9,15 +9,14 @@ import { apiCreateOrder } from "../../store/services/authService";
 interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  typeInput: string;
+  type: string;
   order?: Order;
 }
 
-const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, typeInput, order }) => {
-  const disabledInput = typeInput === "view";
-  const modalTitle = typeInput === "edit" ? "Edit Order" : typeInput === "view" ? "Order Detail" : "Create Order";
+const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, type, order }) => {
+  const disabledInput = type === "view";
+  const modalTitle = type === "edit" ? "Edit Order" : type === "view" ? "Order Detail" : "Create Order";
 
-  const [type, setType] = useState<string>(typeInput);
   const [selectedTour, setSelectedTour] = useState<Tour | null>(order?.tourDetail || null);
   const [customer, setCustomer] = useState<Customer>(order?.customer || {
     name: "",
