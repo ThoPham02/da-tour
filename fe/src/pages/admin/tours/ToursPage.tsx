@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   Plus,
   Search,
-  Filter,
   Map,
   CheckCircle,
-  ChevronDown,
   Calendar,
 } from "lucide-react";
 
@@ -112,12 +110,10 @@ const ToursPage: React.FC = () => {
 
               {/* Filter button */}
               <button
-                className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-100"
                 onClick={handleSearch}
               >
-                <Filter className="w-4 h-4 mr-2" />
                 Filter
-                <ChevronDown className="w-4 h-4 ml-1" />
               </button>
             </div>
 

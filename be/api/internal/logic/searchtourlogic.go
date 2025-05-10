@@ -32,7 +32,7 @@ func (l *SearchTourLogic) SearchTour(req *types.SearchTourReq) (resp *types.Sear
 	var total int64
 	var tours []types.Tour
 
-	total, err = l.svcCtx.TourTblModel.CountTour(l.ctx, req.Location, req.DepartureDate)
+	total, err = l.svcCtx.TourTblModel.CountTour(l.ctx, req.Search, req.Location, req.DepartureDate)
 	if err != nil {
 		l.Logger.Error(err)
 		return &types.SearchTourRes{
@@ -51,7 +51,7 @@ func (l *SearchTourLogic) SearchTour(req *types.SearchTourReq) (resp *types.Sear
 		}, nil
 	}
 
-	toursModel, err = l.svcCtx.TourTblModel.FilterTour(l.ctx, req.Location, req.DepartureDate, req.Limit, req.Offset)
+	toursModel, err = l.svcCtx.TourTblModel.FilterTour(l.ctx, req.Search, req.Location, req.DepartureDate, req.Limit, req.Offset)
 	if err != nil {
 		l.Logger.Error(err)
 		return &types.SearchTourRes{
