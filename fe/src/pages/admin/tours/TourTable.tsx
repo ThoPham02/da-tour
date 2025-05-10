@@ -149,7 +149,7 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab, tours }) => {
         </div>
       )}
 
-      <div className="flex items-center justify-between px-6 py-3 border-t border-gray-200 pt-8 mb-8">
+      <div className="flex items-center justify-between px-6 py-3 border-t border-gray-200 pt-12 mb-12">
         <div className="text-sm text-gray-500">
           Showing {startIndex + 1} to {Math.min(endIndex, filteredTours.length)}{" "}
           of {filteredTours.length} tours

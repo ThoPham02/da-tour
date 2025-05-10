@@ -54,6 +54,7 @@ type Order struct {
 	ID            int64   `json:"id"`
 	Code          string  `json:"code"`
 	TourID        int64   `json:"tourID"`
+	Tour          Tour    `json:"tour"`
 	TourName      string  `json:"tourName"`
 	DepartureDate int64   `json:"departureDate"`
 	UserID        int64   `json:"userID"`
@@ -108,10 +109,11 @@ type SendMessageRes struct {
 }
 
 type SearchTourReq struct {
-	Location      int64 `form:"location, optional"`
-	DepartureDate int64 `form:"departureDate, optional"`
-	Limit         int64 `form:"limit, optional"`
-	Offset        int64 `form:"offset, optional"`
+	Search        string `form:"search, optional"`
+	Location      int64  `form:"location, optional"`
+	DepartureDate int64  `form:"departureDate, optional"`
+	Limit         int64  `form:"limit, optional"`
+	Offset        int64  `form:"offset, optional"`
 }
 
 type SearchTourRes struct {
@@ -207,7 +209,7 @@ type GetOrderRes struct {
 }
 
 type FilterOrderReq struct {
-	// UserID int64 `form:"userID,optional"`
+	UserID int64 `form:"userID,optional"`
 	TourID int64 `form:"tourID,optional"`
 	Status int64 `form:"status,optional"`
 	Limit  int64 `form:"limit,optional"`

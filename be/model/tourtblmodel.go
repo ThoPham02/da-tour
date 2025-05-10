@@ -13,8 +13,8 @@ type (
 	// and implement the added methods in customTourTblModel.
 	TourTblModel interface {
 		tourTblModel
-		FilterTour(ctx context.Context, location int64, departureDate int64, limit int64, offset int64) ([]*TourTbl, error)
-		CountTour(ctx context.Context, location int64, departureDate int64) (int64, error)
+		FilterTour(ctx context.Context, search string, location int64, departureDate int64, limit int64, offset int64) ([]*TourTbl, error)
+		CountTour(ctx context.Context, search string, location int64, departureDate int64) (int64, error)
 	}
 
 	customTourTblModel struct {
@@ -30,10 +30,15 @@ func NewTourTblModel(conn sqlx.SqlConn) TourTblModel {
 }
 
 // FilterTour implements TourTblModel interface.
-func (m *customTourTblModel) FilterTour(ctx context.Context, location int64, departureDate int64, limit int64, offset int64) ([]*TourTbl, error) {
+func (m *customTourTblModel) FilterTour(ctx context.Context, search string, location int64, departureDate int64, limit int64, offset int64) ([]*TourTbl, error) {
 	var tours []*TourTbl
 	var val []interface{}
 	query := `SELECT * FROM tour_tbl where 1=1 `
+
+	if search != "" {
+		query += `AND name LIKE ? `
+		val = append(val, "%"+search+"%")
+	}
 
 	if location != 0 {
 		query += `AND location = ? `
@@ -56,10 +61,15 @@ func (m *customTourTblModel) FilterTour(ctx context.Context, location int64, dep
 }
 
 // CountTour implements TourTblModel interface.
-func (m *customTourTblModel) CountTour(ctx context.Context, location int64, departureDate int64) (int64, error) {
+func (m *customTourTblModel) CountTour(ctx context.Context, search string, location int64, departureDate int64) (int64, error) {
 	var total int64
 	var val []interface{}
 	query := `SELECT COUNT(*) FROM tour_tbl where 1=1 `
+
+	if search != "" {
+		query += `AND name LIKE ? `
+		val = append(val, "%"+search+"%")
+	}
 
 	if location != 0 {
 		query += `AND location = ? `

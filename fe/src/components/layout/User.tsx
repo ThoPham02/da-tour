@@ -9,6 +9,7 @@ import defaultAvatar from "../../assets/images/default_avatar.png";
 import * as actions from "../../store/actions/authActions";
 import AccountModal from "../ui/Modal/AccountModal";
 import BookedToursModal from "../ui/Modal/BookedToursModal";
+import { USER_ROLES } from "../../common/const";
 
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
@@ -35,7 +36,7 @@ const User = () => {
   return (
     <>
       <div
-        className="flex items-center absolute right-12 top-0 z-50"
+        className="flex items-center absolute right-16 top-0 z-50"
         onMouseEnter={() => setIsAvatarHovered(true)}
         onMouseLeave={() => setIsAvatarHovered(false)}
       >
@@ -76,7 +77,8 @@ const User = () => {
                 </h5>
               </div>
 
-              <button
+              {user?.role !== USER_ROLES.ADMIN && (
+                <button
                 onClick={() => {
                   setIsAvatarHovered(false);
                   setIsTourOpen(true);
@@ -93,6 +95,7 @@ const User = () => {
                   <span className="text-xs text-gray-500">Chi tiết</span>
                 </div>
               </button>
+              )}
 
               <button
                 onClick={() => {
