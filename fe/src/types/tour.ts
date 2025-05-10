@@ -1,11 +1,18 @@
 export interface Activity {
   id: number;
   name: string;
+
+  title: string;
+  detail?: string;
 }
 
 export interface Service {
   id: number;
   name: string;
+
+  // response
+  title?: string;
+  description?: string;
 }
 
 export interface Itinerary {
@@ -60,4 +67,5 @@ export interface Order {
   tourName?: string;
   fullName?: string;
   tourDetail?: Tour;
+  departureDate?: number;
 }

@@ -18,27 +18,6 @@ interface UserData {
   role?: number;
 }
 
-const mockBookings = [
-  {
-    bookingDate: "2025-04-01",
-    tourName: "Hạ Long Bay Adventure",
-    departureDate: "2025-04-20",
-    quantity: 2,
-    totalAmount: 3000,
-    paidAmount: 1500,
-    status: "Chờ xác nhận",
-  },
-  {
-    bookingDate: "2025-03-15",
-    tourName: "Hội An Discovery",
-    departureDate: "2025-03-30",
-    quantity: 1,
-    totalAmount: 1200,
-    paidAmount: 1200,
-    status: "Đã xác nhận",
-  },
-];
-
 const User = () => {
   const dispatch: AppDispatch = useDispatch();
   const [isAvatarHovered, setIsAvatarHovered] = useState<boolean>(false);
@@ -147,28 +126,10 @@ const User = () => {
       </div>
       <BookedToursModal
         isOpen={isTourOpen}
-        onClose={() => setIsTourOpen(false)}
-        bookings={[
-          {
-            bookingDate: "2025-04-01",
-            tourName: "Hạ Long Bay Adventure",
-            departureDate: "2025-04-20",
-            quantity: 2,
-            totalAmount: 3000,
-            paidAmount: 1500,
-            status: "Chờ xác nhận",
-          },
-          {
-            bookingDate: "2025-03-15",
-            tourName: "Hội An Discovery",
-            departureDate: "2025-03-30",
-            quantity: 1,
-            totalAmount: 1200,
-            paidAmount: 1200,
-            status: "Đã xác nhận",
-          },
-        ]}
+        onClose={() => setIsTourOpen(false)} 
+        // userID={user.id || 0}
       />
+
       <AccountModal
         isOpen={isAccountOpen}
         onClose={() => setIsAccountOpen(false)}
