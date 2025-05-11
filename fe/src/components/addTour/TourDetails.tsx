@@ -53,7 +53,7 @@ const TourDetails: React.FC<TourDetailsProps> = ({
     if (newService.trim()) {
       const updatedServices = [
         ...tour?.services || [],
-        { id: Date.now(), name: newService.trim() },
+        { id: Date.now(), name: newService.trim(), title: newService.trim()},
       ];
       onServicesChange(updatedServices);
       setNewService("");
@@ -165,15 +165,15 @@ const TourDetails: React.FC<TourDetailsProps> = ({
               </p>
             )}
 
-            {tour?.services?.map((service) => (
+            {tour?.services?.map((services) => (
               <div
-                key={service.id}
+                key={services.id}
                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md group"
               >
-                <span>{service.name || service.title}</span>
+                <span>{services.title}</span>
                 <button
                   type="button"
-                  onClick={() => removeService(service.id)}
+                  onClick={() => removeService(services.id)}
                   className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-600 transition-opacity"
                   disabled={disabled} 
                 >

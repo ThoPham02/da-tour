@@ -93,9 +93,11 @@ const TourForm: React.FC<TourFormProps> = ({ onClose, initialData, mode = "creat
 
   const handleActivitiesChange = (activities: Activity[]) => {
     setTour({ ...tour, activities });
+    console.log("xxxxxxxxx", tour)
   };
 
   const handleServicesChange = (services: Service[]) => {
+    console.log("gggggggggggg", tour)
     setTour({ ...tour, services });
   };
 
