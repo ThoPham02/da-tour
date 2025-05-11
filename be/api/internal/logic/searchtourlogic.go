@@ -62,8 +62,9 @@ func (l *SearchTourLogic) SearchTour(req *types.SearchTourReq) (resp *types.Sear
 		}, nil
 	}
 
+	// Lấy thông tin activities, services, itineraries
 	for _, tourModel := range toursModel {
-		tours = append(tours, types.Tour{
+		tour := types.Tour{
 			ID:            tourModel.Id,
 			Name:          tourModel.Name,
 			Image:         tourModel.Image,
@@ -76,7 +77,46 @@ func (l *SearchTourLogic) SearchTour(req *types.SearchTourReq) (resp *types.Sear
 			Quantity:      tourModel.Quantity,
 			Remain:        tourModel.Remain,
 			Status:        tourModel.Status,
-		})
+		}
+
+		// Lấy itineraries cho tour
+		itinerariesModel, err := l.svcCtx.ItineraryTblModel.FindByTourID(l.ctx, tourModel.Id)
+		if err == nil {
+			for _, itinerary := range itinerariesModel {
+				tour.Itineraries = append(tour.Itineraries, types.Itinerary{
+					ID:          itinerary.Id,
+					Name:        itinerary.Name,
+					Description: itinerary.Description.String,
+				})
+			}
+		}
+
+		// Lấy activities cho tour
+		activitiesModel, err := l.svcCtx.ActivityTblModel.FindByTourID(l.ctx, tourModel.Id)
+		if err == nil {
+			for _, activity := range activitiesModel {
+				tour.Activities = append(tour.Activities, types.Activity{
+					ID:     activity.Id,
+					Title:  activity.Name,
+					Detail: activity.Description.String,
+				})
+			}
+		}
+
+		// Lấy services cho tour
+		servicesModel, err := l.svcCtx.ServiceTblModel.FindByTourID(l.ctx, tourModel.Id)
+		if err == nil {
+			for _, service := range servicesModel {
+				tour.Services = append(tour.Services, types.Service{
+					ID:     service.Id,
+					Title:  service.Name,
+					Detail: service.Description.String,
+				})
+			}
+		}
+
+		// Thêm tour vào kết quả
+		tours = append(tours, tour)
 	}
 
 	return &types.SearchTourRes{

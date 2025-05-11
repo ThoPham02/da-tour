@@ -34,6 +34,6 @@ export const tourSchema = yup.object().shape({
     })
   ).min(1, 'At least one day in itinerary is required'),
   price: yup.number().required('Price is required').min(0, 'Price must be greater than or equal to 0'),
-  seats: yup.number().required('Number of seats is required').min(1, 'At least one seat must be available'),
+  // seats: yup.number().required('Number of seats is required').min(1, 'At least one seat must be available'),
   departureDate: yup.string().required('Departure date is required')
 });

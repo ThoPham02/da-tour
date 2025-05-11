@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tour } from '../../types/tour';
+import { location as LOCATIONS } from "../../assets/data/location";
 
 interface TourBasicInfoProps {
   tour: Tour;
@@ -9,9 +10,10 @@ interface TourBasicInfoProps {
     seats?: string;
     departureDate?: string;
   };
+  disabled: boolean;  // Thêm thuộc tính disabled ở đây
 }
 
-const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
+const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange, disabled }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     onChange({ [name]: value });
@@ -20,6 +22,11 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
   const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0;
     onChange({ duration: value });
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    onChange({ [name]: value });
   };
 
   return (
@@ -36,6 +43,7 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
           onChange={handleInputChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
           placeholder="e.g., Beijing Imperial Experience"
+          disabled={disabled} 
         />
       </div>
 
@@ -51,6 +59,7 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
           rows={3}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
           placeholder="Brief description of the tour..."
+          disabled={disabled} 
         />
       </div>
 
@@ -67,6 +76,7 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
             onChange={handleDurationChange}
             min="1"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
+            disabled={disabled} 
           />
         </div>
 
@@ -74,15 +84,21 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
           <label htmlFor="location" className="block text-sm font-medium text-gray-700">
             Location <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
+          <select
             id="location"
             name="location"
             value={tour.location}
-            onChange={handleInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
-            placeholder="e.g., Beijing, Shanghai, Xi'an"
-          />
+            onChange={handleSelectChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-3 text-sm"
+            disabled={disabled}  
+          >
+            <option value="">Select a location</option>
+            {LOCATIONS.map((loc) => (
+              <option key={loc.id} value={String(loc.id)}>
+                {loc.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -98,6 +114,7 @@ const TourBasicInfo: React.FC<TourBasicInfoProps> = ({ tour, onChange }) => {
           rows={5}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 p-2 border"
           placeholder="Detailed overview of the tour experience..."
+          disabled={disabled}  
         />
       </div>
     </div>

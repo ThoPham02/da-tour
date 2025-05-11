@@ -24,7 +24,7 @@ type Tour struct {
 	Overview      string      `json:"overview"`
 	Activities    []Activity  `json:"activities"`
 	Services      []Service   `json:"services"`
-	Itineraries   []Itinerary `json:"itineraries"`
+	Itineraries   []Itinerary `json:"itinerary"`
 	Price         float64     `json:"price"`
 	DepartureDate int64       `json:"departureDate"`
 	Quantity      int64       `json:"quantity"`
@@ -46,7 +46,7 @@ type Service struct {
 
 type Itinerary struct {
 	ID          int64  `json:"id"`
-	Name        string `json:"name"`
+	Name        string `json:"title"`
 	Description string `json:"description"`
 }
 

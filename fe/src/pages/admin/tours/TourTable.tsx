@@ -3,7 +3,7 @@ import { Edit2, Trash, MoreVertical, ExternalLink } from "lucide-react";
 import { Tour } from "../../../types/tour";
 import { getDestinationNameById } from "../../../utils/utils";
 import { TOUR_STATUS } from "../../../common/const";
-
+import TourModal from "../../../components/addTour/TourModal"; 
 interface TourTableProps {
   activeTab: number;
   tours: Array<Tour>;
@@ -15,16 +15,16 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab, tours }) => {
   const [openActionId, setOpenActionId] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const handleAction = (type: string, tour: Tour) => {
-    console.log(`${type} clicked for:`, tour);
-    if (type === "view") {
-    }
-    if (type === "edit") {
-    }
-    if (type === "delete") {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedTour, setSelectedTour] = useState<Tour | undefined>();
+  const [formMode, setFormMode] = useState<"view" | "edit" | "create">("view");
 
-    }
+  const handleAction = (mode: "view" | "edit", tour: Tour) => {
+    setSelectedTour(tour);
+    setFormMode(mode);
+    setIsFormOpen(true);
   };
+
 
   // Lọc tour theo tab
   const filteredTours =
@@ -60,9 +60,8 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab, tours }) => {
               <th
                 key={idx}
                 scope="col"
-                className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                  header === "Actions" ? "text-right" : "text-left"
-                }`}
+                className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${header === "Actions" ? "text-right" : "text-left"
+                  }`}
               >
                 {header}
               </th>
@@ -86,11 +85,10 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab, tours }) => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span
-                  className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    tour.status === TOUR_STATUS.ACTIVE
-                      ? "bg-green-100 text-green-800"
-                      : "bg-purple-100 text-purple-800"
-                  }`}
+                  className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${tour.status === TOUR_STATUS.ACTIVE
+                    ? "bg-green-100 text-green-800"
+                    : "bg-purple-100 text-purple-800"
+                    }`}
                 >
                   {tour.status === TOUR_STATUS.ACTIVE ? "Active" : "Upcoming"}
                 </span>
@@ -127,13 +125,14 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab, tours }) => {
                         <Edit2 className="inline-block w-4 h-4 mr-2" />
                         Edit
                       </button>
-                      <button
+
+                      {/* <button
                         onClick={() => handleAction("delete", tour)}
                         className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                       >
                         <Trash className="inline-block w-4 h-4 mr-2" />
                         Delete
-                      </button>
+                      </button> */}
                     </div>
                   )}
                 </div>
@@ -174,6 +173,15 @@ const TourTable: React.FC<TourTableProps> = ({ activeTab, tours }) => {
           </button>
         </div>
       </div>
+      {isFormOpen && (
+  <TourModal
+    onClose={() => setIsFormOpen(false)}
+    initialData={selectedTour}
+    mode={formMode}
+  />
+)}
+
+
     </div>
   );
 };

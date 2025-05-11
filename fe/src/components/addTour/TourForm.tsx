@@ -13,36 +13,40 @@ import {
   ValidationErrors,
 } from "../../types/tour";
 import { tourSchema } from "../../validation/tourSchema";
-import { apiCreateTour } from "../../store/services/authService";
+import { apiCreateTour, apiUpdateTour } from "../../store/services/authService";
 
 interface TourFormProps {
   onClose: () => void;
+  initialData?: Tour;
+  mode?: "create" | "edit" | "view";
 }
 
-const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
+const TourForm: React.FC<TourFormProps> = ({ onClose, initialData, mode = "create" }) => {
+  // console.log("ddd", mode)
+  const isViewMode = mode === "view";
+  const isEditMode = mode === "edit";
+
   const [activeTab, setActiveTab] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [tabErrors, setTabErrors] = useState<boolean[]>([
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [tabErrors, setTabErrors] = useState<boolean[]>([false, false, false, false]);
 
+
+  // console.log("TourForm component mounted or updated", initialData);
   const [tour, setTour] = useState<Tour>({
-    image: "",
-    name: "",
-    description: "",
-    duration: 0,
-    location: 0,
-    overview: "",
-    activities: [],
-    services: [],
-    itinerary: [],
-    price: 0,
-    quantity: 0,
-    departureDate: "",
+    image: initialData?.image || "",
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    duration: initialData?.duration || 0,
+    location: initialData?.location || 0,
+    overview: initialData?.overview || "",
+    activities: initialData?.activities || [],
+    services: initialData?.services || [],
+    itinerary: initialData?.itinerary || [],
+    price: initialData?.price || 0,
+    quantity: initialData?.quantity || 0,
+    departureDate: initialData?.departureDate || "",
+    id: initialData?.id,
   });
 
   const validateForm = async () => {
@@ -67,23 +71,12 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
   };
 
   const updateTabErrors = () => {
-    const basicInfoHasError =
-      !tour.name ||
-      !tour.description ||
-      !tour.duration ||
-      !tour.location ||
-      !tour.overview;
-    const detailsHasError =
-      tour?.activities?.length === 0 || tour?.services?.length === 0;
-    const itineraryHasError = tour?.itinerary?.length === 0;
+    const basicInfoHasError = !tour.name || !tour.description || !tour.duration || !tour.location || !tour.overview;
+    const detailsHasError = (tour.activities?.length ?? 0) === 0 || (tour.services?.length ?? 0) === 0;
+    const itineraryHasError = (tour.itinerary?.length ?? 0) === 0;
     const pricingHasError = !tour.price || !tour.quantity || !tour.departureDate;
 
-    setTabErrors([
-      basicInfoHasError,
-      detailsHasError,
-      itineraryHasError,
-      pricingHasError,
-    ]);
+    setTabErrors([basicInfoHasError, detailsHasError, itineraryHasError, pricingHasError]);
   };
 
   useEffect(() => {
@@ -116,21 +109,23 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isViewMode) return;
     setIsSubmitting(true);
 
-    const isValid = await validateForm();
-    if (!isValid) {
-      setIsSubmitting(false);
-      // Find the first tab with an error and switch to it
-      const firstErrorTab = tabErrors.findIndex((error) => error);
-      if (firstErrorTab !== -1) {
-        setActiveTab(firstErrorTab);
-      }
-      // return;
-    }
+    // const isValid = await validateForm();
+    // if (!isValid) {
+    //   setIsSubmitting(false);
+    //   const firstErrorTab = tabErrors.findIndex((error) => error);
+    //   if (firstErrorTab !== -1) {
+    //     setActiveTab(firstErrorTab);
+    //   }
+    //   return;
+    // }
 
     try {
-      const resp = await apiCreateTour(tour);
+      const resp = mode === "edit" && tour.id !== undefined
+        ? await apiUpdateTour(tour.id, tour)
+        : await apiCreateTour(tour);
 
       if (resp?.result?.code === 0) {
         onClose();
@@ -139,6 +134,7 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
       }
     } catch (error) {
       console.error("Error submitting tour data:", error);
+      setIsSubmitting(false);
     }
   };
 
@@ -152,13 +148,7 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
   const getTabContent = () => {
     switch (activeTab) {
       case 0:
-        return (
-          <TourBasicInfo
-            tour={tour}
-            onChange={handleBasicInfoChange}
-            errors={errors}
-          />
-        );
+        return <TourBasicInfo tour={tour} onChange={handleBasicInfoChange} errors={errors} disabled={isViewMode} />;
       case 1:
         return (
           <TourDetails
@@ -166,6 +156,7 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
             onActivitiesChange={handleActivitiesChange}
             onServicesChange={handleServicesChange}
             errors={errors}
+            disabled={isViewMode}
           />
         );
       case 2:
@@ -174,16 +165,11 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
             itinerary={tour.itinerary || []}
             onChange={handleItineraryChange}
             errors={errors}
+            disabled={isViewMode}
           />
         );
       case 3:
-        return (
-          <TourPricing
-            tour={tour}
-            onChange={handlePricingChange}
-            errors={errors}
-          />
-        );
+        return <TourPricing tour={tour} onChange={handlePricingChange} errors={errors} disabled={isViewMode} />;
       default:
         return null;
     }
@@ -195,14 +181,11 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
         onImageUpload={handleImageUpload}
         currentImage={tour.image}
         error={errors.image}
+        disabled={isViewMode}
       />
 
       <div className="mt-8">
-        <TabNavigation
-          tabs={tabs}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-        />
+        <TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
         <div className="mt-4 p-4 bg-gray-50 rounded-md min-h-[300px]">
           {getTabContent()}
@@ -217,13 +200,15 @@ const TourForm: React.FC<TourFormProps> = ({ onClose }) => {
         >
           Cancel
         </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors disabled:opacity-70"
-        >
-          {isSubmitting ? "Saving..." : "Save Tour"}
-        </button>
+        {!isViewMode && (
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors disabled:opacity-70"
+          >
+            {isSubmitting ? "Saving..." : mode === "edit" ? "Update Tour" : "Save Tour"}
+          </button>
+        )}
       </div>
     </form>
   );

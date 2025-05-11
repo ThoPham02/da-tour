@@ -127,7 +127,7 @@ export const convertTourToFormData = (tour: Tour): FormData => {
   // Normalize itinerary and nested activities
   const normalizedItinerary = tour?.itinerary?.map((item) => ({
     id: Number(item.id),
-    dayNumber: item.dayNumber,
+    // dayNumber: item.dayNumber,
     name: item.title,
     description: item.description,
   }));
@@ -154,6 +154,40 @@ export const apiCreateTour = async (
   }
 };
 
+// export const apiFilterTour = async (
+//   filter: any
+// ): Promise<ApiResponse<Tour[]>> => {
+//   try {
+//     const response: AxiosResponse<ApiResponse<Tour[]>> = await axios({
+//       method: "get",
+//       url: "/tour/filter",
+//       params: {
+//         ...filter,
+//       },
+//     });
+
+//     const tours = response.data.data ?? [];
+
+//     const convertedData: ApiResponse<Tour[]> = {
+//       ...response.data,
+//       data: tours.map((tour) => ({
+//         ...tour,
+//         itinerary: tour.itineraries?.map((item) => ({
+//           id: item.id,
+//           title: item.name,
+//           dayNumber: 0,
+//           description: item.description,
+//         })) ?? [],
+//       })),
+//     };
+//     console.log("xxxx", convertedData)
+
+//     return convertedData;
+//   } catch (error) {
+//     console.error("Error filtering tours:", error);
+//     throw error;
+//   }
+// };
 export const apiFilterTour = async (
   filter: any
 ): Promise<ApiResponse<Tour[]>> => {
@@ -172,6 +206,7 @@ export const apiFilterTour = async (
     throw error;
   }
 };
+
 
 export const apiGetTourById = async (id: number): Promise<Tour | null> => {
   try {
@@ -192,6 +227,26 @@ type CreateOrderResponse = {
     code: number;
     message?: string;
   };
+};
+
+export const apiUpdateTour = async (
+  id: number,
+  tourData: Tour
+): Promise<CreateTourResponse | null> => {
+  try {
+    const formData = convertTourToFormData(tourData);
+
+    const response: AxiosResponse<CreateTourResponse> = await axios({
+      method: "put", 
+      url: `/tour/${id}`,
+      data: formData,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating tour:", error);
+    return null;
+  }
 };
 
 export const convertOrderToFormData = (order: Order): FormData => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tour, Activity, Service } from "../../types/tour";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -7,26 +7,40 @@ interface TourDetailsProps {
   onActivitiesChange: (activities: Activity[]) => void;
   onServicesChange: (services: Service[]) => void;
   errors?: {};
+  disabled: boolean;
 }
 
 const TourDetails: React.FC<TourDetailsProps> = ({
   tour,
   onActivitiesChange,
   onServicesChange,
+  disabled,
 }) => {
   const [newActivity, setNewActivity] = useState("");
   const [newService, setNewService] = useState("");
+
+  
+  useEffect(() => {
+    // console.log("TourDetails component mounted or updated", tour);
+    if (tour?.activities && tour?.activities.length > 0) {
+      setNewActivity(""); 
+    }
+    if (tour?.services && tour?.services.length > 0) {
+      setNewService("");
+    }
+  }, [tour]);  
 
   const addActivity = () => {
     if (newActivity.trim()) {
       const updatedActivities = [
         ...tour?.activities || [],
-        { id: Date.now(), name: newActivity.trim() },
+        { id: Date.now(), name: newActivity.trim(), title: newActivity.trim() },
       ];
       onActivitiesChange(updatedActivities);
       setNewActivity("");
     }
   };
+  
 
   const removeActivity = (id: number) => {
     const updatedActivities = tour?.activities?.filter(
@@ -65,6 +79,7 @@ const TourDetails: React.FC<TourDetailsProps> = ({
 
   return (
     <div className="space-y-8">
+      {/* Tour Activities Section */}
       <div>
         <h3 className="text-lg font-medium text-gray-800 mb-4">
           Tour Activities <span className="text-red-500">*</span>
@@ -78,11 +93,13 @@ const TourDetails: React.FC<TourDetailsProps> = ({
               onKeyDown={(e) => handleKeyDown(e, addActivity)}
               className="flex-1 p-2 border border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500"
               placeholder="Add an activity..."
+              disabled={disabled} 
             />
             <button
               type="button"
               onClick={addActivity}
               className="p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              disabled={disabled}  
             >
               <Plus size={20} />
             </button>
@@ -100,11 +117,12 @@ const TourDetails: React.FC<TourDetailsProps> = ({
                 key={activity.id}
                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md group"
               >
-                <span>{activity.name}</span>
+                <span>{activity.title}</span>
                 <button
                   type="button"
                   onClick={() => removeActivity(activity.id)}
                   className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-600 transition-opacity"
+                  disabled={disabled}  
                 >
                   <Trash2 size={18} />
                 </button>
@@ -114,6 +132,7 @@ const TourDetails: React.FC<TourDetailsProps> = ({
         </div>
       </div>
 
+      {/* Included Services Section */}
       <div>
         <h3 className="text-lg font-medium text-gray-800 mb-4">
           Included Services <span className="text-red-500">*</span>
@@ -127,11 +146,13 @@ const TourDetails: React.FC<TourDetailsProps> = ({
               onKeyDown={(e) => handleKeyDown(e, addService)}
               className="flex-1 p-2 border border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500"
               placeholder="Add a service..."
+              disabled={disabled} 
             />
             <button
               type="button"
               onClick={addService}
               className="p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              disabled={disabled}  
             >
               <Plus size={20} />
             </button>
@@ -149,11 +170,12 @@ const TourDetails: React.FC<TourDetailsProps> = ({
                 key={service.id}
                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md group"
               >
-                <span>{service.name}</span>
+                <span>{service.name || service.title}</span>
                 <button
                   type="button"
                   onClick={() => removeService(service.id)}
                   className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-600 transition-opacity"
+                  disabled={disabled} 
                 >
                   <Trash2 size={18} />
                 </button>

@@ -9,9 +9,14 @@ interface TourPricingProps {
     seats?: string;
     departureDate?: string;
   };
+  disabled?: boolean; // Bổ sung thuộc tính disabled
 }
 
-const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange }) => {
+const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange, errors, disabled }) => {
+  const formattedDate = tour.departureDate
+  ? new Date(tour.departureDate).toISOString().slice(0, 10)
+  : '';
+
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value) || 0;
     onChange({ price: value });
@@ -28,6 +33,7 @@ const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange }) => {
 
   return (
     <div className="space-y-6">
+      {/* Price Field */}
       <div>
         <label
           htmlFor="price"
@@ -46,13 +52,16 @@ const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange }) => {
             onChange={handlePriceChange}
             min="0"
             step="0.01"
-            className="p-2 pl-7 block w-full border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
+            className={`p-2 pl-7 block w-full border ${errors?.price ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-red-500 focus:border-red-500`}
             placeholder="Enter price..."
             required
+            disabled={disabled} // Áp dụng disabled
           />
+          {errors?.price && <p className="text-sm text-red-500 mt-1">{errors.price}</p>}
         </div>
       </div>
 
+      {/* Seats Field */}
       <div>
         <label
           htmlFor="seats"
@@ -63,15 +72,18 @@ const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange }) => {
         <input
           type="number"
           id="seats"
-          value={tour.quantity || 0}
+          value={tour.quantity !== undefined ? tour.quantity : ""}
           onChange={handleSeatsChange}
           min="1"
           className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
           placeholder="Enter number of seats..."
           required
+          disabled={disabled}
         />
+        {errors?.seats && <p className="text-sm text-red-500 mt-1">{errors.seats}</p>}
       </div>
 
+      {/* Departure Date Field */}
       <div>
         <label
           htmlFor="departureDate"
@@ -82,11 +94,13 @@ const TourPricing: React.FC<TourPricingProps> = ({ tour, onChange }) => {
         <input
           type="date"
           id="departureDate"
-          value={tour.departureDate}
+          value={formattedDate}
           onChange={handleDateChange}
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+          className={`mt-1 p-2 block w-full border ${errors?.departureDate ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-red-500 focus:border-red-500`}
           required
+          disabled={disabled} // Áp dụng disabled
         />
+        {errors?.departureDate && <p className="text-sm text-red-500 mt-1">{errors.departureDate}</p>}
       </div>
 
       <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">

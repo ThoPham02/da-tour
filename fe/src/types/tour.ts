@@ -17,9 +17,9 @@ export interface Service {
 
 export interface Itinerary {
   id: number;
-  dayNumber: number;
   title: string;
   description: string;
+  name?: string
 }
 
 export interface Tour {
@@ -33,11 +33,6 @@ export interface Tour {
   activities?: Activity[];
   services?: Service[];
   itinerary?: Itinerary[];
-  itineraries?: {
-    id: number;
-    name: string;
-    description: string;
-  }[];
   price: number;
   quantity: number;
   remain?: number;

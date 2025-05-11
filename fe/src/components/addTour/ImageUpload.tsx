@@ -7,11 +7,13 @@ interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
   currentImage: string;
   error?: {};
+  disabled?: boolean;  // Vẫn giữ thuộc tính disabled ở đây
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImageUpload,
   currentImage,
+  disabled = false,  // Mặc định disabled là false
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -20,15 +22,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsDragging(true);
+    if (!disabled) setIsDragging(true);
   };
 
   const handleDragLeave = () => {
-    setIsDragging(false);
+    if (!disabled) setIsDragging(false);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    if (disabled) return;
     setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
@@ -37,6 +40,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
     if (e.target.files && e.target.files[0]) {
       handleImageFile(e.target.files[0]);
     }
@@ -57,7 +61,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click();
+    if (!disabled && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const removeImage = () => {
@@ -83,6 +89,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             type="button"
             onClick={removeImage}
             className="absolute top-2 right-2 p-1 bg-white bg-opacity-70 rounded-full hover:bg-opacity-100 transition-opacity"
+            disabled={disabled}  // Thêm disabled vào nút xóa ảnh
           >
             <X size={20} className="text-red-600" />
           </button>
@@ -90,7 +97,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       ) : (
         <div
           className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center h-64 transition-colors cursor-pointer
-            ${isDragging ? "border-red-500 bg-red-50" : "border-gray-300 hover:border-red-400 hover:bg-gray-50"}`}
+            ${isDragging ? "border-red-500 bg-red-50" : "border-gray-300 hover:border-red-400 hover:bg-gray-50"} 
+            ${disabled ? "cursor-not-allowed opacity-50" : ""}`}  // Thêm điều kiện CSS khi disabled
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -124,7 +132,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         onChange={handleFileInputChange}
         accept="image/*"
         className="hidden"
-        disabled={isUploading}
+        disabled={isUploading || disabled}  // Thêm disabled vào input file
       />
     </div>
   );
