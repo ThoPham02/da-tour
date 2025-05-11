@@ -57,6 +57,7 @@ export interface Order {
   customer: Customer;
   quantity: number;
   totalPrice: number;
+  paid?: number;
   status?: number;
   createDate?: number;
   tourName?: string;

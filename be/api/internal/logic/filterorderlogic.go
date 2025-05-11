@@ -81,6 +81,8 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 		}, nil
 	}
 	for _, order := range ordersModel {
+		var paid float64
+
 		tourModel, err := l.svcCtx.TourTblModel.FindOne(l.ctx, order.TourId)
 		if err != nil {
 			l.Logger.Error(err)
@@ -90,6 +92,23 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 					Message: common.DB_ERR_MESS,
 				},
 			}, nil
+		}
+
+		payments, err := l.svcCtx.PaymentTblModel.GetByOrderID(l.ctx, order.Id)
+		if err != nil {
+			l.Logger.Error(err)
+			return &types.FilterOrderRes{
+				Result: types.Result{
+					Code:    common.DB_ERR_CODE,
+					Message: common.DB_ERR_MESS,
+				},
+			}, nil
+		}
+
+		for _, payment := range payments {
+			if payment.Status == common.PAYMENT_STATUS_COMPLETED {
+				paid += payment.Amount
+			}
 		}
 
 		orders = append(orders, types.Order{
@@ -104,6 +123,7 @@ func (l *FilterOrderLogic) FilterOrder(req *types.FilterOrderReq) (resp *types.F
 			Phone:         order.Phone,
 			Quantity:      order.Quantity,
 			TotalPrice:    order.Total,
+			Paid:          paid,
 			Status:        order.Status,
 			PaymentStatus: order.PaymentStatus,
 			CreateDate:    order.CreatedAt.Int64,

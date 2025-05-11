@@ -10,6 +10,7 @@ import { apiGetOrderById } from "../../../store/services/authService";
 import { useEffect, useState } from "react";
 import { Order } from "../../../types/tour";
 import OrderModal from "../../../components/addOrder/OrderModal";
+import AddPaymentModal from "../../../components/addOrder/AddPaymentModal";
 
 interface OrderActionProps {
   orderStatus: number;
@@ -49,14 +50,22 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
         break;
       case "confirm":
         setType("confirm");
+
+        setIsConfirmOpen(true);
         break;
       case "add_payment":
+        setIsConfirmOpen(true);
+
         setType("add_payment");
         break;
       case "cancel":
+
+        setIsConfirmOpen(true);
         setType("cancel");
         break;
       case "delete":
+
+        setIsConfirmOpen(true);
         setType("delete");
 
         break;
@@ -134,6 +143,14 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
       onClose={() => setIsOrderOpen(false)}
       type={type} 
       order={selectOrder} />}
+
+      {isConfirmOpen && (
+        <AddPaymentModal
+          isOpen={isConfirmOpen}
+          onClose={() => setIsConfirmOpen(false)}
+          orderData={selectOrder || {} as Order}
+        />
+      )}
     </div>
   );
 };

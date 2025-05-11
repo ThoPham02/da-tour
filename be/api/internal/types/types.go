@@ -64,6 +64,7 @@ type Order struct {
 	Status        int64   `json:"status"`
 	Quantity      int64   `json:"quantity"`
 	TotalPrice    float64 `json:"totalPrice"`
+	Paid          float64 `json:"paid"`
 	PaymentStatus int64   `json:"paymentStatus"`
 	CreateDate    int64   `json:"createDate"`
 }
@@ -234,7 +235,7 @@ type UpdateOrderStatusRes struct {
 type UpdateOrderReq struct {
 	OrderID  int64  `path:"orderID"`
 	TourID   int64  `form:"tourID"`
-	UserID   int64  `form:"userID"`
+	UserID   int64  `form:"userID, optional"`
 	Fullname string `form:"fullname"`
 	Email    string `form:"email"`
 	Phone    string `form:"phone"`
@@ -251,7 +252,7 @@ type CreatePaymentReq struct {
 	PaymentDate int64   `form:"paymentDate"`
 	Amount      float64 `form:"amount"`
 	Url         string  `form:"url"`
-	Status      int64   `form:"status"`
+	Status      int64   `form:"status, optional"`
 }
 
 type CreatePaymentRes struct {

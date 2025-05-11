@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"database/sql"
 
 	"da-tour/api/internal/svc"
 	"da-tour/api/internal/types"
@@ -41,7 +42,9 @@ func (l *UpdateOrderLogic) UpdateOrder(req *types.UpdateOrderReq) (resp *types.U
 			},
 		}, nil
 	}
-	if orderModel.Status != common.ORDER_STATUS_PENDING || orderModel.Status != common.ORDER_STATUS_CONFIRMED {
+	l.Logger.Info("OrderModel ", orderModel.Status)
+
+	if orderModel.Status != common.ORDER_STATUS_PENDING && orderModel.Status != common.ORDER_STATUS_CONFIRMED {
 		l.Logger.Error("Order status is not pending or confirmed")
 		return &types.UpdateOrderRes{
 			Result: types.Result{
@@ -115,6 +118,24 @@ func (l *UpdateOrderLogic) UpdateOrder(req *types.UpdateOrderReq) (resp *types.U
 				Message: common.DB_ERR_MESS,
 			},
 		}, nil
+	}
+
+	if req.UserID == 0 {
+		userModel, err := l.svcCtx.UserTblModel.FindOneByEmail(l.ctx, req.Email)
+		if err != nil {
+			l.Logger.Error(err)
+			return &types.UpdateOrderRes{
+				Result: types.Result{
+					Code:    common.DB_ERR_CODE,
+					Message: common.DB_ERR_MESS,
+				},
+			}, nil
+		}
+		if userModel != nil {
+			orderModel.UserId = sql.NullInt64{Int64: userModel.Id, Valid: true}
+		}
+	} else {
+		orderModel.UserId = sql.NullInt64{Int64: req.UserID, Valid: true}
 	}
 
 	orderModel.TourId = req.TourID

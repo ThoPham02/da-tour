@@ -4,7 +4,7 @@ import TourSearch from "./TourSearch";
 import CustomerForm from "./CustomerForm";
 import OrderSummary from "./OrderSummary";
 import { Customer, Order, Tour } from "../../types/tour";
-import { apiCreateOrder } from "../../store/services/authService";
+import { apiCreateOrder, apiUpdateOrder } from "../../store/services/authService";
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -14,6 +14,7 @@ interface OrderModalProps {
 }
 
 const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, type, order }) => {
+  const orderID = order?.id || 0;
   const disabledInput = type === "view";
   const modalTitle = type === "edit" ? "Edit Order" : type === "view" ? "Order Detail" : "Create Order";
 
@@ -98,14 +99,18 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, type, order })
           case "create":
             const resp = await apiCreateOrder(order);
 
+            setIsSubmitting(false);
             if (resp?.result?.code === 0) {
               onClose();
-            } else {
-              setIsSubmitting(false);
-            }
+            } 
             break;
           case "edit":
-            // Handle edit order logic here
+            const respUpdate = await apiUpdateOrder(orderID ,order);
+
+            setIsSubmitting(false);
+            if (respUpdate?.result?.code === 0) {
+              onClose();
+            } 
             break;
           default:
             break;

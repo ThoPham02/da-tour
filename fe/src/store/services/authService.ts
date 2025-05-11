@@ -329,3 +329,23 @@ export const apiGetOrderById = async (id: number): Promise<Order | null> => {
     return null;
   }
 };
+
+export const apiUpdateOrder = async (
+  orderID: number,
+  orderData: Order
+): Promise<CreateOrderResponse | null> => {
+  try {
+    const formData = convertOrderToFormData(orderData);
+
+    const response: AxiosResponse<CreateOrderResponse> = await axios({
+      method: "put",
+      url: `/order/${orderID}`,
+      data: formData,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating order:", error);
+    return null;
+  }
+};

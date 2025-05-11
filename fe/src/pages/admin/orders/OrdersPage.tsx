@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Search, Filter, ChevronDown, Download, Plus } from "lucide-react";
+import { Search, Download, Plus } from "lucide-react";
 
 import OrderTable from "./OrderTable";
 import OrderModal from "../../../components/addOrder/OrderModal";
