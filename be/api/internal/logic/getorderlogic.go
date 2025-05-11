@@ -30,6 +30,7 @@ func (l *GetOrderLogic) GetOrder(req *types.GetOrderReq) (resp *types.GetOrderRe
 
 	var orderModel *model.OrderTbl
 	var payments []types.Payment
+	var paid float64
 
 	orderModel, err = l.svcCtx.OrderTblModel.FindOne(l.ctx, req.OrderID)
 	if err != nil || orderModel == nil {
@@ -76,6 +77,10 @@ func (l *GetOrderLogic) GetOrder(req *types.GetOrderReq) (resp *types.GetOrderRe
 			Status:      payment.Status,
 			Url:         payment.Url.String,
 		})
+
+		if payment.Status == common.PAYMENT_STATUS_COMPLETED {
+			paid += payment.Amount
+		}
 	}
 
 	l.Logger.Info("GetOrder Success")
@@ -96,6 +101,7 @@ func (l *GetOrderLogic) GetOrder(req *types.GetOrderReq) (resp *types.GetOrderRe
 			Status:        orderModel.Status,
 			Quantity:      orderModel.Quantity,
 			TotalPrice:    orderModel.Total,
+			Paid:          paid,
 			PaymentStatus: orderModel.PaymentStatus,
 			CreateDate:    orderModel.CreatedAt.Int64,
 		},

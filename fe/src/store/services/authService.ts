@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import axios from "../axios";
-import { Order, Tour } from "../../types/tour";
+import { Order, Payment, Tour } from "../../types/tour";
 import { getTimeStamp } from "../../utils/utils";
 
 // Kiểu dữ liệu chung
@@ -283,6 +283,7 @@ export const apiGetOrderById = async (id: number): Promise<Order | null> => {
         email: response.data.order.email,
         phone: response.data.order.phone,
       },
+      paid: response.data.order.paid,
       quantity: response.data.order.quantity,
       totalPrice: response.data.order.totalPrice,
       status: response.data.order.status,
@@ -315,3 +316,27 @@ export const apiUpdateOrder = async (
     return null;
   }
 };
+
+export const apiCreatePayment = async (
+  paymentData: Payment
+): Promise<CreateOrderResponse | null> => {
+  try {
+    const formData = new FormData();
+    formData.append("orderID", paymentData.orderId.toString());
+    formData.append("method", paymentData.method.toString());
+    formData.append("amount", paymentData.amount.toString());
+    formData.append("paymentDate", paymentData.date?.toString() || Date.now().toString());
+    formData.append("url", paymentData.url || "");
+
+    const response: AxiosResponse<CreateOrderResponse> = await axios({
+      method: "post",
+      url: "/payment",
+      data: formData,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    return null;
+  }
+}

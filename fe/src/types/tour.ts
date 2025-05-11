@@ -1,6 +1,6 @@
 export interface Activity {
   id: number;
-  // name: string;
+  name: string;
 
   title: string;
   detail?: string;
@@ -8,7 +8,7 @@ export interface Activity {
 
 export interface Service {
   id: number;
-  // name: string;
+  name: string;
 
   // response
   title?: string;
@@ -64,4 +64,15 @@ export interface Order {
   fullName?: string;
   tourDetail?: Tour;
   departureDate?: number;
+}
+
+export interface Payment {
+  id?: number;
+  orderId: number;
+  customerName: string;
+  amount: number;
+  method: number;
+  status: number;
+  date?: number;
+  url?: string;
 }

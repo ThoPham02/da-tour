@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { X, Upload, CreditCard, Landmark, Wallet } from 'lucide-react';
-import { Order, PaymentMethod } from '../../types/tour';
-import { formatCurrency } from '../../utils/utils';
+import { X, CreditCard, Landmark, Wallet } from 'lucide-react';
+import { Order, Payment } from '../../types/tour';
+import { formatCurrency, getTimeStamp } from '../../utils/utils';
+import { apiCreatePayment } from '../../store/services/authService';
+import ProofUpload from './ProofUpload';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -14,10 +16,10 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
   onClose,
   orderData,
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('bank_transfer');
+  const [paymentMethod, setPaymentMethod] = useState<number>(1);
   const [amount, setAmount] = useState<number>(orderData.totalPrice - (orderData.paid ?? 0));
   const [paymentDate, setPaymentDate] = useState<string>("");
-  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [proofFile, setProofFile] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
   const [errors, setErrors] = useState<{
     amount?: string;
@@ -27,7 +29,7 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate form
@@ -47,25 +49,14 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
       newErrors.paymentDate = 'Payment date is required';
     }
     
-    if (paymentMethod === 'bank_transfer' && !proofFile) {
+    if (paymentMethod === 1 && !proofFile) {
       newErrors.proofFile = 'Payment proof is required for bank transfers';
     }
     
     setErrors(newErrors);
     
     if (Object.keys(newErrors).length === 0) {
-        try {
-              const resp = await apiCreatePayment();
-  
-              setIsSubmitting(false);
-              if (resp?.result?.code === 0) {
-                onClose();
-              } 
-              break;
-        } catch (error) {
-          console.error("Error submitting tour data:", error);
-        }
-      }
+      handleSubmitPayment(e);
     }
   };
 
@@ -81,22 +72,38 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setProofFile(e.dataTransfer.files[0]);
-    }
+    setProofFile(""); 
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setProofFile(e.target.files[0]);
-    }
+  const handleFileChange = (imageUrl: string) => {
+    setProofFile(imageUrl);
   };
+
+  const handleSubmitPayment = async (e: React.FormEvent) => {
+      e.preventDefault();
+  
+      try {
+              const resp = await apiCreatePayment({
+                orderId: orderData.id,
+                customerName: orderData.customer.name,
+                amount,
+                method: paymentMethod,
+                date: getTimeStamp(paymentDate),
+                url: proofFile,
+              } as Payment);
+  
+              if (resp?.result?.code === 0) {
+                onClose();
+              } 
+        } catch (error) {
+          console.error("Error submitting tour data:", error);
+        }
+      }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fadeIn">
       <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden transform transition-all"
+        className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[80%] overflow-y-auto transform transition-all"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-red-50">
@@ -136,11 +143,11 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
                 <button
                   type="button"
                   className={`flex flex-col items-center justify-center p-3 rounded-lg border ${
-                    paymentMethod === 'bank_transfer' 
+                    paymentMethod === 1 
                       ? 'border-red-500 bg-red-50 text-red-700' 
                       : 'border-gray-200 hover:bg-gray-50'
                   } transition-colors`}
-                  onClick={() => setPaymentMethod('bank_transfer')}
+                  onClick={() => setPaymentMethod(1)}
                 >
                   <Landmark size={20} className="mb-1" />
                   <span className="text-xs">Bank Transfer</span>
@@ -148,11 +155,11 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
                 <button
                   type="button"
                   className={`flex flex-col items-center justify-center p-3 rounded-lg border ${
-                    paymentMethod === 'credit_card' 
+                    paymentMethod === 2
                       ? 'border-red-500 bg-red-50 text-red-700' 
                       : 'border-gray-200 hover:bg-gray-50'
                   } transition-colors`}
-                  onClick={() => setPaymentMethod('credit_card')}
+                  onClick={() => setPaymentMethod(2)}
                 >
                   <CreditCard size={20} className="mb-1" />
                   <span className="text-xs">Credit Card</span>
@@ -160,11 +167,11 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
                 <button
                   type="button"
                   className={`flex flex-col items-center justify-center p-3 rounded-lg border ${
-                    paymentMethod === 'cash' 
+                    paymentMethod === 3 
                       ? 'border-red-500 bg-red-50 text-red-700' 
                       : 'border-gray-200 hover:bg-gray-50'
                   } transition-colors`}
-                  onClick={() => setPaymentMethod('cash')}
+                  onClick={() => setPaymentMethod(3)}
                 >
                   <Wallet size={20} className="mb-1" />
                   <span className="text-xs">Cash</span>
@@ -224,24 +231,17 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
             </div>
             
             {/* Payment Proof Upload (for Bank Transfer) */}
-            {paymentMethod === 'bank_transfer' && (
+            {paymentMethod === 1 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Payment Proof
                 </label>
                 <div 
-                  className={`border-2 border-dashed rounded-lg p-4 text-center ${
-                    isDragging 
-                      ? 'border-red-500 bg-red-50' 
-                      : errors.proofFile 
-                        ? 'border-red-300 bg-red-50' 
-                        : 'border-gray-300 hover:border-gray-400'
-                  } transition-colors`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                 >
-                  {proofFile ? (
+                  {/* {proofFile ? (
                     <div className="py-2">
                       <div className="flex items-center justify-center text-red-600">
                         <Upload size={20} className="mr-2" />
@@ -276,7 +276,10 @@ const AddPaymentModal: React.FC<PaymentModalProps> = ({
                         onChange={handleFileChange}
                       />
                     </div>
-                  )}
+                  )} */}
+
+                    <ProofUpload onImageUpload={handleFileChange} currentImage={proofFile} />
+
                 </div>
                 {errors.proofFile && (
                   <p className="mt-1 text-sm text-red-600">{errors.proofFile}</p>

@@ -30,6 +30,8 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
     const fetchOrder = async () => {
       const resp = await apiGetOrderById(orderID);
 
+      console.log("fetchOrder", resp);
+
       setSelectOrder(resp || {} as Order);
     };
     fetchOrder();
@@ -148,7 +150,10 @@ const OrderActionButton: React.FC<OrderActionProps> = ({
         <AddPaymentModal
           isOpen={isConfirmOpen}
           onClose={() => setIsConfirmOpen(false)}
-          orderData={selectOrder || {} as Order}
+          orderData={{
+            ...selectOrder,
+            paid: selectOrder?.paid || 0,
+          } as Order}
         />
       )}
     </div>

@@ -251,7 +251,7 @@ type CreatePaymentReq struct {
 	Method      int64   `form:"method"`
 	PaymentDate int64   `form:"paymentDate"`
 	Amount      float64 `form:"amount"`
-	Url         string  `form:"url"`
+	Url         string  `form:"url,optional"`
 	Status      int64   `form:"status, optional"`
 }
 

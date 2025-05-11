@@ -50,3 +50,16 @@ export const formatDate = (date: Date | string): string => {
     day: 'numeric'
   });
 };
+
+export const getPaymentMethodName = (method: number): string => {
+  switch (method) {
+    case 1:
+      return "Credit Card";
+    case 2:
+      return "PayPal";
+    case 3:
+      return "Cash";
+    default:
+      return "Unknown";
+  }
+}
