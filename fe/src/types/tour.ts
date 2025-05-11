@@ -1,6 +1,6 @@
 export interface Activity {
   id: number;
-  name: string;
+  // name: string;
 
   title: string;
   detail?: string;
@@ -8,7 +8,7 @@ export interface Activity {
 
 export interface Service {
   id: number;
-  name: string;
+  // name: string;
 
   // response
   title?: string;

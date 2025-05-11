@@ -113,14 +113,14 @@ export const convertTourToFormData = (tour: Tour): FormData => {
   // Normalize activities: ensure id is number
   const normalizedActivities = tour?.activities?.map((a) => ({
     id: Number(a.id),
-    title: a.name,
+    title: a.title,
   }));
   formData.append("activities", JSON.stringify(normalizedActivities));
 
   // Normalize services: ensure id is number
   const normalizedServices = tour?.services?.map((s) => ({
     id: Number(s.id),
-    title: s.name,
+    title: s.title,
   }));
   formData.append("services", JSON.stringify(normalizedServices));
 
@@ -128,7 +128,7 @@ export const convertTourToFormData = (tour: Tour): FormData => {
   const normalizedItinerary = tour?.itinerary?.map((item) => ({
     id: Number(item.id),
     // dayNumber: item.dayNumber,
-    name: item.title,
+    title: item.title,
     description: item.description,
   }));
   formData.append("itinerary", JSON.stringify(normalizedItinerary));
@@ -154,40 +154,6 @@ export const apiCreateTour = async (
   }
 };
 
-// export const apiFilterTour = async (
-//   filter: any
-// ): Promise<ApiResponse<Tour[]>> => {
-//   try {
-//     const response: AxiosResponse<ApiResponse<Tour[]>> = await axios({
-//       method: "get",
-//       url: "/tour/filter",
-//       params: {
-//         ...filter,
-//       },
-//     });
-
-//     const tours = response.data.data ?? [];
-
-//     const convertedData: ApiResponse<Tour[]> = {
-//       ...response.data,
-//       data: tours.map((tour) => ({
-//         ...tour,
-//         itinerary: tour.itineraries?.map((item) => ({
-//           id: item.id,
-//           title: item.name,
-//           dayNumber: 0,
-//           description: item.description,
-//         })) ?? [],
-//       })),
-//     };
-//     console.log("xxxx", convertedData)
-
-//     return convertedData;
-//   } catch (error) {
-//     console.error("Error filtering tours:", error);
-//     throw error;
-//   }
-// };
 export const apiFilterTour = async (
   filter: any
 ): Promise<ApiResponse<Tour[]>> => {
