@@ -20,6 +20,7 @@ export interface Itinerary {
   title: string;
   description: string;
   name?: string
+  
 }
 
 export interface Tour {
